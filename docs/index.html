@@ -177,11 +177,11 @@ SPDX-License-Identifier: Unlicense
           <mark>Ad como opus</mark>
           <div class="mb-3">
             <label for="of" class="form-label">Fontem ontologia (YAML aut JSON)</label>
-            <textarea class="form-control instrumentum-optionem" id="of" rows="3">ontologia.yml</textarea>
+            <textarea class="form-control instrumentum-optionem" id="of" rows="3">data/scientiam-basi.yml</textarea>
           </div>
           <div class="mb-3">
             <label for="ef" class="form-label">Exemplum bonō (CSV)</label>
-            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">usum-exemplis.csv</textarea>
+            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
           </div>
           <div class="form-check form-switch">
             <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
@@ -190,12 +190,13 @@ SPDX-License-Identifier: Unlicense
             </label>
           </div>
           Neo URL: <a target="_blank" id="expertum-url"
-            href="http://git.workspace.localhost/EticaAI/hxltm/docs/codex-simplex-ontologiae/#?expertum='%7B%22ontologia%22:%5B%22ontologia.yml%22%5D,%22exemplum%22:%5B%22usum-exemplis.csv%22%5D,%22minimam%22:1%7D'">http://git.workspace.localhost/EticaAI/hxltm/docs/codex-simplex-ontologiae/#?expertum='%7B%22ontologia%22:%5B%22ontologia.yml%22%5D,%22exemplum%22:%5B%22usum-exemplis.csv%22%5D,%22minimam%22:1%7D'</a>
+            href="#">#</a>
         </div>
         <div>
         </div>
       </div>
     </section>
+
     <section class="ontologia">
       <h3 id="h-ontologia"><a href="#h-ontologia">§</a> 1.1. Scientiam basī prīncipāle</h3>
       <textarea id="ontologia" class="c-ontologia" style="width:100%;min-height: 10em;">
@@ -328,7 +329,7 @@ SPDX-License-Identifier: Unlicense
 
     </section>
     <section class="professorem">
-      <h3 id="h-professorem"><a href="#h-professorem">§</a> 1.2. Scientiam basī de exemplum bonō</h3>
+      <h3 id="h-professorem"><a href="#h-professorem">§</a> 1.2. Scientiam basī ex ūsum normae</h3>
       <!-- <p><mark>Ad como opus</mark></p> -->
       <!-- <p><mark>Ad como opus</mark></p> -->
       <textarea id="professorem">
@@ -619,7 +620,16 @@ SPDX-License-Identifier: Unlicense
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"
     integrity="sha512-CSBhVREyzHAjAFfBlIBakjoRUKp5h7VSweP0InR/pAJyptH7peuhCsqAI/snV+TwZmXZqoUklpXp6R6wMnYf5Q=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- <script type="module" src="numerordinatio.mjs"></script> -->
+  <script type="module">
+    import * as NumOrd from './lib/numerordinatio.mjs';
+    import * as WebPasco from './lib/numerordinatio-web-pasco.mjs';
+    window.NumOrd = NumOrd
+    window.NumOrd = WebPasco
+  </script>
   <script>
+
     /****** _[eng-Latn] Edit this section [eng-Latn]_ ******/
     const debug = false
     let datum_globum = {}
@@ -2827,7 +2837,7 @@ scientia.quod_terminum('12')
         CoreMirrorProfessorem.setValue(text)
       });
     });
-    let usum_exemplis = 'usum-exemplis.csv'
+    let usum_exemplis = 'data/usum-exemplis.csv'
     fetch(usum_exemplis).then(function (response) {
       response.text().then(function (text) {
         CoreMirrorTestum.setValue(text)

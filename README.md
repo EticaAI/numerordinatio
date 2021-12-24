@@ -17,3 +17,11 @@ Etymology: "ordo" from Latin ōrdō; ordo , ĭnis, m. from root or-; Sanscr. ar-
 **numerordinatio**, fēminīnum generī
 1. ([protologism](https://en.wiktionary.org/wiki/protologism)) ([Latinitatis Vivae](https://en.wikipedia.org/wiki/Contemporary_Latin))
     - \_[eng-Latn] a generic strategy of arranging numbers in an taxonomy-like explicit way [eng-Latn]\_
+
+
+<!--
+
+- ūsum, https://en.wiktionary.org/wiki/usus#Latin
+- normae, https://en.wiktionary.org/wiki/norma#Latin
+- https://github.com/HXLStandard/libhxl-js/blob/main/hxl.js
+-->
