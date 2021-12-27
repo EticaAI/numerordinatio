@@ -209,6 +209,23 @@ class CodexBasim {
 
     return this
   }
+  /**
+    * _[eng-Latn]Add manually one item to the base[eng-Latn]_
+    *
+    * @param {string} codicem_basim
+    * @param {string} [linguam]
+    * @param {string} [terminum]
+    * @returns {object} this
+    */
+  addereObiectum(datum_extentionem) {
+    // TODO: allow this extend the base item
+    //
+    // console.log('addereObiectum', this.datum_de_factum, datum_extentionem)
+
+    this.datum_de_factum = Auxilium.mergeDeep(this.datum_de_factum, datum_extentionem)
+    this.praeparare()
+    return this
+  }
 
   exportareObiectum(reconstructum = false) {
     if (reconstructum) {
@@ -353,7 +370,7 @@ class CodexBasim {
         this.datum_reconstructum[item] = this.datum_de_factum[item]
       }
     }
-    console.log('this.datum_reconstructum', this.datum_reconstructum)
+    // console.log('this.datum_reconstructum', this.datum_reconstructum)
     return this
   }
 
@@ -891,6 +908,39 @@ class Auxilium {
     return resultatum
 
   }
+
+  /**
+  * Performs a deep merge of objects and returns new object. Does not modify
+  * objects (immutable) and merges arrays via concatenation.
+  *
+  * @see https://stackoverflow.com/a/48218209/894546
+  *
+  * @param {...object} objects - Objects to merge
+  * @returns {object} New object with merged key/values
+  */
+  static mergeDeep(...objects) {
+    const isObject = obj => obj && typeof obj === 'object';
+
+    return objects.reduce((prev, obj) => {
+      Object.keys(obj).forEach(key => {
+        const pVal = prev[key];
+        const oVal = obj[key];
+
+        if (Array.isArray(pVal) && Array.isArray(oVal)) {
+          prev[key] = pVal.concat(...oVal);
+        }
+        else if (isObject(pVal) && isObject(oVal)) {
+          prev[key] = mergeDeep(pVal, oVal);
+        }
+        else {
+          prev[key] = oVal;
+        }
+      });
+
+      return prev;
+    }, {});
+  }
+
 }
 
 

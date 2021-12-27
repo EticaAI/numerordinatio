@@ -179,13 +179,17 @@ SPDX-License-Identifier: Unlicense
         <div class="card card-body">
           <mark>Ad como opus</mark>
           <div class="mb-3">
-            <label for="of" class="form-label">Fontem ontologia (YAML aut JSON)</label>
+            <label for="of" class="form-label">Fontem de scientiam basī (YAML aut JSON)</label>
             <textarea class="form-control instrumentum-optionem" id="of" rows="3">data/scientiam-basi.yml</textarea>
           </div>
           <div class="mb-3">
-            <label for="ef" class="form-label">Exemplum bonō (CSV)</label>
-            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
-data/usum-normae.csv</textarea>
+            <label for="of" class="form-label">Fontem ex scientiam commūnitātibus (YAML aut JSON)</label>
+            <textarea class="form-control instrumentum-optionem" id="cf" rows="3">data/scientiam-basi.yml
+data/scientiam-basi-extra.yml</textarea>
+          </div>
+          <div class="mb-3">
+            <label for="ef" class="form-label">Fontem de ūsum normae</label>
+            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
           </div>
           <div class="form-check form-switch">
             <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
@@ -674,13 +678,14 @@ data/usum-normae.csv</textarea>
     let datum_globum = {}
     let scientia_basi = null // crude ontology.yml, _as it is_
     let scientia_basi_mutatum_est = null // last change on ontology.yml
+    let communitatibus = null // scientiam_commūnitātibus
     let scientia = null // computed result
     let testum = {}
     let usum_professori_tabulam = [] // CSV
     let usum_professori_obiectum = {} // CSV
+    let scientia_datum = null // CSV
     /****** _[eng-Latn] Edit this section [eng-Latn]_ ******/
     // const yaml = require('js-yaml');
-
 
     /**
      * _[eng-Latn]
@@ -1883,7 +1888,8 @@ data/usum-normae.csv</textarea>
     /** Hackish user interface helper to get things working **/
     function scientia_fontem(externus = true) {
       let resultatum = {
-        'ontologia': [],
+        'scientiam': [],
+        'communitatem': [],
         'exemplum': [],
         'minimam': true,
         'url': ''
@@ -1898,30 +1904,35 @@ data/usum-normae.csv</textarea>
           // console.log('decodedURI', decodedURI)
           de_hash = JSON.parse(decodedURI)
 
-          resultatum.ontologia = de_hash.ontologia
+          resultatum.scientiam = de_hash.scientiam
+          resultatum.communitatem = de_hash.communitatem
           resultatum.exemplum = de_hash.exemplum
           resultatum.minimam = de_hash.minimam
         } catch (error) {
-          alert('scientia_fontem (URL) ' + error)
+          alert('scientiam_fontem (URL) ' + error)
           // console.log('scientia_fontem crudum', crudum)
           // console.log('scientia_fontem decodedURI', decodedURI)
         }
 
-        document.querySelector('#of').value = resultatum.ontologia.join('\n')
+        document.querySelector('#of').value = resultatum.scientiam.join('\n')
+        document.querySelector('#cf').value = resultatum.communitatem.join('\n')
         document.querySelector('#ef').value = resultatum.exemplum.join('\n')
         document.querySelector('#minimae').checked = resultatum.minimam
 
         // console.log(de_hash)
       } else {
         let of = document.querySelector('#of').value.split(/\r?\n/);
+        let cf = document.querySelector('#cf').value.split(/\r?\n/);
         let ef = document.querySelector('#ef').value.split(/\r?\n/);
-        resultatum.ontologia = of
+        resultatum.scientiam = of
+        resultatum.communitatem = cf
         resultatum.exemplum = ef
         resultatum.minimam = document.querySelector('#minimae').checked
       }
 
       resultatum.url = window.location.href.replace(location.hash, '') + '#?expertum=' + JSON.stringify({
-        ontologia: resultatum.ontologia,
+        scientiam: resultatum.scientiam,
+        communitatem: resultatum.communitatem,
         exemplum: resultatum.exemplum,
         minimam: resultatum.minimam,
       })
@@ -2028,19 +2039,104 @@ data/usum-normae.csv</textarea>
       })
     })
 
+    // @TODO: maybe try keep comments, see @https://github.com/liorbentov/preserve-yaml-comments/blob/master/src/index.js
+
     let usum_exemplis = 'data/usum-exemplis.csv'
     fetch(usum_exemplis).then(function (response) {
       response.text().then(function (text) {
         CoreMirrorTestum.setValue(text)
       });
     });
-    // let ontologia_referens = 'ontologia.yml'
-    // fetch(ontologia_referens).then(function (response) {
-    fetch(scientia_fontem_initiale.ontologia[0]).then(function (response) {
-      response.text().then(function (text) {
-        CoreMirrorOntologia.setValue(text)
+
+    if (scientia_fontem_initiale.scientiam.length < 2) {
+      // let ontologia_referens = 'ontologia.yml'
+      // fetch(ontologia_referens).then(function (response) {
+      fetch(scientia_fontem_initiale.scientiam[0]).then(function (response) {
+        response.text().then(function (text) {
+          CoreMirrorOntologia.setValue(text)
+        });
       });
-    });
+    } else {
+      // TODO, several scientia basi, strip comments
+      // console.log('scientia_fontem_initiale.scientia', scientia_fontem_initiale.scientia)
+      let scientia_fontem = null
+      function __hacky_2(exemplum_neo) {
+        // console.log('__hacky', exemplum_neo)
+        exemplum_et_all.push(...exemplum_neo)
+        exemplum_et_all = NumOrd.Auxilium.array_collectionem_narmationi(exemplum_et_all)
+        // console.log('exemplum_et_all', exemplum_et_all)
+        CoreMirrorProfessorem.setValue(Papa.unparse(exemplum_et_all))
+      }
+      WebPasco.fetchAll(scientia_fontem_initiale.scientiam).then(function (scientia_collectionem) {
+        let scientia_meta = null
+        let fontem = []
+        scientia_collectionem.map(item => {
+          // console.log('item', item.url)
+          fontem.push(item.url)
+          item.text().then(function (text) {
+            // console.log('text', text)
+            try {
+              // const doc = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
+              scientia_basi = jsyaml.load(text, 'utf8');
+              if (scientia_meta) {
+                scientia_meta.addereObiectum(scientia_basi)
+              } else {
+                scientia_meta = new CodexDeObiectum(scientia_basi)
+              }
+              scientia_meta.praeparare()
+
+              let _obiectum = scientia_meta.exportareObiectum(true)
+              let _yaml = jsyaml.dump(_obiectum, { forceQuotes: true })
+              // console.log(scientia_basi);
+              CoreMirrorOntologia.setValue("#" + fontem.join("\n#") + "\n" + _yaml)
+            } catch (e) {
+              console.log(e);
+            }
+            // Papa.parse(text, {
+            //   complete: function (results) {
+            //     __hacky(results.data)
+            //   }
+            // })
+          });
+        })
+      })
+    }
+
+    // communitatibus
+
+    // let communitatibus = null
+    // function __hacky_3(exemplum_neo) {
+    //   // console.log('__hacky', exemplum_neo)
+    //   exemplum_et_all.push(...exemplum_neo)
+    //   exemplum_et_all = NumOrd.Auxilium.array_collectionem_narmationi(exemplum_et_all)
+    //   // console.log('exemplum_et_all', exemplum_et_all)
+    //   CoreMirrorProfessorem.setValue(Papa.unparse(exemplum_et_all))
+    // }
+    // console.log('scientia_fontem_initiale', scientia_fontem_initiale)
+    WebPasco.fetchAll(scientia_fontem_initiale.communitatem).then(function (communitatem_collectionem) {
+      let scientia_meta = null
+      let fontem = []
+      communitatem_collectionem.map(item => {
+        // console.log('item', item.url)
+        fontem.push(item.url)
+        item.text().then(function (text) {
+          // console.log('text', text)
+          try {
+            // const doc = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
+            let ad_hoc = jsyaml.load(text, 'utf8');
+            if (communitatibus) {
+              communitatibus.addereObiectum(ad_hoc)
+            } else {
+              communitatibus = new CodexDeObiectum(ad_hoc)
+            }
+            communitatibus.praeparare()
+            // console.log('done', item.url, communitatibus)
+          } catch (e) {
+            console.log(e);
+          }
+        });
+      })
+    })
 
     function prepare_scientia() {
       try {
