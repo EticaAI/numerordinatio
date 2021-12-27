@@ -691,7 +691,62 @@ class Graphviz {
 // https://github.com/cimiano/tbx2rdf
 // https://github.com/liderproject/tbx2rdfservice
 // http://tbx2rdf.lider-project.eu/converter/
-class RDF { }
+// https://www.w3.org/TR/rdf11-concepts/
+/*
+let codex = (new CodexDeObiectum(jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8')))
+let ast =  codex.praeparare().exportareObiectum(true)
+let rdf_ttl_urn = (new RDFProofOfConcept(ast)).export()
+rdf_ttl_urn
+*/
+class RDFProofOfConcept {
+  constructor(ast) {
+    this.ast = ast || {}
+  }
+
+  _initiale() {
+    return ''
+  }
+
+  _corporeum() {
+    let tbx_concepts = []
+    for (let [codicem, conceptum_significatini] of Object.entries(this.ast)) {
+      if (conceptum_significatini && Object.keys(conceptum_significatini).length > 0) {
+        tbx_concepts.push(`      <termEntry id="__${codicem}__">`)
+        for (let [linguam, terminum_collectionem] of Object.entries(conceptum_significatini)) {
+          tbx_concepts.push(`        <langSet xml:lang="${linguam}">`)
+          for (let [terminum_indicem, terminum_referens] of Object.entries(terminum_collectionem)) {
+            tbx_concepts.push(`          <tig>`)
+            tbx_concepts.push(`            <term>${terminum_referens}</term>`)
+            tbx_concepts.push(`          </tig>`)
+          }
+          // tbx_concepts.push(`        <seg>${tmx_seg.join("\n")}</seg>`)
+
+          // tbx_concepts.push(`          </tig>`)
+          tbx_concepts.push(`        </langSet>`)
+        }
+        tbx_concepts.push(`      </termEntry>`)
+      }
+    }
+
+    return tbx_concepts.join("\n")
+  }
+
+  _finale() {
+    return ''
+  }
+
+  setAST(ast) {
+    this.ast = ast
+    return this
+  }
+
+  export() {
+    let initiale = this._initiale()
+    let finale = this._finale()
+    let corporeum = this._corporeum()
+    return initiale + "\n" + corporeum + "\n" + finale
+  }
+}
 
 
 
@@ -945,4 +1000,4 @@ class Auxilium {
 
 
 
-export { Auxilium, CodexBasim, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF }
+export { Auxilium, CodexBasim, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDFProofOfConcept }

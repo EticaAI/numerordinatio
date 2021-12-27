@@ -1,3 +1,6 @@
+# @TODO https://datatracker.ietf.org/doc/html/rfc8141
+# @see https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml
+
 ### '45'?
 # On 25 April 1945, 50 governments met... 24 October 1945
 '45':
@@ -34,3 +37,34 @@
 '47.15924.215':
   qaa-Zyyy:
     '0': 'Latn'
+
+### '93'?
+# The Internet Engineering Task Force (IETF) (...) but since 1993 (...)
+'93':
+  qaa-Zyyy:
+    '0': https://www.rfc-editor.org/rfc/rfc2648.html
+# The identifier has the following ABNF [2] specification:
+
+# NSS = rfc-nss / fyi-nss / std-nss / bcp-nss /
+#       draft-nss / mtg-nss / other-nss
+
+# rfc-nss = "rfc:" 1*DIGIT
+# fyi-nss = "fyi:" 1*DIGIT
+# std-nss = "std:" 1*DIGIT
+# bcp-nss = "bcp:" 1*DIGIT
+# draft-nss = "id:" string
+# mtg-nss = "mtg:" string
+# other-nss = string
+#   ; beginning with a prefix other than one of those
+#   ; above for future expansion
+
+# string = 1*(DIGIT / ALPHA / "-")
+### '93.2'? 
+# BCP
+'93.2': {}
+
+### '93.2.47'?
+# BCP47; https://en.wikipedia.org/wiki/IETF_language_tag
+'93.2.47':
+  qaa-Zyyy:
+    '0': https://www.rfc-editor.org/info/bcp47

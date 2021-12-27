@@ -37,7 +37,7 @@ SPDX-License-Identifier: Unlicense
     }
 
     body {
-      padding-bottom: 4em;
+      padding-bottom: 8em;
     }
 
     /* Color blind palette from here https://davidmathlogic.com/colorblind/#%23648FFF-%23785EF0-%23DC267F-%23FE6100-%23FFB000*/
@@ -468,7 +468,7 @@ data/scientiam-basi-extra.yml</textarea>
         </h3>
 
         <div class="mb-3">
-          <button class="btn btn-primary" type="submit" id="i_reversum_logicae_actionem" style="width: 100%;">
+          <button class="btn btn-outline-primary" type="submit" id="i_reversum_logicae_actionem" style="width: 100%;">
             āctiōnem
           </button>
         </div>
@@ -668,7 +668,8 @@ data/scientiam-basi-extra.yml</textarea>
     window.Graphviz = NumOrd.Graphviz
     window.TMX = NumOrd.TMX
     window.TBXBasic2008 = NumOrd.TBXBasic2008
-    window.RDF = NumOrd.RDF
+    // window.RDF = NumOrd.RDF
+    window.RDFProofOfConcept = NumOrd.RDFProofOfConcept
 
     //CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF
 
@@ -992,7 +993,7 @@ data/scientiam-basi-extra.yml</textarea>
     function codex_de_tabulam_in_obiectum(usum_professori_tabulam) {
       let obiectum = {}
 
-      codex = new CodexDeTabulam()
+      let codex = new CodexDeTabulam()
 
       usum_professori_tabulam.forEach(lineam => {
         // console.log('lineam', lineam)
@@ -1612,7 +1613,7 @@ data/scientiam-basi-extra.yml</textarea>
       if (codicem_cor.indexOf("~") > -1) {
         let temp = codicem_cor.split("~")
         codicem_cor = temp[0]
-        entitatem = parseInt(temp[1])
+        // entitatem = parseInt(temp[1])
       } else {
         codicem_completum = codicem_cor
       }
@@ -1953,6 +1954,7 @@ data/scientiam-basi-extra.yml</textarea>
     var CoreMirrorTestumDot = CodeMirror.fromTextArea(document.querySelector('#testum_dot'));
     var CoreMirrorProfessorem = CodeMirror.fromTextArea(document.querySelector('#professorem'));
     var CoreMirroReversumAst = CodeMirror.fromTextArea(document.querySelector('#i_reversum_logicae_ast'));
+    window.CoreMirrorOntologia = CoreMirrorOntologia // debug only
 
     CoreMirrorOntologia.setOption('lineNumbers', true)
     CoreMirrorOntologia.setOption('theme', 'dracula')
@@ -2163,10 +2165,10 @@ data/scientiam-basi-extra.yml</textarea>
         usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
         // scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
         // scientia_datum_reconstructum = scientia_basi_de_crudum(usum_professori_obiectum)
-        console.log('usum_professori_obiectum', usum_professori_obiectum)
+        // console.log('usum_professori_obiectum', usum_professori_obiectum)
         usum_professori_obiectum.praeparare()
 
-        console.log('usum_professori_obiectum', usum_professori_obiectum)
+        // console.log('usum_professori_obiectum', usum_professori_obiectum)
         // console.log('scientia_datum_reconstructum', scientia_datum_reconstructum)
       } catch (e) {
         console.log(e)
@@ -2180,6 +2182,8 @@ data/scientiam-basi-extra.yml</textarea>
       });
     });
 
+    let adhoc_objectivum_linguam = null
+    let adhoc_agendum_linguam = null
     actionem.addEventListener("click", function (el) {
       // console.log('click', el)
       // console.log('ui_testum', ui_testum, parseCSV(ui_testum.value))
@@ -2207,7 +2211,7 @@ data/scientiam-basi-extra.yml</textarea>
         console.group(`Testum ${testum_index}`);
         // console.log('loop', item)
 
-        resultatum_main = main(scientia_basi, item, adhoc_objectivum_linguam, adhoc_agendum_linguam)
+        let resultatum_main = main(scientia_basi, item, adhoc_objectivum_linguam, adhoc_agendum_linguam)
         // console.log(abstractum_syntaxim_arborem)
         // console.log(abstractum_syntaxim_arborem)
         // console.log(resultatum_main.resumens.fontem)

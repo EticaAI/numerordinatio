@@ -1,1 +1,5 @@
 docs/data/*.json
+docs/data/*.rdf
+docs/data/*.n3
+docs/data/*.nt
+docs/data/*.ttl
