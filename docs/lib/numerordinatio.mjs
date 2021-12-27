@@ -327,6 +327,12 @@ class CodexBasim {
     return tabulam
   }
 
+  exportareRDFTurtle(reconstructum = false) {
+    let obiectum = this.exportareObiectum(reconstructum)
+    let tmx = new RDFProofOfConcept()
+    tmx.setAST(obiectum)
+    return tmx.export()
+  }
   exportareTMX(reconstructum = false) {
     let obiectum = this.exportareObiectum(reconstructum)
     let tmx = new TMX()
@@ -695,7 +701,7 @@ class Graphviz {
 /*
 let codex = (new CodexDeObiectum(jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8')))
 let ast =  codex.praeparare().exportareObiectum(true)
-let rdf_ttl_urn = (new RDFProofOfConcept(ast)).export()
+let rdf_ttl_urn = (new RDFProofOfConcept(ast)).exportArray()
 rdf_ttl_urn
 */
 class RDFProofOfConcept {
@@ -708,27 +714,28 @@ class RDFProofOfConcept {
   }
 
   _corporeum() {
-    let tbx_concepts = []
+    let rdf_ttl_urn = []
     for (let [codicem, conceptum_significatini] of Object.entries(this.ast)) {
       if (conceptum_significatini && Object.keys(conceptum_significatini).length > 0) {
-        tbx_concepts.push(`      <termEntry id="__${codicem}__">`)
+        // rdf_ttl_urn.push(`      <termEntry id="__${codicem}__">`)
         for (let [linguam, terminum_collectionem] of Object.entries(conceptum_significatini)) {
-          tbx_concepts.push(`        <langSet xml:lang="${linguam}">`)
+          // rdf_ttl_urn.push(`        <langSet xml:lang="${linguam}">`)
           for (let [terminum_indicem, terminum_referens] of Object.entries(terminum_collectionem)) {
-            tbx_concepts.push(`          <tig>`)
-            tbx_concepts.push(`            <term>${terminum_referens}</term>`)
-            tbx_concepts.push(`          </tig>`)
+            // rdf_ttl_urn.push(`          <tig>`)
+            // rdf_ttl_urn.push(`            <term>${terminum_referens}</term>`)
+            // rdf_ttl_urn.push(`          </tig>`)
+            rdf_ttl_urn.push(`<urn:${codicem}> <urn:93:2:47#${linguam}> "${terminum_referens}" .`)
           }
-          // tbx_concepts.push(`        <seg>${tmx_seg.join("\n")}</seg>`)
+          // rdf_ttl_urn.push(`        <seg>${tmx_seg.join("\n")}</seg>`)
 
-          // tbx_concepts.push(`          </tig>`)
-          tbx_concepts.push(`        </langSet>`)
+          // rdf_ttl_urn.push(`          </tig>`)
+          // rdf_ttl_urn.push(`        </langSet>`)
         }
-        tbx_concepts.push(`      </termEntry>`)
+        // rdf_ttl_urn.push(`      </termEntry>`)
       }
     }
 
-    return tbx_concepts.join("\n")
+    return rdf_ttl_urn
   }
 
   _finale() {
@@ -744,11 +751,17 @@ class RDFProofOfConcept {
     let initiale = this._initiale()
     let finale = this._finale()
     let corporeum = this._corporeum()
-    return initiale + "\n" + corporeum + "\n" + finale
+    // return initiale + "\n" + corporeum + "\n" + finale
+    return corporeum.join("\n")
+  }
+  exportArray() {
+    // let initiale = this._initiale()
+    // let finale = this._finale()
+    let corporeum = this._corporeum()
+    // return initiale + "\n" + corporeum + "\n" + finale
+    return corporeum
   }
 }
-
-
 
 // http://www.ttt.org/oscarStandards/tbx/tbx_oscar.pdf
 // http://www.ttt.org/oscarStandards/tbx/

@@ -308,6 +308,23 @@ data/scientiam-basi-extra.yml</textarea>
           </ul>
         </div>
 
+        <div class="btn-group float-end est-experimentum" style="display: none">
+          <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            RDF et al
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a target="_blank" href="#" class="dropdown-item" id="ontologia-rdf-urn-ttl-archivum">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                ontologia-urn.ttl
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <div class="btn-group float-end">
           <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"
             aria-expanded="false">
@@ -2176,6 +2193,17 @@ data/scientiam-basi-extra.yml</textarea>
       }
     }
 
+    function estExperimentum(){
+      // #beta=1
+      return (document.location.hash.indexOf('beta=1') > -1)
+    }
+
+    document.querySelectorAll('.est-experimentum').forEach(function (el) {
+      if (estExperimentum()) {
+        el.style.display = ''
+      }
+    });
+
     document.querySelectorAll('.instrumentum-optionem').forEach(function (el) {
       el.addEventListener("click", function (el) {
         scientia_fontem(false)
@@ -2254,6 +2282,12 @@ data/scientiam-basi-extra.yml</textarea>
       prepare_scientia()
       var blob = new Blob([scientia.exportareTBXBasic2008()], { type: "application/x-tbx;charset=utf-8" });
       saveAs(blob, "ontologia.tmx");
+    });
+
+    document.querySelector('#ontologia-rdf-urn-ttl-archivum').addEventListener("click", function (el) {
+      prepare_scientia()
+      var blob = new Blob([scientia.exportareRDFTurtle()], { type: "application/x-turtle;charset=utf-8" });
+      saveAs(blob, "ontologia-urn.ttl");
     });
 
     document.querySelector('#ontologia-archivum-csv').addEventListener("click", function (el) {
