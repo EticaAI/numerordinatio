@@ -1,3 +1,12 @@
+// Dominium Publicum
+// SPDX-License-Identifier: Unlicense
+
+/**
+ * _[eng-Latn] While there is no immediate need, remaining JavaScript code
+ * from index.html relatd to web eventually could be moved to here. [eng-Latn]_
+ */
+
+
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
 // console.log('numerordinatio-web-pasco.mjs')
 /*

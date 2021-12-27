@@ -6,10 +6,10 @@
 '45':
   qaa-Zyyy:
     '0': 'https://www.wikidata.org/wiki/Q1065'
-'45.11':
+'45:11':
   qaa-Zyyy:
     '0': 'https://icd.who.int/ct11'
-'45.49':
+'45:49':
   qaa-Zyyy:
     '0': 'https://unstats.un.org/unsd/methodology/m49/'
     '1': 'https://unstats.un.org/unsd/publication/SeriesM/Series_M49_(1970)_en-fr.pdf'
@@ -21,20 +21,20 @@
 '47':
   qaa-Zyyy:
     '0': 'https://www.wikidata.org/wiki/Q15028'
-'47.639':
+'47:639':
   qaa-Zyyy:
     '0': 'https://www.wikidata.org/wiki/Q33547'
-'47.639.3':
+'47:639:3':
   qaa-Zyyy:
     '0': 'https://www.wikidata.org/wiki/Q845956'
-'47.15924':
+'47:15924':
   qaa-Zyyy:
     '0': 'https://www.wikidata.org/wiki/Q845956'
     '1': 'https://unicode.org/iso15924/iso15924.txt'
-'47.15924.160':
+'47:15924:160':
   qaa-Zyyy:
     '0': 'Arab'
-'47.15924.215':
+'47:15924:215':
   qaa-Zyyy:
     '0': 'Latn'
 
@@ -68,3 +68,5 @@
 '93.2.47':
   qaa-Zyyy:
     '0': https://www.rfc-editor.org/info/bcp47
+
+# Exemplum: <urn:93:2:47#eng-Latn>

@@ -1,5 +1,11 @@
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-// console.log('numerordinatio.mjs')
+// Dominium Publicum
+// SPDX-License-Identifier: Unlicense
+
+/**
+ * _[eng-Latn] While there is no immediate need, remaining JavaScript code
+ * from index.html which could be ported to a non-web environment (such as
+ * command line) eventually could be moved to here. [eng-Latn]_
+ */
 
 class CodexBasim {
   constructor() {
@@ -137,10 +143,10 @@ class CodexBasim {
    */
   _parentem(codicem_radix) {
     let resultatum = []
-    let temp = codicem_radix.split('.')
+    let temp = codicem_radix.split(':')
     temp.pop()
     while (temp.length) {
-      resultatum.push(temp.join('.'))
+      resultatum.push(temp.join(':'))
       temp.pop()
     }
     return resultatum

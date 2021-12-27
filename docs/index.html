@@ -100,7 +100,7 @@ SPDX-License-Identifier: Unlicense
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Simplex auxilium</h5>
+          <h3 class="modal-title" id="exampleModalLabel">Simplex auxilium</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Exitus"></button>
         </div>
         <div class="modal-body">
@@ -189,7 +189,8 @@ data/scientiam-basi-extra.yml</textarea>
           </div>
           <div class="mb-3">
             <label for="ef" class="form-label">Fontem de ūsum normae</label>
-            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
+            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
+data/usum-exemplis-un-htcds.csv</textarea>
           </div>
           <div class="form-check form-switch">
             <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
@@ -340,7 +341,6 @@ data/scientiam-basi-extra.yml</textarea>
               </a>
             </li>
             <li>
-              </a>
               <a target="_blank" href="#" class="dropdown-item" id="ontologia-ast-online-dot-verbosum">
                 <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Globe:">
                   <use xlink:href="#bi-globe" />
@@ -350,12 +350,11 @@ data/scientiam-basi-extra.yml</textarea>
             </li>
           </ul>
         </div>
+      </div>
 
     </section>
     <section class="professorem">
       <h3 id="h-professorem"><a href="#h-professorem">§</a> 1.2. Scientiam basī ex ūsum normae</h3>
-      <!-- <p><mark>Ad como opus</mark></p> -->
-      <!-- <p><mark>Ad como opus</mark></p> -->
       <textarea id="professorem">
 # Loading...
       </textarea>
@@ -588,24 +587,6 @@ data/scientiam-basi-extra.yml</textarea>
       </section>
 
     </section>
-
-    <!--
-    <section class="todo">
-      <hr>
-      <h2><mark>Ad como opus</mark></h2>
-      <ul>
-        <li>http://viz-js.com/
-        </li>
-        <li>https://github.com/dagrejs/dagre/wiki</li>
-        <li>http://webgraphviz.com/</li>
-        <li>http://graphviz.it/#/gallery/nhg.gv</li>
-        <li>https://dreampuf.github.io/GraphvizOnline/</li>
-        <li>https://github.com/magjac/d3-graphviz</li>
-        <li>http://magjac.com/graphviz-visual-editor/</li>
-        <li>https://dotuml.com/</li>
-      </ul>
-    </section>
-    -->
   </main>
 
   <!-- @see https://getbootstrap.com/docs/5.1/components/alerts/#icons -->
@@ -645,21 +626,12 @@ data/scientiam-basi-extra.yml</textarea>
     integrity="sha512-CSBhVREyzHAjAFfBlIBakjoRUKp5h7VSweP0InR/pAJyptH7peuhCsqAI/snV+TwZmXZqoUklpXp6R6wMnYf5Q=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-    crossorigin="anonymous"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/codejar@3.5.0/codejar.min.js"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js" integrity="sha512-hpZ5pDCF2bRCweL5WoA0/N1elet1KYL5mx3LP555Eg/0ZguaHawxNvEjF6O3rufAChs16HVNhEc6blF/rZoowQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/codemirror.min.js"
     integrity="sha512-4DlmQ+aBOfYTZ3uzRKCDXdyL7y8IlopnVChhXG0pRFgyvhwONVQW3JX8e5DYoXUNr3evQpLZz7S3O1XxMH4WKA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/mode/mathematica/mathematica.min.js"
-    integrity="sha512-rbukTh0nNllkRjO8PgdzZSWxeeG4msxoTnrIxt5kUnI1uayl6+sUxoItSZiC6/pQto44VJVc7HQ+WYzOesb1kw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/mode/javascript/javascript.min.js" integrity="sha512-DJ/Flq7rxJDDhgkO49H/rmidX44jmxWot/ku3c+XXEF9XFal78KIpu7w6jEaQhK4jli1U3/yOH+Rp3cIIEYFPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/mode/yaml/yaml.min.js"
     integrity="sha512-+aXDZ93WyextRiAZpsRuJyiAZ38ztttUyO/H3FZx4gOAOv4/k9C6Um1CvHVtaowHZ2h7kH0d+orWvdBLPVwb4g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -671,7 +643,19 @@ data/scientiam-basi-extra.yml</textarea>
     integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!-- <script type="module" src="numerordinatio.mjs"></script> -->
+  <!--
+  ##############################################################################
+    @TODO _[eng-Latn] While there is no immediate need, remaining JavaScript
+                       code from index.html could be moved to
+                       lib/numerordinatio-web-pasco.mjs and
+                       lib/numerordinatio.mjs. It's working (not just as proof
+                       of concept) for end users, but it make less friendly to
+                       port to a non-web environment (such as CLI with NodeJS)
+                       by simply reusing the dlib/numerordinatio.mjs.
+           [eng-Latn]_
+  ##############################################################################
+  -->
+
   <script type="module">
     import * as NumOrd from './lib/numerordinatio.mjs';
     import * as WebPasco from './lib/numerordinatio-web-pasco.mjs';
@@ -747,11 +731,13 @@ data/scientiam-basi-extra.yml</textarea>
 
         if (adhoc[3]) {
           rem_et_codicem.push([index + 1, adhoc[3]])
-          let _parts = adhoc[3].split('.')
+          // let _parts = adhoc[3].split('.')
+          let _parts = adhoc[3].split(':')
           _parts.pop()
           while (_parts.length) {
             if (_parts.length > 0) {
-              abstractum_nodum.add(_parts.join('.'))
+              // abstractum_nodum.add(_parts.join('.'))
+              abstractum_nodum.add(_parts.join(':'))
               _parts.pop()
             }
           }
@@ -779,9 +765,11 @@ data/scientiam-basi-extra.yml</textarea>
           for (let item_2 of _etal) {
             // console.log('item_1[5]', item_1[5])
             // if (item_2 && item_2[5] && item_2[5].indexOf(item_1 + '.') === 0) {
-            if (item_2 && item_2[5] && item_2[5].indexOf(item_1[5] + '.') === 0) {
+            // if (item_2 && item_2[5] && item_2[5].indexOf(item_1[5] + '.') === 0) {
+            if (item_2 && item_2[5] && item_2[5].indexOf(item_1[5] + ':') === 0) {
               // console.log(crudum_abstractum_nodum[index_1])
-              let _parts = item_2[5].replace(item_1[5] + '.', '').split('.')
+              // let _parts = item_2[5].replace(item_1[5] + '.', '').split('.')
+              let _parts = item_2[5].replace(item_1[5] + ':', '').split(':')
               // console.log('_parts', _parts, item_2[5], item_1[5], item_2[5].replace(item_1[5] + '.', ''), '')
               if (_parts.length === 1) {
                 crudum_abstractum_nodum[index_1][7].push(item_2[0])
@@ -1145,13 +1133,15 @@ data/scientiam-basi-extra.yml</textarea>
       } else {
         codicem_radicem = codicem_purum
       }
-      let temp_parts = codicem_radicem.split('.')
+      // let temp_parts = codicem_radicem.split('.')
+      let temp_parts = codicem_radicem.split(':')
       if (temp_parts.length > 1) {
         // let temp_patrem = codicem_radicem.split('.')
         do {
           // console.log('oi', temp_parts)
           temp_parts.pop();
-          patrem.push(temp_parts.join('.'))
+          // patrem.push(temp_parts.join('.'))
+          patrem.push(temp_parts.join(':'))
         } while (temp_parts.length > 0);
 
         patrem = patrem.filter(col => col != "").reverse()
@@ -1367,7 +1357,8 @@ data/scientiam-basi-extra.yml</textarea>
       // const RegulaCodicemPurum = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/u
       // const oi = /^(p{General_Category=Decimal_Number}[p{General_Category=Decimal_Number}|.|~]*p{General_Category=Decimal_Number})$/
       // const oi = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/
-      const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
+      // const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
+      const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\:|~]*\\p{General_Category=Decimal_Number})`
       const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
       // const RegulaCodicemInVasum = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/u
 
@@ -1566,16 +1557,18 @@ data/scientiam-basi-extra.yml</textarea>
 
     function __direct_children(code, all_options) {
       let resultatum = []
-      let code_level = code.split('.').length
+      // let code_level = code.split('.').length
+      let code_level = code.split(':').length
       // console.log('code', code)
       if (all_options) {
         all_options.forEach(item => {
           // console.log('item', item)
           if (item.indexOf(`${code}`) > -1) {
-            let option_level = item.split('.').length
+            // let option_level = item.split('.').length
+            let option_level = item.split(':').length
             // console.log('oi  code, code_level, item, option_level', code, code_level, item, option_level)
             // console.log(code_level, option_level, code_level === (option_level + 1))
-            if (code_level === (option_level - 1)) {
+            if (code_level === (option_level - 1) && (parseInt(code) !== 0)) {
               resultatum.push(item)
             }
           }
@@ -1586,7 +1579,8 @@ data/scientiam-basi-extra.yml</textarea>
 
     function __codicem_rank(codicem_purum) {
       if (codicem_purum) {
-        return codicem_purum.split('.').length
+        // return codicem_purum.split('.').length
+        return codicem_purum.split(':').length
       }
       return -1
     }
@@ -1599,13 +1593,17 @@ data/scientiam-basi-extra.yml</textarea>
 
       const getEntries = (o, prefix = '') =>
         Object.entries(o).flatMap(([k, v]) =>
-          Object(v) === v ? getEntries(v, `${prefix}${k}.`) : [[`${prefix}${k}`, v]]
+          // Object(v) === v ? getEntries(v, `${prefix}${k}.`) : [[`${prefix}${k}`, v]]
+          // Object(v) === v ? getEntries(v, `${prefix}${k}:`) : [[`${prefix}${k}`, v]]
+          Object(v) === v ? getEntries(v, `${prefix}${k}`) : [[`${prefix}?${k}`, v]]
         )
 
       // return Object.fromEntries(getEntries(obiectum))
       Object.entries(Object.fromEntries(getEntries(obiectum))).forEach(pair => {
 
-        resultatum.push(`${pair[0]}::${pair[1]}`)
+        // resultatum.push(`${pair[0]}::${pair[1]}`)
+        // resultatum.push(`${pair[0]}:::${pair[1]}`)
+        resultatum.push(`${pair[0]}=((${pair[1]}))`)
       });
 
       return resultatum
@@ -1620,7 +1618,8 @@ data/scientiam-basi-extra.yml</textarea>
       // let removedText = textum.replace(/\D+/g, '');
       let coniunctum = 0
       let codicem_completum = null
-      let codicem_cor = textum.replace(/[^0-9_~\.\^\-\[\]\(\)\{\}]/g, '');
+      // let codicem_cor = textum.replace(/[^0-9_~\.\^\-\[\]\(\)\{\}]/g, '');
+      let codicem_cor = textum.replace(/[^0-9_~\:\^\-\[\]\(\)\{\}]/g, '');
       if (codicem_cor.match(/\((.*)\)/)) {
         codicem_cor = codicem_cor.match(/\((.*)\)/).pop()
       }
@@ -2193,7 +2192,7 @@ data/scientiam-basi-extra.yml</textarea>
       }
     }
 
-    function estExperimentum(){
+    function estExperimentum() {
       // #beta=1
       return (document.location.hash.indexOf('beta=1') > -1)
     }

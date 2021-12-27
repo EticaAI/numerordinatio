@@ -17,7 +17,7 @@
     '0': Legal Entity
   prs-Arab:
     '0': "//نهاد قانونی//"
-'12.10':
+'12:10':
   eng-Latn:
     '0': //Any type of person name//
   prs-Arab:
@@ -25,7 +25,7 @@
     '0': "//هر نوع نام شخصی//"
   qhx-Latn:
     '0': "#item+personam+nomen+co_12_10"
-'12.10.34':
+'12:10:34':
   eng-Latn:
     # '0': Person - alternative name
     '0': alternative name
@@ -33,14 +33,14 @@
     '0': "//شخص// - //نام جایگزین//"
   qhx-Latn:
     '0': "#item+personam+nomen+co_12_10_34"
-'12.10.34.5.99':
+'12:10:34:5:99':
   eng-Latn:
     # '0': Person - nickname from workplace
     '0': nickname from workplace
   prs-Arab:
     # '0': "//شخص// - //نام مستعار از محل کار//"
     '0': "//نام مستعار از محل کار//"
-'14.56':
+'14:56':
   eng-Latn:
     # '0': Legal Entity - alternative name
     '0': alternative name
