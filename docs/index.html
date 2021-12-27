@@ -109,10 +109,12 @@ SPDX-License-Identifier: Unlicense
             <dl>
               <dt><dfn lang="la" translate="no">Ordonumerae</dfn></dt>
               <dd>
-                1. (protologism; contemporary latin) a generic strategy of arranging numbers in an taxonomy-like explicit
+                1. (protologism; contemporary latin) a generic strategy of arranging numbers in an taxonomy-like
+                explicit
                 way.
               </dd>
-              <dd>2. Etymology: <em lang="la" translate="no">"ordo"</em> from Latin <em lang="la" translate="no">ōrdō</em>;
+              <dd>2. Etymology: <em lang="la" translate="no">"ordo"</em> from Latin <em lang="la"
+                  translate="no">ōrdō</em>;
                 ordo , ĭnis, m. from root or-; Sanscr. ar-, to go, strive upward; cf. orior, through an adj. stem ordo-;
                 (See <a href="http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=ordo">ordo in
                   Charlton T. Lewis and Charles Short (1879)</a>).
@@ -129,7 +131,8 @@ SPDX-License-Identifier: Unlicense
               <dt><span lang="la" translate="no">Scientiam basī</span></dt>
               <dd>Knowledge Base</dd>
               <dt><span lang="la" translate="no">Scientiam basī prīncipāle</span></dt>
-              <dd>1. Structured knowledge with both natural language and reference for external identifiers related to same
+              <dd>1. Structured knowledge with both natural language and reference for external identifiers related to
+                same
                 concepts (literal: main knowledge base)</dd>
               <dt><span lang="la" translate="no">Scientiam basī de exemplum bonō</span></dt>
               <dd>
@@ -190,8 +193,7 @@ data/usum-normae.csv</textarea>
               Memoriam usum minimae
             </label>
           </div>
-          Neo URL: <a target="_blank" id="expertum-url"
-            href="#">#</a>
+          Neo URL: <a target="_blank" id="expertum-url" href="#">#</a>
         </div>
         <div>
         </div>
@@ -625,7 +627,7 @@ data/usum-normae.csv</textarea>
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
     crossorigin="anonymous"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/codejar@3.5.0/codejar.min.js"></script> -->
@@ -663,7 +665,7 @@ data/usum-normae.csv</textarea>
     window.TMX = NumOrd.TMX
     window.TBXBasic2008 = NumOrd.TBXBasic2008
     window.RDF = NumOrd.RDF
-    
+
     //CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF
 
 
@@ -1901,8 +1903,8 @@ data/usum-normae.csv</textarea>
           resultatum.minimam = de_hash.minimam
         } catch (error) {
           alert('scientia_fontem (URL) ' + error)
-          console.log('scientia_fontem crudum', crudum)
-          console.log('scientia_fontem decodedURI', decodedURI)
+          // console.log('scientia_fontem crudum', crudum)
+          // console.log('scientia_fontem decodedURI', decodedURI)
         }
 
         document.querySelector('#of').value = resultatum.ontologia.join('\n')
@@ -1929,7 +1931,7 @@ data/usum-normae.csv</textarea>
       document.querySelector('#expertum-url').innerHTML = resultatum.url
       document.querySelector('#expertum-url').href = resultatum.url
 
-      console.log(resultatum)
+      // console.log(resultatum)
 
       return resultatum
     }
@@ -1996,7 +1998,7 @@ data/usum-normae.csv</textarea>
     const scientia_fontem_initiale = scientia_fontem(true)
 
 
-    console.log(await WebPasco.fetchAll(scientia_fontem_initiale.exemplum))
+    // console.log(await WebPasco.fetchAll(scientia_fontem_initiale.exemplum))
 
     if (scientia_fontem_initiale.minimam) {
       CoreMirrorOntologia.toTextArea()
@@ -2005,14 +2007,27 @@ data/usum-normae.csv</textarea>
       document.querySelector('#professorem').style.display = 'none'
     }
 
-    // Load usum-professori.csv
-    // let usum_professori = 'usum-professori.csv'
-    // fetch(usum_professori).then(function (response) {
-    fetch(scientia_fontem_initiale.exemplum[0]).then(function (response) {
-      response.text().then(function (text) {
-        CoreMirrorProfessorem.setValue(text)
-      });
-    });
+    let exemplum_et_all = []
+    function __hacky(exemplum_neo) {
+      // console.log('__hacky', exemplum_neo)
+      exemplum_et_all.push(...exemplum_neo)
+      exemplum_et_all = NumOrd.Auxilium.array_collectionem_narmationi(exemplum_et_all)
+      // console.log('exemplum_et_all', exemplum_et_all)
+      CoreMirrorProfessorem.setValue(Papa.unparse(exemplum_et_all))
+    }
+
+    WebPasco.fetchAll(scientia_fontem_initiale.exemplum).then(function (exemplum_collectionem) {
+      exemplum_collectionem.map(item => {
+        item.text().then(function (text) {
+          Papa.parse(text, {
+            complete: function (results) {
+              __hacky(results.data)
+            }
+          })
+        });
+      })
+    })
+
     let usum_exemplis = 'data/usum-exemplis.csv'
     fetch(usum_exemplis).then(function (response) {
       response.text().then(function (text) {

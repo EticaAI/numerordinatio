@@ -1,5 +1,5 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-console.log('numerordinatio.mjs')
+// console.log('numerordinatio.mjs')
 
 class CodexBasim {
   constructor() {
@@ -855,25 +855,41 @@ class Auxilium {
     let maximum = 0
     let temp1 = []
     let resultatum = []
-    console.log(array_de_array)
+    // console.log(array_de_array)
     for (let [index_1, item_1] of array_de_array.entries()) {
       // console.log(index_1, item_1)
-      if (item_1 && item_1.length > 0) {
-        // temp1.push(item_1)
-        maximum = (item_1.length > maximum ? item_1.length : maximum)
+      if (item_1 && item_1.length > 0 && item_1.filter(item => item).length > 0) {
+        temp1.push(item_1)
+        let maximum_non_vacuum = item_1.filter(item => item).length
+        maximum = (maximum_non_vacuum > maximum ? maximum_non_vacuum : maximum)
       }
     }
+
+    let resultatum_non_unicum = []
     if (temp1 && temp1.length) {
-      for (let [index_1, item_1] of temp1.entries()) {
-        resultatum[index_1] = []
-        for (let column = 0; column < maximum; column++){
-
+      for (let lineam of temp1) {
+        // console.log('lineam', lineam)
+        let neo_lineam = []
+        for (let indicem of Array.from(Array(maximum).keys())) {
+          // console.log('oioi', indicem, lineam[indicem])
+          if (lineam[indicem]) {
+            neo_lineam.push(lineam[indicem])
+          } else {
+            neo_lineam.push('')
+          }
         }
+        resultatum_non_unicum.push(neo_lineam)
       }
 
     }
-    // @TODO: remove duplicated, if any
+    // _[eng-Latn] Remove duplicates [eng-Latn]_
+    let stringArray = resultatum_non_unicum.map(JSON.stringify);
+    let uniqueStringArray = new Set(stringArray);
+    resultatum = Array.from(uniqueStringArray, JSON.parse);
+    // resultatum = resultatum_non_unicum
+
     return resultatum
+
   }
 }
 

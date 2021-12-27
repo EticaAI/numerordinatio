@@ -1,5 +1,5 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-console.log('numerordinatio-web-pasco.mjs')
+// console.log('numerordinatio-web-pasco.mjs')
 /*
   <!-- HTML Exemplum -->
   <script type="module">
@@ -13,10 +13,10 @@ console.log('numerordinatio-web-pasco.mjs')
 
 // function fetchAll(...resources) {
 function fetchAll(resources) {
-  console.log(resources)
+  // console.log(resources)
   var destination = []
   resources.forEach(it => {
-    console.log('it', it)
+    // console.log('it', it)
     destination.push(fetch(it))
   })
   return Promise.all(destination)
