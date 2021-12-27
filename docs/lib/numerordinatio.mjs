@@ -840,4 +840,43 @@ datatype="${this.datatype}"
   }
 }
 
-export { CodexBasim, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF }
+class Auxilium {
+  /**
+   * _[eng-Latn] Normalize arrays of arrays all have same number of columns
+   * [eng-Latn]_
+   *
+   * @example
+   * Auxilium.array_collectionem_narmationi([[1, 2], [1,2], [4,5,6,7]])
+   *
+   * @param {array} array_de_array 
+   * @returns {array}
+   */
+  static array_collectionem_narmationi(array_de_array) {
+    let maximum = 0
+    let temp1 = []
+    let resultatum = []
+    console.log(array_de_array)
+    for (let [index_1, item_1] of array_de_array.entries()) {
+      // console.log(index_1, item_1)
+      if (item_1 && item_1.length > 0) {
+        // temp1.push(item_1)
+        maximum = (item_1.length > maximum ? item_1.length : maximum)
+      }
+    }
+    if (temp1 && temp1.length) {
+      for (let [index_1, item_1] of temp1.entries()) {
+        resultatum[index_1] = []
+        for (let column = 0; column < maximum; column++){
+
+        }
+      }
+
+    }
+    // @TODO: remove duplicated, if any
+    return resultatum
+  }
+}
+
+
+
+export { Auxilium, CodexBasim, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF }
