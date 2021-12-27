@@ -785,6 +785,10 @@ class TBXBasic2008 {
     this.ast = {}
   }
 
+  _id(codicem){
+    return codicem.replace(/\:/g, '_')
+  }
+
   // http://www.ttt.org/oscarStandards/tbx/TBXcoreStructV02.dtd
   // TBXBasiccoreStructV02.dtd"
   _initiale() {
@@ -810,7 +814,7 @@ class TBXBasic2008 {
     let tbx_concepts = []
     for (let [codicem, conceptum_significatini] of Object.entries(this.ast)) {
       if (conceptum_significatini && Object.keys(conceptum_significatini).length > 0) {
-        tbx_concepts.push(`      <termEntry id="__${codicem}__">`)
+        tbx_concepts.push(`      <termEntry id="__${this._id(codicem)}__">`)
         for (let [linguam, terminum_collectionem] of Object.entries(conceptum_significatini)) {
           tbx_concepts.push(`        <langSet xml:lang="${linguam}">`)
           for (let [terminum_indicem, terminum_referens] of Object.entries(terminum_collectionem)) {
@@ -867,6 +871,10 @@ class TMX {
     this.ast = {}
   }
 
+  _id(codicem){
+    return codicem.replace(/\:/g, '_')
+  }
+
   _initiale() {
     return `<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE tmx SYSTEM "${this.system}">
@@ -887,7 +895,7 @@ datatype="${this.datatype}"
     let tmx_concepts = []
     for (let [codicem, conceptum_significatini] of Object.entries(this.ast)) {
       if (conceptum_significatini && Object.keys(conceptum_significatini).length > 0) {
-        tmx_concepts.push(`    <tu tuid="__${codicem}__">`)
+        tmx_concepts.push(`    <tu tuid="__${this._id(codicem)}__">`)
         for (let [linguam, terminum_collectionem] of Object.entries(conceptum_significatini)) {
           tmx_concepts.push(`      <tuv xml:lang="${linguam}">`)
           let tmx_seg = []

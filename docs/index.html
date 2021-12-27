@@ -189,8 +189,9 @@ data/scientiam-basi-extra.yml</textarea>
           </div>
           <div class="mb-3">
             <label for="ef" class="form-label">Fontem de ūsum normae</label>
-            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
-data/usum-exemplis-un-htcds.csv</textarea>
+            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
+            <!-- <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
+data/usum-exemplis-un-htcds.csv</textarea> -->
           </div>
           <div class="form-check form-switch">
             <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
@@ -660,7 +661,7 @@ data/usum-exemplis-un-htcds.csv</textarea>
     import * as NumOrd from './lib/numerordinatio.mjs';
     import * as WebPasco from './lib/numerordinatio-web-pasco.mjs';
     window.NumOrd = NumOrd
-    window.NumOrd = WebPasco
+    window.WebPasco = WebPasco
 
     window.Auxilium = NumOrd.Auxilium
     window.CodexBasim = NumOrd.CodexBasim
@@ -671,6 +672,14 @@ data/usum-exemplis-un-htcds.csv</textarea>
     window.TBXBasic2008 = NumOrd.TBXBasic2008
     // window.RDF = NumOrd.RDF
     window.RDFProofOfConcept = NumOrd.RDFProofOfConcept
+
+    let status_quo = new WebPasco.StatusQuo({
+      'ui_objectivum_linguam': '#objectivum_linguam',
+      'ui_auxilium_linguam': '#auxilium_linguam',
+      'ui_agendum_linguam': '#agendum_linguam',
+    })
+
+    window.status_quo = status_quo
 
     //CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF
 
@@ -1024,7 +1033,8 @@ data/usum-exemplis-un-htcds.csv</textarea>
 
       codex.praeparare()
 
-      // console.log('codex resultatum', codex.resultatum())
+      console.log('codex usum_professori_tabulam', usum_professori_tabulam)
+      console.log('codex resultatum', codex.resultatum())
 
       // return usum_professori_tabulam
       return codex.resultatum()
@@ -2171,9 +2181,15 @@ data/usum-exemplis-un-htcds.csv</textarea>
         console.log(e);
       }
     }
-    function prepare_usum_professori() {
+
+    function prepare_usum_professori(callback) {
       try {
-        usum_professori_tabulam = parseCSV(CoreMirrorProfessorem.getValue())
+        let _temp = CoreMirrorProfessorem.getValue()
+        // usum_professori_tabulam = parseCSV(CoreMirrorProfessorem.getValue())
+        usum_professori_tabulam = parseCSV(_temp)
+        console.log('oioi CoreMirrorProfessorem.getValue()', CoreMirrorProfessorem.getValue())
+        console.log('oioi usum_professori_tabulam', usum_professori_tabulam)
+        console.log('oioi parseCSV(_temp)', parseCSV(_temp))
         let _usum_professori_obiectum = codex_de_tabulam_in_obiectum(usum_professori_tabulam)
         usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
         usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
@@ -2184,8 +2200,49 @@ data/usum-exemplis-un-htcds.csv</textarea>
         // console.log('usum_professori_obiectum', usum_professori_obiectum)
         usum_professori_obiectum.praeparare()
 
-        // console.log('usum_professori_obiectum', usum_professori_obiectum)
+        // console.log('usum_professori_tabulam', usum_professori_tabulam)
+        // console.log('oreMirrorProfessorem.getValue 123', CoreMirrorProfessorem.getValue())
+        // console.log('usum_professori_obiectum 123', usum_professori_obiectum)
+        // console.log('usum_professori_obiectum 12345',  usum_professori_obiectum.exportareObiectum())
+        // console.log('CoreMirrorProfessorem.getValue()', CoreMirrorProfessorem.getValue())
+        // console.log('parseCSV(CoreMirrorProfessorem.getValue())', parseCSV(CoreMirrorProfessorem.getValue()))
+        // console.log('usum_professori_tabulam', usum_professori_tabulam)
+        // console.log('_usum_professori_obiectum', _usum_professori_obiectum)
         // console.log('scientia_datum_reconstructum', scientia_datum_reconstructum)
+        if (callback) {
+          callback(true)
+        }
+      } catch (e) {
+        console.log(e)
+        alert(e);
+      }
+    }
+    function prepare_usum_professori2(callback) {
+      return prepare_usum_professori(callback)
+      let crudum_data = CoreMirrorProfessorem.getValue()
+      console.log('crudum_data', crudum_data)
+      console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
+      crudum_data = "a,b\n1,2"
+      try {
+        Papa.parse(crudum_data, {
+          complete: function (result) {
+            console.log('result.data', result.data)
+            console.log('result', result)
+            let _usum_professori_obiectum = codex_de_tabulam_in_obiectum(result.data)
+            usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
+            usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
+            usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
+            usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
+            // scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
+            // scientia_datum_reconstructum = scientia_basi_de_crudum(usum_professori_obiectum)
+            // console.log('usum_professori_obiectum', usum_professori_obiectum)
+            usum_professori_obiectum.praeparare()
+
+            if (callback) {
+              callback(true)
+            }
+          }
+        })
       } catch (e) {
         console.log(e)
         alert(e);
@@ -2335,13 +2392,16 @@ data/usum-exemplis-un-htcds.csv</textarea>
 
     document.querySelector('#usum-professori-archivum-yml').addEventListener("click", function (el) {
       // prepare_scientia()
-      prepare_usum_professori()
+      // prepare_usum_professori()
 
-      let _obiectum = usum_professori_obiectum.exportareObiectum()
-      let _yaml = jsyaml.dump(_obiectum, { forceQuotes: true })
+      prepare_usum_professori2(function () {
+        let _obiectum = usum_professori_obiectum.exportareObiectum()
+        let _yaml = jsyaml.dump(_obiectum, { forceQuotes: true })
 
-      var blob = new Blob([_yaml], { type: "text/x-yaml;charset=utf-8" });
-      saveAs(blob, "usum-professori.yml");
+        console.log('usum-professori-archivum-yml', _obiectum, _yaml, usum_professori_obiectum)
+        var blob = new Blob([_yaml], { type: "text/x-yaml;charset=utf-8" });
+        saveAs(blob, "usum-professori.yml");
+      })
     });
 
     document.querySelector('#usum-professori-archivum-json').addEventListener("click", function (el) {
