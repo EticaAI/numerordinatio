@@ -496,6 +496,334 @@ class Primitivum {
 
 
   /**
+   * _[eng-Latn]
+   * From only array of headers and optionally some rows, build an rudimentar
+   * abstract syntax tree (without any awareness of what this means)
+   * [eng-Latn]_
+   *
+   * @param   {array} caput_collectionem - JavaScript Array de caput
+   * @param   {array} [rem_collectionem] - JavaScript Array[Array] de datum
+   * @returns {array}
+   */
+  static __abstractum_syntaxim_arborem(caput_collectionem, rem_collectionem = null) {
+    let ast_crudum = []
+    let rem_crudum = []
+    let coniunctum = new Set()
+    let abstractum_nodum = new Set()
+    let crudum_abstractum_nodum = []
+    let rem_et_codicem = []
+    let indicem = 1
+
+    // Tests
+    // abstractum_syntaxim_arborem(['Attacker name [12.10.34~1]', '', 'Survivor name [12.10.34~2]', 'Something else', 'Company name [14.56~2]'])
+
+    // 0: [<0:originale_indicem>, <1:originale_caput>, <2:typum_caput>, <3:aliud_caput>, <4:codicem_completum>, <5:codicem_basem>, <6:coniunctum>, <7:relationem>, <8:referens_nomen>]
+    // 1: vacuum
+    // 2: [...<coniunctum_collectionem>]
+    // 3: [...<crudum_abstractum_nodum>]
+
+    let _argumented = []
+    let _meta = []
+
+    _argumented.push(null)
+
+    for (const [index, caput] of caput_collectionem.entries()) {
+      let adhoc = Primitivum.quod_significationem_de_caput_item(caput)
+      coniunctum.add(adhoc[4])
+      let lineam = [index + 1, caput].concat(adhoc)
+      lineam.push([]) // <relationem>
+      lineam.push('') // <referens_nomen>
+      _argumented.push(lineam)
+
+      if (adhoc[3]) {
+        rem_et_codicem.push([index + 1, adhoc[3]])
+        // let _parts = adhoc[3].split('.')
+        let _parts = adhoc[3].split(':')
+        _parts.pop()
+        while (_parts.length) {
+          if (_parts.length > 0) {
+            // abstractum_nodum.add(_parts.join('.'))
+            abstractum_nodum.add(_parts.join(':'))
+            _parts.pop()
+          }
+        }
+      }
+      // console.log('adhoc[6]', adhoc[4], adhoc)
+    }
+    let _an = []
+    let _etal = []
+    if (abstractum_nodum.size) {
+      _an = Array.from(abstractum_nodum).sort()
+      let aindex = -2
+      for (let item of _an) {
+        crudum_abstractum_nodum.push(
+          [aindex, item, -100, item, item, item, null, [], '']
+        )
+        aindex = aindex - 1
+      }
+
+      let _etal = _argumented.concat(crudum_abstractum_nodum)
+      // _etal = _etal.filter()
+
+      // relationem
+      for (let [index_1, item_1] of crudum_abstractum_nodum.entries()) {
+        // console.log('item0', item_0)
+        for (let item_2 of _etal) {
+          // console.log('item_1[5]', item_1[5])
+          // if (item_2 && item_2[5] && item_2[5].indexOf(item_1 + '.') === 0) {
+          // if (item_2 && item_2[5] && item_2[5].indexOf(item_1[5] + '.') === 0) {
+          if (item_2 && item_2[5] && item_2[5].indexOf(item_1[5] + ':') === 0) {
+            // console.log(crudum_abstractum_nodum[index_1])
+            // let _parts = item_2[5].replace(item_1[5] + '.', '').split('.')
+            let _parts = item_2[5].replace(item_1[5] + ':', '').split(':')
+            // console.log('_parts', _parts, item_2[5], item_1[5], item_2[5].replace(item_1[5] + '.', ''), '')
+            if (_parts.length === 1) {
+              crudum_abstractum_nodum[index_1][7].push(item_2[0])
+              // console.log('foi mesmo', index_1, item_2[0])
+            }
+          }
+        }
+      }
+    }
+
+    _meta.push(
+      Array.from(coniunctum).sort()
+    )
+
+    ast_crudum.push(_argumented)
+    ast_crudum.push(rem_collectionem)
+    ast_crudum.push(_meta)
+    ast_crudum.push(crudum_abstractum_nodum)
+
+    // console.log('abstractum_syntaxim_arborem_v2', ast)
+
+    return ast_crudum
+  }
+
+  // @TODO: implement way to, via curated examples of previously tagged data
+  //        add codes on a dataset
+  // @deprecated make Numerodinatio able merge final result without use this helper
+  //
+  static __abstractum_syntaxim_arborem_de_conscientiam(ast_de_professorem, scientia_basi, optionem = {}) {
+    // Trivia: https://en.wiktionary.org/wiki/conscientia#Latin
+    let ast_finale = ast_de_professorem
+
+    console.info('@deprecated abstractum_syntaxim_arborem_de_conscientiam; @todo Numerodinatio')
+
+    // 0: [<0:originale_indicem>, <1:originale_caput>, <2:typum_caput>, <3:aliud_caput>, <4:codicem_completum>, <5:codicem_basem>, <6:coniunctum>, <7:relationem>, <8:referens_nomen>]
+    if (ast_finale[0]) {
+      for (let index = 1; index < ast_finale[0].length; index++) {
+        if (ast_finale[0][index][5]) {
+          let referens_nomen = quod_cognitionem(scientia_basi, { codicem: ast_finale[0][index][5] })
+          if (referens_nomen && referens_nomen[0]) {
+            ast_finale[0][index][8] = referens_nomen[0]
+            // console.log('deu', referens_nomen[0])
+          }
+        }
+      }
+    }
+
+    // 3: [...<crudum_abstractum_nodum>]
+    if (ast_finale[3]) {
+      // index de 0
+      for (let index = 0; index < ast_finale[3].length; index++) {
+        // <5:codicem_basem>
+        // <8:referens_nomen>
+        if (ast_finale[3][index][5]) {
+          let referens_nomen = quod_cognitionem(scientia_basi, { codicem: ast_finale[3][index][5] })
+          if (referens_nomen && referens_nomen[0]) {
+            ast_finale[3][index][8] = referens_nomen[0]
+            // console.log('deu2', referens_nomen[0])
+          }
+          // console.log('referens_nomen', referens_nomen)
+        }
+        // console.log('oi', ast_finale[3][index][5])
+      }
+    }
+    return ast_finale
+  }
+
+  /**
+ * _[eng-Latn] A rudimentar summary of Abstract Syntax Tree. Consider use
+ * the ast_in_dot_numerae()
+ * [eng-Latn]_
+ *
+ * @param {array}  ast
+ * @returns {object}
+ **/
+  static __ast_in_summarium(ast) {
+    let resultatum = {}
+
+    // ast_in_summarium(abstractum_syntaxim_arborem(['12.10.34', '12.10.34~2', '', '14.56', '14.56', '14.56~2']))
+    if (ast && ast.length) {
+      ast.forEach(coniunctum_et_rem_collectionem => {
+        let coniunctum = "" + coniunctum_et_rem_collectionem[0]
+        // console.log(coniunctum)
+        resultatum[coniunctum] = []
+        coniunctum_et_rem_collectionem[1].forEach(rem_collectionem => {
+          // console.log('rem_collectionem', rem_collectionem)
+          if (Array.isArray(rem_collectionem)) {
+            resultatum[coniunctum].push("" + rem_collectionem[0] + ',' + rem_collectionem[1])
+          } else {
+            resultatum[coniunctum].push('' + rem_collectionem)
+          }
+        });
+      });
+    }
+
+    return resultatum
+  }
+
+  /**
+   * @TODO temporary name; maybe replace or remove
+   *
+   * @param {*} code 
+   * @param {*} all_options 
+   * @returns 
+   */
+  static __direct_children(code, all_options) {
+    let resultatum = []
+    // let code_level = code.split('.').length
+    let code_level = code.split(':').length
+    // console.log('code', code)
+    if (all_options) {
+      all_options.forEach(item => {
+        // console.log('item', item)
+        if (item.indexOf(`${code}`) > -1) {
+          // let option_level = item.split('.').length
+          let option_level = item.split(':').length
+          // console.log('oi  code, code_level, item, option_level', code, code_level, item, option_level)
+          // console.log(code_level, option_level, code_level === (option_level + 1))
+          if (code_level === (option_level - 1) && (parseInt(code) !== 0)) {
+            resultatum.push(item)
+          }
+        }
+      });
+    }
+    return resultatum
+  }
+
+  // @TODO deal with order of apperance https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
+  static __scientia_basi_in_ast_dot_numerum(scientia) {
+    // let resultatum = '# TODO'
+
+    let scientia_datum = scientia.quod_completum()
+
+    let dot = new Graphviz('ontologia-numerae')
+
+    // console.log(scientia, scientia)
+
+    if (scientia_datum && Object.keys(scientia_datum).length !== 0) {
+      let _opt = Object.keys(scientia_datum)
+      for (let [codicem_basim, signifo] of Object.entries(scientia_datum)) {
+        // dot.addNode(codicem_basim)
+        // dot.addNode(codicem_basim, { rank: __codicem_rank(codicem_basim) })
+        dot.addNode(codicem_basim, { rank: Primitivum.ordoDeCodicem(codicem_basim) })
+      }
+
+      _opt.forEach(item => {
+        let __rels = Primitivum.__direct_children(item, _opt)
+        if (__rels && __rels.length > 0) {
+          dot.addRelIndirect(item, __rels)
+        }
+      })
+
+    } {
+      // dot.addAnnotation('vacuum?')
+    }
+
+    return dot.render()
+  }
+
+  /**
+   * @todo potential refactoring here on NumerordinatioAST
+   *
+   * @param {*} scientia 
+   * @returns 
+   */
+  static __scientia_basi_in_ast_dot_verbosum(scientia) {
+    let dot = new Graphviz('ontologia-verbosum', 'strict graph', {
+      'node': { 'style': 'filled' }
+    })
+
+    let scientia_datum = scientia.quod_completum()
+
+    // console.log('scientia_datum', scientia_datum)
+
+    // console.log(scientia, scientia)
+    // node [style=filled]
+
+    if (scientia_datum && Object.keys(scientia_datum).length !== 0) {
+      let _opt = Object.keys(scientia_datum)
+      for (let [codicem_basim, signifo] of Object.entries(scientia_datum)) {
+        // dot.addNode(codicem_basim)
+        // console.log(signifo)
+        dot.addNode(codicem_basim, {
+          // 'rank': __codicem_rank(codicem_basim),
+          'rank': Primitivum.ordoDeCodicem(codicem_basim),
+          // 'verbose': __linearize(signifo)
+          'verbose': Primitivum.lineatio(signifo)
+        })
+      }
+
+      _opt.forEach(item => {
+        let __rels = Primitivum.__direct_children(item, _opt)
+        if (__rels && __rels.length > 0) {
+          dot.addRelIndirect(item, __rels)
+        }
+      })
+
+    } {
+      // dot.addAnnotation('vacuum?')
+    }
+
+    return dot.render()
+  }
+
+  /**
+   * _[eng-Latn]Convert from tabular format to object format. Mostly used
+   * to use example tables already labeled with codes trying to merge
+   * everything as if was a planned ontology
+   * [eng-Latn]_
+   */
+  static codex_de_tabulam_in_obiectum(usum_professori_tabulam) {
+    let obiectum = {}
+
+    let codex = new CodexDeTabulam()
+
+    usum_professori_tabulam.forEach(lineam => {
+      // console.log('lineam', lineam)
+      let titulum = lineam.shift()
+      let linguam = lineam.shift()
+      // console.log('lineam', lineam)
+
+      while (lineam.length > 0) {
+        let sig = null
+        if (lineam[0]) {
+          sig = Primitivum.quod_significationem_de_caput_item(lineam[0])
+          // console.log('sig', sig)
+          if (sig[3]) {
+            // console.log('foi', sig)
+            codex.addereRem(sig[3], linguam, sig[1])
+          }
+        }
+        lineam.shift()
+      }
+    });
+
+    // quod_significationem_de_caput_item()
+
+    codex.praeparare()
+
+    console.log('codex usum_professori_tabulam', usum_professori_tabulam)
+    console.log('codex resultatum', codex.resultatum())
+
+    // return usum_professori_tabulam
+    return codex.resultatum()
+  }
+
+
+  /**
    * Flat a deep object into single line array with keys and arrays
    * 
    * Trivia:
