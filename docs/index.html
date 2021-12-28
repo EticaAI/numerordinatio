@@ -791,7 +791,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       _argumented.push(null)
 
       for (const [index, caput] of caput_collectionem.entries()) {
-        let adhoc = quod_significationem_de_caput_item(caput)
+        let adhoc = Primitivum.quod_significationem_de_caput_item(caput)
         coniunctum.add(adhoc[4])
         let lineam = [index + 1, caput].concat(adhoc)
         lineam.push([]) // <relationem>
@@ -865,9 +865,13 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
 
     // @TODO: implement way to, via curated examples of previously tagged data
     //        add codes on a dataset
+    // @deprecated make Numerodinatio able merge final result without use this helper
+    //
     function abstractum_syntaxim_arborem_de_conscientiam(ast_de_professorem, scientia_basi, optionem = {}) {
       // Trivia: https://en.wiktionary.org/wiki/conscientia#Latin
       let ast_finale = ast_de_professorem
+
+      console.info('@deprecated abstractum_syntaxim_arborem_de_conscientiam; @todo Numerodinatio')
 
       // 0: [<0:originale_indicem>, <1:originale_caput>, <2:typum_caput>, <3:aliud_caput>, <4:codicem_completum>, <5:codicem_basem>, <6:coniunctum>, <7:relationem>, <8:referens_nomen>]
       if (ast_finale[0]) {
@@ -902,32 +906,32 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       return ast_finale
     }
 
-    // @TODO: implement way to, via curated examples of previously tagged data
-    //        add codes on a dataset
-    function abstractum_syntaxim_arborem_de_professorem(ast_crudum) {
-      let ast_de_professorem = ast_crudum
-      return ast_de_professorem
-    }
+    // // @TODO: implement way to, via curated examples of previously tagged data
+    // //        add codes on a dataset
+    // function abstractum_syntaxim_arborem_de_professorem(ast_crudum) {
+    //   let ast_de_professorem = ast_crudum
+    //   return ast_de_professorem
+    // }
 
-    /**
-     * _[eng-Latn] Return subset of variables from it's cluster number [eng-Latn]_
-     *
-     * @param {array}  rem_completum
-     * @param {number} coniunctum
-     * @returns {array}
-     **/
-    function ast_coniunctum(rem_completum, coniunctum) {
-      let resultatum = []
-      rem_completum.forEach(element => {
-        if (element[3] === coniunctum) {
-          resultatum.push(element)
-        }
-      });
-      if (resultatum.length === 0) {
-        throw `ast_coniunctum non? coniunctum[${coniunctum}] rem_completum [${JSON.stringify(rem_completum)}] `;
-      }
-      return resultatum
-    }
+    // /**
+    //  * _[eng-Latn] Return subset of variables from it's cluster number [eng-Latn]_
+    //  *
+    //  * @param {array}  rem_completum
+    //  * @param {number} coniunctum
+    //  * @returns {array}
+    //  **/
+    // function ast_coniunctum(rem_completum, coniunctum) {
+    //   let resultatum = []
+    //   rem_completum.forEach(element => {
+    //     if (element[3] === coniunctum) {
+    //       resultatum.push(element)
+    //     }
+    //   });
+    //   if (resultatum.length === 0) {
+    //     throw `ast_coniunctum non? coniunctum[${coniunctum}] rem_completum [${JSON.stringify(rem_completum)}] `;
+    //   }
+    //   return resultatum
+    // }
 
     /**
      * _[eng-Latn] A rudimentar summary of Abstract Syntax Tree. Consider use
@@ -1084,7 +1088,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         while (lineam.length > 0) {
           let sig = null
           if (lineam[0]) {
-            sig = quod_significationem_de_caput_item(lineam[0])
+            sig = Primitivum.quod_significationem_de_caput_item(lineam[0])
             // console.log('sig', sig)
             if (sig[3]) {
               // console.log('foi', sig)
@@ -1107,7 +1111,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     }
 
     /**
-     * 
+     * @deprecated deprecated with abstractum_syntaxim_arborem_de_conscientiam()
+     *
      * @example
      *
      * quod_cognitionem(scientia_basi, {codicem:'12'})
@@ -1129,6 +1134,9 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       return [scientia_basi[optionem.codicem][clavem][terminum_indicem], clavem, terminum_indicem]
     }
 
+    /**
+     * @deprecated deprecated with abstractum_syntaxim_arborem_de_conscientiam()
+     **/
     function quod_linguam(optionem = [], objectivum_linguam = null, agendum_linguam = []) {
       // @TODO create javascript version of bcp47_langtag
       //       https://github.com/EticaAI/tico-19-hxltm/blob/main/scripts/fn/linguacodex.py#L1064
@@ -1162,237 +1170,237 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     }
 
 
-    /**
-     * Trivia:
-     * - significātiōnem, https://en.wiktionary.org/wiki/significatio#Latin
-     * - pūrum, https://en.wiktionary.org/wiki/purus#Latin
-     * - abstractum, https://en.wiktionary.org/wiki/purus#Latin
-     *
-     * @example
-     * // returns [3, '12.34~3', '12.34', 3]
-     * quod_significationem_de_codicem_purum('12.34~2', 3)
-     *
-     * @example
-     * // returns [3, '12.34~3', '12.34', 3]
-     * quod_significationem_de_codicem_purum('12.34', 4)
-     *
-     * @example
-     * // returns [3, '12.34.56~3', '12.34.56', 3, ['12', '12.34']]
-     * quod_significationem_de_codicem_purum('12', -1, true)
-     *
-     * @param {string} [codicem_purum]
-     * @param {number} indicem
-     * @param {bool} [abstractum]
-     * @returns {array}
-     */
-    const quod_significationem_de_codicem_purum = (codicem_purum, indicem, abstractum) => {
-      // coniunctum = 0: De anglicum "Broadcast address"
-      // @see https://en.wikipedia.org/wiki/Broadcast_address
-      let coniunctum = 0
-      let codicem_completum = codicem_purum
-      let codicem_radicem = ''
-      let patrem = []
+    // /**
+    //  * Trivia:
+    //  * - significātiōnem, https://en.wiktionary.org/wiki/significatio#Latin
+    //  * - pūrum, https://en.wiktionary.org/wiki/purus#Latin
+    //  * - abstractum, https://en.wiktionary.org/wiki/purus#Latin
+    //  *
+    //  * @example
+    //  * // returns [3, '12.34~3', '12.34', 3]
+    //  * quod_significationem_de_codicem_purum('12.34~2', 3)
+    //  *
+    //  * @example
+    //  * // returns [3, '12.34~3', '12.34', 3]
+    //  * quod_significationem_de_codicem_purum('12.34', 4)
+    //  *
+    //  * @example
+    //  * // returns [3, '12.34.56~3', '12.34.56', 3, ['12', '12.34']]
+    //  * quod_significationem_de_codicem_purum('12', -1, true)
+    //  *
+    //  * @param {string} [codicem_purum]
+    //  * @param {number} indicem
+    //  * @param {bool} [abstractum]
+    //  * @returns {array}
+    //  */
+    // const quod_significationem_de_codicem_purum = (codicem_purum, indicem, abstractum) => {
+    //   // coniunctum = 0: De anglicum "Broadcast address"
+    //   // @see https://en.wikipedia.org/wiki/Broadcast_address
+    //   let coniunctum = 0
+    //   let codicem_completum = codicem_purum
+    //   let codicem_radicem = ''
+    //   let patrem = []
 
-      if (!codicem_purum) {
-        throw "codicem_purum?";
-      }
+    //   if (!codicem_purum) {
+    //     throw "codicem_purum?";
+    //   }
 
-      if (codicem_purum.length < 5 && !abstractum) {
-        throw `codicem_purum > [00.00]? [${codicem_purum}]`;
-      }
-      // @TODO: check if starts and ends with digit
+    //   if (codicem_purum.length < 5 && !abstractum) {
+    //     throw `codicem_purum > [00.00]? [${codicem_purum}]`;
+    //   }
+    //   // @TODO: check if starts and ends with digit
 
-      if (codicem_purum.indexOf("~") > -1) {
-        let temp = codicem_purum.split("~")
-        codicem_radicem = temp[0]
-        coniunctum = parseInt(temp[1])
-      } else {
-        codicem_radicem = codicem_purum
-      }
-      // let temp_parts = codicem_radicem.split('.')
-      let temp_parts = codicem_radicem.split(':')
-      if (temp_parts.length > 1) {
-        // let temp_patrem = codicem_radicem.split('.')
-        do {
-          // console.log('oi', temp_parts)
-          temp_parts.pop();
-          // patrem.push(temp_parts.join('.'))
-          patrem.push(temp_parts.join(':'))
-        } while (temp_parts.length > 0);
+    //   if (codicem_purum.indexOf("~") > -1) {
+    //     let temp = codicem_purum.split("~")
+    //     codicem_radicem = temp[0]
+    //     coniunctum = parseInt(temp[1])
+    //   } else {
+    //     codicem_radicem = codicem_purum
+    //   }
+    //   // let temp_parts = codicem_radicem.split('.')
+    //   let temp_parts = codicem_radicem.split(':')
+    //   if (temp_parts.length > 1) {
+    //     // let temp_patrem = codicem_radicem.split('.')
+    //     do {
+    //       // console.log('oi', temp_parts)
+    //       temp_parts.pop();
+    //       // patrem.push(temp_parts.join('.'))
+    //       patrem.push(temp_parts.join(':'))
+    //     } while (temp_parts.length > 0);
 
-        patrem = patrem.filter(col => col != "").reverse()
-      }
+    //     patrem = patrem.filter(col => col != "").reverse()
+    //   }
 
-      return [indicem, codicem_completum, codicem_radicem, coniunctum, patrem]
-    }
+    //   return [indicem, codicem_completum, codicem_radicem, coniunctum, patrem]
+    // }
 
-    /**
-     * Trivia:
-     * - significātiōnem, https://en.wiktionary.org/wiki/significatio#Latin
-     * - cōdicem, https://en.wiktionary.org/wiki/codex#Latin
-     * - aliud, https://en.wiktionary.org/wiki/alius#Latin
-     * - typum, https://en.wiktionary.org/wiki/typus#Latin
-     * - fontem, https://en.wiktionary.org/wiki/fons#Latin
-     *
-     * @example <caption>00.00~0</caption>
-     * // returns [1, '12.34~5', '', '12.34~5']
-     * quod_significationem_de_caput_item('12.34~5')
-     *
-     * @example <caption>[00.00~0]</caption>
-     * // returns [2, '12.34~5', '', '[12.34~5]
-     * quod_significationem_de_caput_item('[12.34~5]')
-     *
-     * @example <caption>[00.00~0] 00=(...); []=(...);</caption>
-     * // returns [2, '12.34~5', '', '﹇١٢.٣٤~٥﹈']
-     * quod_significationem_de_caput_item('﹇١٢.٣٤~٥﹈')
-     *
-     * @example
-     * // returns [3, '12.34', '//نام جایگزین//', '[12.34] //نام جایگزین//']
-     * quod_significationem_de_caput_item('[12.34] //نام جایگزین//')
-     *
-     * @example
-     * // returns @TODO
-     * quod_significationem_de_caput_item('alternative-name--12-34')
-     *
-     * @example
-     * // returns @TODO
-     * quod_significationem_de_caput_item('备用名称_12-34')
-     *
-     * @param {string} [textum]
-     * @returns {array}
-     */
-    const quod_significationem_de_caput_item = (textum) => {
-      let typum = -1 // -1: non-codicem; 1: numerum purum; 2 [00.00];
-      let aliud = ''
-      let codicem_completum = ''
-      let codicem_radicem = ''
-      let codicem_coniunctum = -1
-      // let fontem = textum
+    // /**
+    //  * Trivia:
+    //  * - significātiōnem, https://en.wiktionary.org/wiki/significatio#Latin
+    //  * - cōdicem, https://en.wiktionary.org/wiki/codex#Latin
+    //  * - aliud, https://en.wiktionary.org/wiki/alius#Latin
+    //  * - typum, https://en.wiktionary.org/wiki/typus#Latin
+    //  * - fontem, https://en.wiktionary.org/wiki/fons#Latin
+    //  *
+    //  * @example <caption>00.00~0</caption>
+    //  * // returns [1, '12.34~5', '', '12.34~5']
+    //  * quod_significationem_de_caput_item('12.34~5')
+    //  *
+    //  * @example <caption>[00.00~0]</caption>
+    //  * // returns [2, '12.34~5', '', '[12.34~5]
+    //  * quod_significationem_de_caput_item('[12.34~5]')
+    //  *
+    //  * @example <caption>[00.00~0] 00=(...); []=(...);</caption>
+    //  * // returns [2, '12.34~5', '', '﹇١٢.٣٤~٥﹈']
+    //  * quod_significationem_de_caput_item('﹇١٢.٣٤~٥﹈')
+    //  *
+    //  * @example
+    //  * // returns [3, '12.34', '//نام جایگزین//', '[12.34] //نام جایگزین//']
+    //  * quod_significationem_de_caput_item('[12.34] //نام جایگزین//')
+    //  *
+    //  * @example
+    //  * // returns @TODO
+    //  * quod_significationem_de_caput_item('alternative-name--12-34')
+    //  *
+    //  * @example
+    //  * // returns @TODO
+    //  * quod_significationem_de_caput_item('备用名称_12-34')
+    //  *
+    //  * @param {string} [textum]
+    //  * @returns {array}
+    //  */
+    // const quod_significationem_de_caput_item = (textum) => {
+    //   let typum = -1 // -1: non-codicem; 1: numerum purum; 2 [00.00];
+    //   let aliud = ''
+    //   let codicem_completum = ''
+    //   let codicem_radicem = ''
+    //   let codicem_coniunctum = -1
+    //   // let fontem = textum
 
-      // Full test
-      // ['12.34~5', '١٢.٣٥', '[12.34~5]', '[12.34~5] lorem ipsum', ' Lorem Ipsum [12.34~5]', '[١٢.٣٥] لوريم إيبسوم', 'lorem-ipsum_12-34', 'lorem-ipsum--12-34'].map(quod_significationem_de_caput_item)
+    //   // Full test
+    //   // ['12.34~5', '١٢.٣٥', '[12.34~5]', '[12.34~5] lorem ipsum', ' Lorem Ipsum [12.34~5]', '[١٢.٣٥] لوريم إيبسوم', 'lorem-ipsum_12-34', 'lorem-ipsum--12-34'].map(quod_significationem_de_caput_item)
 
-      // @see https://www.unicode.org/reports/tr44/#General_Category_Values
-      // Regula cor: 00.00~0
-      const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
-      // Regula cor: [00.00~0]
-      const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
+    //   // @see https://www.unicode.org/reports/tr44/#General_Category_Values
+    //   // Regula cor: 00.00~0
+    //   const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
+    //   // Regula cor: [00.00~0]
+    //   const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
 
-      // Regula de factum: /^00.00~0$/
-      const __RegulaCodicemPurum = new RegExp('^' + RegulaCodicemPurum + '$', 'u')
-      // Regula de factum: /^[00.00~0]$/
-      const __RegulaCodicemPurumInVasum = new RegExp('^' + RegulaCodicemInVasum + '$', 'u')
-      // Regula de factum: /^[00.00~0] aliud $/
-      const __RegulaCodicemPurumInVasumInitiale = new RegExp('^' + RegulaCodicemInVasum + '(.+)$', 'u')
-      // Regula de factum: /^ aliud [00.00~0]$/
-      const __RegulaCodicemPurumInVasumFinale = new RegExp('^(.+)' + RegulaCodicemInVasum + '$', 'u')
+    //   // Regula de factum: /^00.00~0$/
+    //   const __RegulaCodicemPurum = new RegExp('^' + RegulaCodicemPurum + '$', 'u')
+    //   // Regula de factum: /^[00.00~0]$/
+    //   const __RegulaCodicemPurumInVasum = new RegExp('^' + RegulaCodicemInVasum + '$', 'u')
+    //   // Regula de factum: /^[00.00~0] aliud $/
+    //   const __RegulaCodicemPurumInVasumInitiale = new RegExp('^' + RegulaCodicemInVasum + '(.+)$', 'u')
+    //   // Regula de factum: /^ aliud [00.00~0]$/
+    //   const __RegulaCodicemPurumInVasumFinale = new RegExp('^(.+)' + RegulaCodicemInVasum + '$', 'u')
 
-      // Punctuation, connector, 	Includes "_" underscore
-      // https://www.compart.com/en/unicode/category/Pc
-      //
-      // Punctuation, dash, 	Includes "-" dash
-      // https://www.compart.com/en/unicode/category/Pd
-      //
-      // Punctuation, open [, {, ﹇
-      // https://www.compart.com/en/unicode/category/Ps
-      //
-      // Punctuation, close ], }, ﹈
-      // https://www.compart.com/en/unicode/category/Pe
-      //
-      // Punctuation, other . , * ! ?
-      // https://www.compart.com/en/unicode/category/Po
-      // 
-      // Math Symbol
+    //   // Punctuation, connector, 	Includes "_" underscore
+    //   // https://www.compart.com/en/unicode/category/Pc
+    //   //
+    //   // Punctuation, dash, 	Includes "-" dash
+    //   // https://www.compart.com/en/unicode/category/Pd
+    //   //
+    //   // Punctuation, open [, {, ﹇
+    //   // https://www.compart.com/en/unicode/category/Ps
+    //   //
+    //   // Punctuation, close ], }, ﹈
+    //   // https://www.compart.com/en/unicode/category/Pe
+    //   //
+    //   // Punctuation, other . , * ! ?
+    //   // https://www.compart.com/en/unicode/category/Po
+    //   // 
+    //   // Math Symbol
 
-      if (__RegulaCodicemPurum.test(textum)) {
-        typum = 1
-        codicem_completum = quod_significationem_in_digitum(textum.match(__RegulaCodicemPurum)[0])
-        // resultatum.push(textum.match(RegulaCodicemPurum))
+    //   if (__RegulaCodicemPurum.test(textum)) {
+    //     typum = 1
+    //     codicem_completum = Primitivum.quod_significationem_in_digitum(textum.match(__RegulaCodicemPurum)[0])
+    //     // resultatum.push(textum.match(RegulaCodicemPurum))
 
-      } else if (__RegulaCodicemPurumInVasum.test(textum)) {
-        let temp = textum.match(__RegulaCodicemPurumInVasum)
-        typum = 2
-        codicem_completum = quod_significationem_in_digitum(temp[2])
+    //   } else if (__RegulaCodicemPurumInVasum.test(textum)) {
+    //     let temp = textum.match(__RegulaCodicemPurumInVasum)
+    //     typum = 2
+    //     codicem_completum = Primitivum.quod_significationem_in_digitum(temp[2])
 
-      } else if (__RegulaCodicemPurumInVasumInitiale.test(textum)) {
-        let temp = textum.match(__RegulaCodicemPurumInVasumInitiale)
-        typum = 3
-        codicem_completum = quod_significationem_in_digitum(temp[2])
-        aliud = temp[3].trim()
+    //   } else if (__RegulaCodicemPurumInVasumInitiale.test(textum)) {
+    //     let temp = textum.match(__RegulaCodicemPurumInVasumInitiale)
+    //     typum = 3
+    //     codicem_completum = Primitivum.quod_significationem_in_digitum(temp[2])
+    //     aliud = temp[3].trim()
 
-      } else if (__RegulaCodicemPurumInVasumFinale.test(textum)) {
-        let temp = textum.match(__RegulaCodicemPurumInVasumFinale)
-        typum = 4
-        codicem_completum = quod_significationem_in_digitum(temp[3])
-        aliud = temp[1].trim()
+    //   } else if (__RegulaCodicemPurumInVasumFinale.test(textum)) {
+    //     let temp = textum.match(__RegulaCodicemPurumInVasumFinale)
+    //     typum = 4
+    //     codicem_completum = Primitivum.quod_significationem_in_digitum(temp[3])
+    //     aliud = temp[1].trim()
 
-      } else {
-        // @TODO: implement parsing pattterns like these
-        //        - alternative-name--12-34
-        //        - altrrnative-nane_12-34
-        //        - 备用名称--12-34
-        //        - மாற்று பெயர்--12-34
-      }
-      if (codicem_completum.length > 0) {
-        if (codicem_completum.indexOf("~") > -1) {
-          let temp = codicem_completum.split("~")
-          codicem_radicem = temp[0]
-          codicem_coniunctum = parseInt(temp[1])
-        } else {
-          // console.log('codicem_completum.length', codicem_completum.length, codicem_completum)
-          codicem_radicem = codicem_completum
-          codicem_coniunctum = 0
-        }
-      }
-      if (codicem_coniunctum === -1) {
-        aliud = textum
-      }
+    //   } else {
+    //     // @TODO: implement parsing pattterns like these
+    //     //        - alternative-name--12-34
+    //     //        - altrrnative-nane_12-34
+    //     //        - 备用名称--12-34
+    //     //        - மாற்று பெயர்--12-34
+    //   }
+    //   if (codicem_completum.length > 0) {
+    //     if (codicem_completum.indexOf("~") > -1) {
+    //       let temp = codicem_completum.split("~")
+    //       codicem_radicem = temp[0]
+    //       codicem_coniunctum = parseInt(temp[1])
+    //     } else {
+    //       // console.log('codicem_completum.length', codicem_completum.length, codicem_completum)
+    //       codicem_radicem = codicem_completum
+    //       codicem_coniunctum = 0
+    //     }
+    //   }
+    //   if (codicem_coniunctum === -1) {
+    //     aliud = textum
+    //   }
 
-      // console.log([typum, aliud, codicem_completum, codicem_radicem, codicem_coniunctum])
-      return [typum, aliud, codicem_completum, codicem_radicem, codicem_coniunctum]
-    }
+    //   // console.log([typum, aliud, codicem_completum, codicem_radicem, codicem_coniunctum])
+    //   return [typum, aliud, codicem_completum, codicem_radicem, codicem_coniunctum]
+    // }
 
-    // quod_significationem_in_digitum('١٢.٣٥')
-    /**
-     * @see This comment https://github.com/HXL-CPLP/forum/issues/60#issuecomment-997185201
-     */
-    function quod_significationem_in_digitum(codicem_purum, in_indicem = 0) {
-      if (!codicem_purum || codicem_purum.length === 0) {
-        return ''
-      }
-      let resultatum = ''
-      for (const [index, rem] of codicem_purum.split('').entries()) {
-        resultatum = resultatum + quod_significationem_in_digitum_de_atomum(rem)
-      }
-      return resultatum
-    }
+    // // quod_significationem_in_digitum('١٢.٣٥')
+    // /**
+    //  * @see This comment https://github.com/HXL-CPLP/forum/issues/60#issuecomment-997185201
+    //  */
+    // function quod_significationem_in_digitum(codicem_purum, in_indicem = 0) {
+    //   if (!codicem_purum || codicem_purum.length === 0) {
+    //     return ''
+    //   }
+    //   let resultatum = ''
+    //   for (const [index, rem] of codicem_purum.split('').entries()) {
+    //     resultatum = resultatum + quod_significationem_in_digitum_de_atomum(rem)
+    //   }
+    //   return resultatum
+    // }
 
-    // quod_significationem_in_digitum_de_atomum('١')
-    /**
-     */
-    function quod_significationem_in_digitum_de_atomum(atom) {
-      const datum = [
-        '0123456789', // DIGIT ZERO (...) DIGIT NINE
-        '٠١٢٣٤٥٦٧٨٩', // 	ARABIC-INDIC DIGIT ZERO (...) ARABIC-INDIC DIGIT NINE
-        '߀߁߂߃߄߅߆߇߈߉', // 	U+07C0	NKO DIGIT ZERO (...) U+07C9	NKO DIGIT NINE
-        '०१२३४५६७८९', // U+0966	DEVANAGARI DIGIT ZERO (...) U+096F	DEVANAGARI DIGIT NINE
-        // @TODO: This function is obviously partial. Eventually It needs a better alternative.
-        //        See this comment
-        //        https://github.com/HXL-CPLP/forum/issues/60#issuecomment-997185201
-      ]
-      // https://www.fileformat.info/info/unicode/category/Nd/list.htm
+    // // quod_significationem_in_digitum_de_atomum('١')
+    // /**
+    //  */
+    // function quod_significationem_in_digitum_de_atomum(atom) {
+    //   const datum = [
+    //     '0123456789', // DIGIT ZERO (...) DIGIT NINE
+    //     '٠١٢٣٤٥٦٧٨٩', // 	ARABIC-INDIC DIGIT ZERO (...) ARABIC-INDIC DIGIT NINE
+    //     '߀߁߂߃߄߅߆߇߈߉', // 	U+07C0	NKO DIGIT ZERO (...) U+07C9	NKO DIGIT NINE
+    //     '०१२३४५६७८९', // U+0966	DEVANAGARI DIGIT ZERO (...) U+096F	DEVANAGARI DIGIT NINE
+    //     // @TODO: This function is obviously partial. Eventually It needs a better alternative.
+    //     //        See this comment
+    //     //        https://github.com/HXL-CPLP/forum/issues/60#issuecomment-997185201
+    //   ]
+    //   // https://www.fileformat.info/info/unicode/category/Nd/list.htm
 
-      for (let NumerumSystema of datum) {
-        // console.log('NumerumSystema', NumerumSystema)
-        for (const [index, rem] of NumerumSystema.split('').entries()) {
-          if (atom === rem) {
-            return index
-          }
-        }
-      }
-      // _[eng-Latn]Worst case: we return the item, without changes[eng-Latn]_
-      return atom
-    }
+    //   for (let NumerumSystema of datum) {
+    //     // console.log('NumerumSystema', NumerumSystema)
+    //     for (const [index, rem] of NumerumSystema.split('').entries()) {
+    //       if (atom === rem) {
+    //         return index
+    //       }
+    //     }
+    //   }
+    //   // _[eng-Latn]Worst case: we return the item, without changes[eng-Latn]_
+    //   return atom
+    // }
 
     // @TODO deal with order of apperance https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
     function scientia_basi_in_ast_dot_numerum(scientia) {
@@ -1700,7 +1708,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       })
 
       let ast_crudum = abstractum_syntaxim_arborem(clavem_collectionem)
-      let ast_de_professorem = abstractum_syntaxim_arborem_de_professorem(ast_crudum)
+      // let ast_de_professorem = abstractum_syntaxim_arborem_de_professorem(ast_crudum)
+      let ast_de_professorem = ast_crudum
       let ast_finale = abstractum_syntaxim_arborem_de_conscientiam(ast_crudum, scientia_basi)
 
       ast.summarium.grupum = Array.from(grupum_set).sort()

@@ -496,28 +496,6 @@ class Primitivum {
 
 
   /**
-   * ōrdō de cōdicem
-   * _[eng-Latn] The rank of of a pure code [eng-Latn]_
-   *
-   * Trivia:
-   * - "cōdicem", https://en.wiktionary.org/wiki/codex#Latin
-   * - "cōdicem", https://en.wiktionary.org/wiki/ordinatio
-   *
-   * @param {string} codicem_purum 
-   * @returns {number}
-   */
-  static ordoDeCodicem(codicem_purum) {
-    // throw "@deprecated use Primitivum.lineatio"
-    // return Primitivum.lineatio(obiectum)
-
-    if (codicem_purum) {
-      // return codicem_purum.split('.').length
-      return codicem_purum.split(':').length
-    }
-    return -1
-  }
-
-  /**
    * Flat a deep object into single line array with keys and arrays
    * 
    * Trivia:
@@ -544,6 +522,28 @@ class Primitivum {
     });
 
     return resultatum
+  }
+
+  /**
+   * ōrdō de cōdicem
+   * _[eng-Latn] The rank of of a pure code [eng-Latn]_
+   *
+   * Trivia:
+   * - "cōdicem", https://en.wiktionary.org/wiki/codex#Latin
+   * - "cōdicem", https://en.wiktionary.org/wiki/ordinatio
+   *
+   * @param {string} codicem_purum 
+   * @returns {number}
+   */
+  static ordoDeCodicem(codicem_purum) {
+    // throw "@deprecated use Primitivum.lineatio"
+    // return Primitivum.lineatio(obiectum)
+
+    if (codicem_purum) {
+      // return codicem_purum.split('.').length
+      return codicem_purum.split(':').length
+    }
+    return -1
   }
 
   /**
@@ -712,6 +712,251 @@ class Primitivum {
     }
 
     return resultatum
+  }
+
+
+  /**
+   * @deprecated use Primitivum.quod_significationem_de_caput_item()
+   *
+   * Trivia:
+   * - significātiōnem, https://en.wiktionary.org/wiki/significatio#Latin
+   * - pūrum, https://en.wiktionary.org/wiki/purus#Latin
+   * - abstractum, https://en.wiktionary.org/wiki/purus#Latin
+   *
+   * @example
+   * // returns [3, '12.34~3', '12.34', 3]
+   * quod_significationem_de_codicem_purum('12.34~2', 3)
+   *
+   * @example
+   * // returns [3, '12.34~3', '12.34', 3]
+   * quod_significationem_de_codicem_purum('12.34', 4)
+   *
+   * @example
+   * // returns [3, '12.34.56~3', '12.34.56', 3, ['12', '12.34']]
+   * quod_significationem_de_codicem_purum('12', -1, true)
+   *
+   * @param {string} [codicem_purum]
+   * @param {number} indicem
+   * @param {bool} [abstractum]
+   * @returns {array}
+   */
+  static quod_significationem_de_codicem_purum(codicem_purum, indicem, abstractum) {
+    // coniunctum = 0: De anglicum "Broadcast address"
+    // @see https://en.wikipedia.org/wiki/Broadcast_address
+    let coniunctum = 0
+    let codicem_completum = codicem_purum
+    let codicem_radicem = ''
+    let patrem = []
+
+    if (!codicem_purum) {
+      throw "codicem_purum?";
+    }
+
+    if (codicem_purum.length < 5 && !abstractum) {
+      throw `codicem_purum > [00.00]? [${codicem_purum}]`;
+    }
+    // @TODO: check if starts and ends with digit
+
+    if (codicem_purum.indexOf("~") > -1) {
+      let temp = codicem_purum.split("~")
+      codicem_radicem = temp[0]
+      coniunctum = parseInt(temp[1])
+    } else {
+      codicem_radicem = codicem_purum
+    }
+    // let temp_parts = codicem_radicem.split('.')
+    let temp_parts = codicem_radicem.split(':')
+    if (temp_parts.length > 1) {
+      // let temp_patrem = codicem_radicem.split('.')
+      do {
+        // console.log('oi', temp_parts)
+        temp_parts.pop();
+        // patrem.push(temp_parts.join('.'))
+        patrem.push(temp_parts.join(':'))
+      } while (temp_parts.length > 0);
+
+      patrem = patrem.filter(col => col != "").reverse()
+    }
+
+    return [indicem, codicem_completum, codicem_radicem, coniunctum, patrem]
+  }
+
+  /**
+   * Trivia:
+   * - significātiōnem, https://en.wiktionary.org/wiki/significatio#Latin
+   * - cōdicem, https://en.wiktionary.org/wiki/codex#Latin
+   * - aliud, https://en.wiktionary.org/wiki/alius#Latin
+   * - typum, https://en.wiktionary.org/wiki/typus#Latin
+   * - fontem, https://en.wiktionary.org/wiki/fons#Latin
+   *
+   * @example <caption>00.00~0</caption>
+   * // returns [1, '12.34~5', '', '12.34~5']
+   * Primitivum.quod_significationem_de_caput_item('12.34~5')
+   *
+   * @example <caption>[00.00~0]</caption>
+   * // returns [2, '12.34~5', '', '[12.34~5]
+   * Primitivum.quod_significationem_de_caput_item('[12.34~5]')
+   *
+   * @example <caption>[00.00~0] 00=(...); []=(...);</caption>
+   * // returns [2, '12.34~5', '', '﹇١٢.٣٤~٥﹈']
+   * Primitivum.quod_significationem_de_caput_item('﹇١٢.٣٤~٥﹈')
+   *
+   * @example
+   * // returns [3, '12.34', '//نام جایگزین//', '[12.34] //نام جایگزین//']
+   * Primitivum.quod_significationem_de_caput_item('[12.34] //نام جایگزین//')
+   *
+   * @example
+   * // returns @TODO
+   * Primitivum.quod_significationem_de_caput_item('alternative-name--12-34')
+   *
+   * @example
+   * // returns @TODO
+   * Primitivum.quod_significationem_de_caput_item('备用名称_12-34')
+   *
+   * @param {string} [textum]
+   * @returns {array}
+   */
+  static quod_significationem_de_caput_item(textum) {
+    let typum = -1 // -1: non-codicem; 1: numerum purum; 2 [00.00];
+    let aliud = ''
+    let codicem_completum = ''
+    let codicem_radicem = ''
+    let codicem_coniunctum = -1
+    // let fontem = textum
+
+    // Full test
+    // ['12.34~5', '١٢.٣٥', '[12.34~5]', '[12.34~5] lorem ipsum', ' Lorem Ipsum [12.34~5]', '[١٢.٣٥] لوريم إيبسوم', 'lorem-ipsum_12-34', 'lorem-ipsum--12-34'].map(quod_significationem_de_caput_item)
+
+    // @see https://www.unicode.org/reports/tr44/#General_Category_Values
+    // Regula cor: 00.00~0
+    const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
+    // Regula cor: [00.00~0]
+    const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
+
+    // Regula de factum: /^00.00~0$/
+    const __RegulaCodicemPurum = new RegExp('^' + RegulaCodicemPurum + '$', 'u')
+    // Regula de factum: /^[00.00~0]$/
+    const __RegulaCodicemPurumInVasum = new RegExp('^' + RegulaCodicemInVasum + '$', 'u')
+    // Regula de factum: /^[00.00~0] aliud $/
+    const __RegulaCodicemPurumInVasumInitiale = new RegExp('^' + RegulaCodicemInVasum + '(.+)$', 'u')
+    // Regula de factum: /^ aliud [00.00~0]$/
+    const __RegulaCodicemPurumInVasumFinale = new RegExp('^(.+)' + RegulaCodicemInVasum + '$', 'u')
+
+    // Punctuation, connector, 	Includes "_" underscore
+    // https://www.compart.com/en/unicode/category/Pc
+    //
+    // Punctuation, dash, 	Includes "-" dash
+    // https://www.compart.com/en/unicode/category/Pd
+    //
+    // Punctuation, open [, {, ﹇
+    // https://www.compart.com/en/unicode/category/Ps
+    //
+    // Punctuation, close ], }, ﹈
+    // https://www.compart.com/en/unicode/category/Pe
+    //
+    // Punctuation, other . , * ! ?
+    // https://www.compart.com/en/unicode/category/Po
+    // 
+    // Math Symbol
+
+    if (__RegulaCodicemPurum.test(textum)) {
+      typum = 1
+      codicem_completum = Primitivum.quod_significationem_in_digitum(textum.match(__RegulaCodicemPurum)[0])
+      // resultatum.push(textum.match(RegulaCodicemPurum))
+
+    } else if (__RegulaCodicemPurumInVasum.test(textum)) {
+      let temp = textum.match(__RegulaCodicemPurumInVasum)
+      typum = 2
+      codicem_completum = Primitivum.quod_significationem_in_digitum(temp[2])
+
+    } else if (__RegulaCodicemPurumInVasumInitiale.test(textum)) {
+      let temp = textum.match(__RegulaCodicemPurumInVasumInitiale)
+      typum = 3
+      codicem_completum = Primitivum.quod_significationem_in_digitum(temp[2])
+      aliud = temp[3].trim()
+
+    } else if (__RegulaCodicemPurumInVasumFinale.test(textum)) {
+      let temp = textum.match(__RegulaCodicemPurumInVasumFinale)
+      typum = 4
+      codicem_completum = Primitivum.quod_significationem_in_digitum(temp[3])
+      aliud = temp[1].trim()
+
+    } else {
+      // @TODO: implement parsing pattterns like these
+      //        - alternative-name--12-34
+      //        - altrrnative-nane_12-34
+      //        - 备用名称--12-34
+      //        - மாற்று பெயர்--12-34
+    }
+    if (codicem_completum.length > 0) {
+      if (codicem_completum.indexOf("~") > -1) {
+        let temp = codicem_completum.split("~")
+        codicem_radicem = temp[0]
+        codicem_coniunctum = parseInt(temp[1])
+      } else {
+        // console.log('codicem_completum.length', codicem_completum.length, codicem_completum)
+        codicem_radicem = codicem_completum
+        codicem_coniunctum = 0
+      }
+    }
+    if (codicem_coniunctum === -1) {
+      aliud = textum
+    }
+
+    // console.log([typum, aliud, codicem_completum, codicem_radicem, codicem_coniunctum])
+    return [typum, aliud, codicem_completum, codicem_radicem, codicem_coniunctum]
+  }
+
+  /**
+   * @see https://github.com/HXL-CPLP/forum/issues/60#issuecomment-997185201
+   *
+   * @example
+   * Primitivum.quod_significationem_in_digitum('١٢.٣٥')
+   * 
+   * @param {string} codicem_purum 
+   * @param {number} in_indicem 
+   * @returns 
+   */
+  static quod_significationem_in_digitum(codicem_purum, in_indicem = 0) {
+    if (!codicem_purum || codicem_purum.length === 0) {
+      return ''
+    }
+    let resultatum = ''
+    for (const [index, rem] of codicem_purum.split('').entries()) {
+      resultatum = resultatum + Primitivum.quod_significationem_in_digitum_de_atomum(rem)
+    }
+    return resultatum
+  }
+
+  /**
+   * @example
+   * Primitivum.quod_significationem_in_digitum_de_atomum('١')
+   *
+   * @param {string} atom 
+   * @returns 
+   */
+  static quod_significationem_in_digitum_de_atomum(atom) {
+    const datum = [
+      '0123456789', // DIGIT ZERO (...) DIGIT NINE
+      '٠١٢٣٤٥٦٧٨٩', // 	ARABIC-INDIC DIGIT ZERO (...) ARABIC-INDIC DIGIT NINE
+      '߀߁߂߃߄߅߆߇߈߉', // 	U+07C0	NKO DIGIT ZERO (...) U+07C9	NKO DIGIT NINE
+      '०१२३४५६७८९', // U+0966	DEVANAGARI DIGIT ZERO (...) U+096F	DEVANAGARI DIGIT NINE
+      // @TODO: This function is obviously partial. Eventually It needs a better alternative.
+      //        See this comment
+      //        https://github.com/HXL-CPLP/forum/issues/60#issuecomment-997185201
+    ]
+    // https://www.fileformat.info/info/unicode/category/Nd/list.htm
+
+    for (let NumerumSystema of datum) {
+      // console.log('NumerumSystema', NumerumSystema)
+      for (const [index, rem] of NumerumSystema.split('').entries()) {
+        if (atom === rem) {
+          return index
+        }
+      }
+    }
+    // _[eng-Latn]Worst case: we return the item, without changes[eng-Latn]_
+    return atom
   }
 }
 
