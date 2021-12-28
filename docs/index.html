@@ -279,6 +279,26 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
                 ontologia.hxl.csv
               </button>
             </li>
+            <li class="est-experimentum" style="display:none">
+              <button type="button" class="dropdown-item actionem_exportare" data-numord-fontem="scientiam_agendum"
+                data-numord-objectivum-formatum="CSV" data-numord-objectivum-postformatum="in_csv_textum" data-numord-objectivum-mimetype="text/csv"
+                data-numord-regressum="in_archivum" data-numord-objectivum-archivum="ontologia.csv">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                ontologia2.csv
+              </button>
+            </li>
+            <li class="est-experimentum" style="display:none">
+              <button type="button" class="dropdown-item actionem_exportare" data-numord-fontem="scientiam_agendum"
+                data-numord-objectivum-formatum="HXL-CSV" data-numord-objectivum-postformatum="in_csv_textum" data-numord-objectivum-mimetype="text/csv"
+                data-numord-regressum="in_archivum" data-numord-objectivum-archivum="ontologia.csv">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                ontologia2.hxl.csv
+              </button>
+            </li>
           </ul>
         </div>
 
@@ -308,10 +328,9 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
               </button>
             </li>
             <li class="est-experimentum" style="display:none">
-              <button type="button" class="dropdown-item actionem_exportare" data-numord-fontem="scientia"
-                data-numord-fontem="scientia_basi" data-numord-objectivum-formatum="TMX"
-                data-numord-objectivum-mimetype="application/x-tmx" data-numord-regressum="in_archivum"
-                data-numord-objectivum-archivum="ontologia.tmx">
+              <button type="button" class="dropdown-item actionem_exportare" data-numord-fontem="scientiam_agendum"
+                data-numord-objectivum-formatum="TMX" data-numord-objectivum-mimetype="application/x-tmx"
+                data-numord-regressum="in_archivum" data-numord-objectivum-archivum="ontologia.tmx">
                 <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
                   <use xlink:href="#bi-file-earmark-arrow-down" />
                 </svg>
@@ -334,6 +353,16 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
                 </svg>
                 ontologia-urn.ttl
               </a>
+            </li>
+            <li class="est-experimentum" style="display:none">
+              <button type="button" class="dropdown-item actionem_exportare" data-numord-fontem="scientiam_agendum"
+                data-numord-objectivum-formatum="RDF" data-numord-objectivum-mimetype="application/x-turtle"
+                data-numord-regressum="in_archivum" data-numord-objectivum-archivum="ontologia-urn.ttl">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                ontologia-urn2.ttl
+              </button>
             </li>
           </ul>
         </div>
@@ -359,6 +388,16 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
                 </svg>
                 ontologia-verbosum.gv
               </a>
+            </li>
+            <li class="est-experimentum" style="display:none">
+              <button type="button" class="dropdown-item actionem_exportare" data-numord-fontem="scientiam_agendum"
+                data-numord-objectivum-formatum="Graphviz" data-numord-objectivum-mimetype="text/vnd.graphviz"
+                data-numord-regressum="in_archivum_externum" data-numord-objectivum-archivum="ontologia-numerae2.gv">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                ontologia-numerae2.gv
+              </button>
             </li>
           </ul>
         </div>
@@ -690,7 +729,6 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       'ui_agendum_linguam': '#agendum_linguam',
     })
 
-    status_quo.fiatLux()
 
     window.status_quo = status_quo
 
@@ -702,12 +740,20 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     let datum_globum = {}
     let scientia_basi = null // crude ontology.yml, _as it is_
     let scientia_basi_mutatum_est = null // last change on ontology.yml
-    let communitatibus = null // scientiam_commūnitātibus
+    let scientiam_communitatibus = null // scientiam_commūnitātibus
     let scientia = null // computed result
     let testum = {}
     let usum_professori_tabulam = [] // CSV
     let usum_professori_obiectum = {} // CSV
     let scientia_datum = null // CSV
+
+    // window.scientia_basi = scientia_basi
+    // window.scientia = scientia
+    window.scientiam_communitatibus = scientiam_communitatibus
+    // window.usum_normae = usum_normae // @TODO use this instead of usum_professori_obiectum
+    // window.inspectionem = inspectionem // @TODO use this for csv test
+
+    status_quo.fiatLux()
     /****** _[eng-Latn] Edit this section [eng-Latn]_ ******/
     // const yaml = require('js-yaml');
 
@@ -2143,9 +2189,9 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       })
     }
 
-    // communitatibus
+    // scientiam_communitatibus
 
-    // let communitatibus = null
+    // let scientiam_communitatibus = null
     // function __hacky_3(exemplum_neo) {
     //   // console.log('__hacky', exemplum_neo)
     //   exemplum_et_all.push(...exemplum_neo)
@@ -2165,12 +2211,12 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
           try {
             // const doc = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
             let ad_hoc = jsyaml.load(text, 'utf8');
-            if (communitatibus) {
-              communitatibus.addereObiectum(ad_hoc)
+            if (scientiam_communitatibus) {
+              scientiam_communitatibus.addereObiectum(ad_hoc)
             } else {
-              communitatibus = new CodexDeObiectum(ad_hoc)
+              scientiam_communitatibus = new CodexDeObiectum(ad_hoc)
             }
-            communitatibus.praeparare()
+            scientiam_communitatibus.praeparare()
             // console.log('done', item.url, communitatibus)
           } catch (e) {
             console.log(e);
@@ -2189,11 +2235,15 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         scientia.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
         scientia.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
         scientia.praeparare()
+
+        window['scientiam_agendum'] = scientia
         // console.log(scientia_basi);
       } catch (e) {
         console.log(e);
       }
     }
+
+    window.prepare_scientia = prepare_scientia
 
     function prepare_usum_professori(callback) {
       try {
@@ -2230,6 +2280,9 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         alert(e);
       }
     }
+
+    window.prepare_usum_professori = prepare_usum_professori
+
     function prepare_usum_professori2(callback) {
       return prepare_usum_professori(callback)
       let crudum_data = CoreMirrorProfessorem.getValue()
@@ -2265,7 +2318,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     /** _[eng-Latn] Helper functions, start **/
 
     function in_archivum(data, optionem, errorem) {
-      console.log('in_archivum', data, optionem, errorem)
+      // console.log('in_archivum', data, optionem, errorem)
 
       function _archivum(data) {
         var blob = new Blob([data], { type: `${optionem.ObjectivumMimetype};charset=utf-8` });
@@ -2280,6 +2333,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         }
       } else {
         console.error('in_archivum', errorem)
+        alert(JSON.stringify(errorem))
       }
     }
     window.in_archivum = in_archivum

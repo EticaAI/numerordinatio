@@ -34,6 +34,32 @@ class StatusQuo {
       'auxilium_linguam': optionem.ui_auxilium_linguam || '#auxilium_linguam',
       'agendum_linguam': optionem.ui_agendum_linguam || '#agendum_linguam'
     }
+    // this.datum = {
+    //   'scientiam_basi': null,
+    //   'scientia': null,
+    //   'scientiam_communitatibus': null,
+    //   'usum_normae': null,
+    //   'inspectionem': null, // Test dataset (collection)
+    // }
+  }
+
+  datum(regressum, fontem, formatum = 'obiectum', reconstructum = false){
+    // scientia_basi
+    // communitatibus
+    // usum_professori_obiectum
+
+    // console.log('datum', fontem)
+
+    // TODO: refresh options from UI, such as language and etc
+    window['prepare_scientia']()
+    // window['prepare_usum_professori']()
+    window[fontem].praeparare()
+    let datum = window[fontem].exportare(formatum, reconstructum)
+
+    // console.log('datum', datum)
+
+    regressum(datum)
+    // return window[nomen]
   }
 
   est(rem, clavem, collectionem) {
@@ -57,7 +83,7 @@ class StatusQuo {
 function _ui_actionem_exportare(HtmlElementum) {
   let optionem = {
     'ObjectivumFormatum': '', // data-numord-objectivum-formatum
-    'ObjectivumPostformatum': '', // data-numord-objectivum-mimetype
+    'ObjectivumPostformatum': '', // data-numord-objectivum-postformatum
     'ObjectivumMimetype': 'text/plain',
     'ObjectivumArchivum': 'data.txt' // data-numord-objectivum-archivum
   }
@@ -70,12 +96,16 @@ function _ui_actionem_exportare(HtmlElementum) {
       }
     }
   }
-  console.log('_ui_actionem_exportare', HtmlElementum)
-  console.log('_ui_actionem_exportare', HtmlElementum.dataset)
-  console.log('_ui_actionem_exportare optionem', optionem)
-  if (optionem.Regressum) {
-    window[optionem.Regressum](datum, optionem, errorem)
-  }
+  // console.log('optionem', optionem)
+  window['status_quo'].datum(function(datum){
+    // console.log('_ui_actionem_exportare', HtmlElementum)
+    // console.log('_ui_actionem_exportare', HtmlElementum.dataset)
+    // console.log('_ui_actionem_exportare optionem', optionem)
+    if (optionem.Regressum) {
+      window[optionem.Regressum](datum, optionem, errorem)
+    }
+  }, optionem.Fontem, optionem.ObjectivumFormatum)
+
 }
 
 // function fetchAll(...resources) {

@@ -233,6 +233,36 @@ class CodexBasim {
     return this
   }
 
+  exportare(formatum, reconstructum = false) {
+    let formatum_normale = formatum.toLowerCase().replace(/\-/g, '')
+    if (formatum_normale.indexOf('tmx') === 0) {
+      return this.exportareTMX(reconstructum)
+    }
+    if (formatum_normale.indexOf('tbx') === 0) {
+      return this.exportareTBXBasic2008(reconstructum)
+    }
+    if (formatum_normale.indexOf('rdf') === 0) {
+      return this.exportareRDFTurtle(reconstructum)
+    }
+    if (formatum_normale.indexOf('graphviz') === 0 || formatum_normale.indexOf('gv') === 0 || formatum_normale.indexOf('dot') === 0) {
+      throw `TODO: [${formatum}]; need be migrated from html to here`
+    }
+    if (formatum_normale.indexOf('tabulam') === 0 || formatum_normale.indexOf('csv') === 0) {
+
+      // Note: CSV-like formats still need conversion to string
+      return this.exportareTabulam(reconstructum)
+    }
+    if (formatum_normale.indexOf('hxl') === 0 || formatum_normale.indexOf('hxlcsv') === 0) {
+      // Note: CSV-like formats still need conversion to string
+      return this.exportareTabulamHXL(reconstructum)
+    }
+    if (formatum_normale.indexOf('obiectum') === 0 || formatum_normale.indexOf('json') === 0 || formatum_normale.indexOf('yaml') === 0) {
+      // Note: JSON and YAML formats still need conversion to string later
+      return this.exportareTabulam(reconstructum)
+    }
+    throw `formatum [${formatum}] ?`
+  }
+
   exportareObiectum(reconstructum = false) {
     if (reconstructum) {
       return this.quod_completum()
@@ -339,6 +369,7 @@ class CodexBasim {
     tmx.setAST(obiectum)
     return tmx.export()
   }
+
   exportareTMX(reconstructum = false) {
     let obiectum = this.exportareObiectum(reconstructum)
     let tmx = new TMX()
@@ -785,7 +816,7 @@ class TBXBasic2008 {
     this.ast = {}
   }
 
-  _id(codicem){
+  _id(codicem) {
     return codicem.replace(/\:/g, '_')
   }
 
@@ -871,7 +902,7 @@ class TMX {
     this.ast = {}
   }
 
-  _id(codicem){
+  _id(codicem) {
     return codicem.replace(/\:/g, '_')
   }
 
@@ -880,14 +911,14 @@ class TMX {
 <!DOCTYPE tmx SYSTEM "${this.system}">
 <tmx version="1.4">
 <header
-creationtool="${this.creationtool}"
-creationtoolversion="${this.creationtoolversion}"
-segtype="${this.segtype}"
-o-tmf="UTF-8"
-adminlang="${this.adminlang}"
-srclang="${this.srclang}"
-datatype="${this.datatype}"
-/>
+  creationtool="${this.creationtool}"
+  creationtoolversion="${this.creationtoolversion}"
+  segtype="${this.segtype}"
+  o-tmf="UTF-8"
+  adminlang="${this.adminlang}"
+  srclang="${this.srclang}"
+  datatype="${this.datatype}"
+  />
 <body>`
   }
 
