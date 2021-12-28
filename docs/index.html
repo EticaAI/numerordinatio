@@ -720,6 +720,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     window.Graphviz = NumOrd.Graphviz
     window.TMX = NumOrd.TMX
     window.TBXBasic2008 = NumOrd.TBXBasic2008
+    window.Primitivum = NumOrd.Primitivum
     // window.RDF = NumOrd.RDF
     window.RDFProofOfConcept = NumOrd.RDFProofOfConcept
 
@@ -963,6 +964,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     // ast_in_dot_numerae(abstractum_syntaxim_arborem(['12.10.34', '12.10.34~2', '', '14.56', '14.56', '14.56~2']))
     // summārium, https://en.wiktionary.org/wiki/summarium
     function ast_in_dot_numerae(ast, titulum) {
+      // @deprecated use NumerordinatioAST
+
       let resultatum = []
       const sumarium = ast_in_summarium(ast)
       // return sumarium
@@ -987,6 +990,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     }
 
     function ast_in_dot_v2(ast, titulum, annotationem = '') {
+      // @deprecated use NumerordinatioAST
+
       let resultatum = []
       // const sumarium = ast_in_summarium(ast)
       // return sumarium
@@ -1019,7 +1024,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         //   label = label + '\\n---'
         // }
 
-        dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label, style: 'dotted' })
+        // dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label, style: 'dotted' })
+        dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': Primitivum.ordoDeCodicem(lineam[5]) }, { 'label': label, style: 'dotted' })
         if (lineam[7]) {
           dot.addRelIndirect(`_${lineam[0]}`, lineam[7].map(x => '_' + x))
         }
@@ -1046,7 +1052,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         }
 
         // dot.addNode(`_${lineam[0]}`, {'cluster': lineam[6]}, { 'label': label })
-        dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label })
+        // dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label })
+        dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': Primitivum.ordoDeCodicem(lineam[5]) }, { 'label': label })
         // console.log(lineam)
       }
       if (dot.hasCluster('-1')) {
@@ -1387,174 +1394,6 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       return atom
     }
 
-    /**
-     * _[eng-Latn]
-     * (Debug) what does this text means into Unicode General Category Property
-     * (using JavaScript Engine) regexes?
-     * [eng-Latn]_
-     *
-     * @see https://www.unicode.org/reports/tr44/#General_Category_Values
-     * @see https://unicode.org/reports/tr18/#General_Category_Property
-     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes
-     *
-     * @example
-     * ['12.34~5', '١٢.٣٥', '[12.34~5]', '[12.34~5] lorem ipsum', ' Lorem Ipsum [12.34~5]', '[١٢.٣٥] لوريم إيبسوم', 'lorem-ipsum_12-34', 'lorem-ipsum--12-34'].map(quod_significationem_in_regula)
-     *
-     * @param {string} textum
-     * @returns {array}
-     */
-    function quod_significationem_in_regula(textum) {
-      let resultatum = []
-      const RegulaSystemaScribo = /\p{General_Category=Letter}/gu
-      const RegulaNumerum = /\p{General_Category=Number}/gu
-      const RegulaNumerumDigitum = /\p{General_Category=Decimal_Number}/gu
-      const RegulaPunctumInitiale = /\p{General_Category=Open_Punctuation}/gu
-      const RegulaPunctumFinale = /\p{General_Category=Close_Punctuation}/gu
-      const RegulaSublineam = /\p{General_Category=Connector_Punctuation}/gu
-      // @TODO: Non-latinum terminum? https://en.wiktionary.org/wiki/hyphen
-      const RegulaHuphen = /\p{General_Category=Dash_Punctuation}/gu
-      const RegulaExtrapunctum = /\p{General_Category=Other_Punctuation}/gu
-      const RegulaSymbolum = /\p{General_Category=Symbol}/gu
-      const RegulaMathematicam = /\p{General_Category=Math_Symbol}/gu
-
-      // // FULL STOP U+002E https://www.compart.com/en/unicode/U+002E
-      // const SignificationemSeparatum = '.'
-      // // TILDE (U+007E) https://www.compart.com/en/unicode/charsets/containing/U+007E
-      // const SignificationemConiunctum = '~'
-
-      // Strict regex
-      // const RegulaCodicemPurum = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/u
-      // const oi = /^(p{General_Category=Decimal_Number}[p{General_Category=Decimal_Number}|.|~]*p{General_Category=Decimal_Number})$/
-      // const oi = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/
-      // const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
-      const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\:|~]*\\p{General_Category=Decimal_Number})`
-      const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
-      // const RegulaCodicemInVasum = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/u
-
-      const RegulaInitiale = /^\p{General_Category=Open_Punctuation}(.*)\p{General_Category=Close_Punctuation}.?/u
-      const RegulaFinale = /.?\p{General_Category=Open_Punctuation}(.*)\p{General_Category=Close_Punctuation}$/u
-      // const RegulaNumerumInitialeEtFinale = /^\p{General_Category=Decimal_Number}([\p{General_Category=Decimal_Number}|\.|~]*)\p{General_Category=Decimal_Number}$/u
-
-      textum = textum.trim()
-
-      const __RegulaCodicemPurum = new RegExp('^' + RegulaCodicemPurum + '$', 'u')
-      if (__RegulaCodicemPurum.test(textum)) {
-        resultatum.push(`RegulaCodicemPurum ${quod_significationem_in_digitum(textum.match(__RegulaCodicemPurum)[0])}`)
-        // resultatum.push(textum.match(RegulaCodicemPurum))
-      } else {
-        // resultatum.push('RegulaCodicemPurum')
-      }
-
-      const __RegulaCodicemPurumInVasum = new RegExp('^' + RegulaCodicemInVasum + '$', 'u')
-      if (__RegulaCodicemPurumInVasum.test(textum)) {
-        let temp = textum.match(__RegulaCodicemPurumInVasum)
-        resultatum.push(`RegulaCodicemInVasum ${quod_significationem_in_digitum(temp[2])} ${temp[1]}`)
-        // resultatum.push(temp)
-      } else {
-        // resultatum.push('Non RegulaCodicemInVasum')
-      }
-
-      const __RegulaCodicemPurumInVasumInitiale = new RegExp('^' + RegulaCodicemInVasum + '(.+)$', 'u')
-      if (__RegulaCodicemPurumInVasumInitiale.test(textum)) {
-        let temp = textum.match(__RegulaCodicemPurumInVasumInitiale)
-        resultatum.push(`RegulaCodicemPurumInVasumInitiale ${quod_significationem_in_digitum(temp[2])} ${temp[1]} <<${temp[3].trim()}>>`)
-        resultatum.push(temp)
-      } else {
-        // resultatum.push('Non RegulaCodicemPurumInVasumInitiale')
-      }
-
-      const __RegulaCodicemPurumInVasumFinale = new RegExp('^(.+)' + RegulaCodicemInVasum + '$', 'u')
-      if (__RegulaCodicemPurumInVasumFinale.test(textum)) {
-        let temp = textum.match(__RegulaCodicemPurumInVasumFinale)
-        resultatum.push(`RegulaCodicemPurumInVasumFinale ${quod_significationem_in_digitum(temp[3])} ${temp[2]} <<${temp[1].trim()}>>`)
-        resultatum.push(temp)
-      } else {
-        // resultatum.push('Non RegulaCodicemPurumInVasumInitiale')
-      }
-
-      // if (RegulaNumerumInitialeEtFinale.test(textum)) {
-      //   resultatum.push(`RegulaNumerumInitialeEtFinale`)
-      //   resultatum.push(textum.match(RegulaNumerumInitialeEtFinale))
-      // } else {
-      //   // resultatum.push('NonRegulaNumerumInitialeEtFinale')
-      // }
-
-      if (RegulaInitiale.test(textum)) {
-        resultatum.push(`RegulaInitiale`)
-        resultatum.push(textum.match(RegulaInitiale))
-      } else {
-        // resultatum.push('NonRegulaInitiale')
-      }
-
-      if (RegulaFinale.test(textum)) {
-        resultatum.push(`RegulaFinale`)
-        resultatum.push(textum.match(RegulaFinale))
-      } else {
-        // resultatum.push('NonRegulaFinale')
-      }
-
-      if (RegulaSystemaScribo.test(textum)) {
-        resultatum.push(`RegulaSystemaScribo ${textum.replace(/\P{General_Category=Letter}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaSystemaScribo')
-      }
-
-      if (RegulaNumerum.test(textum)) {
-        resultatum.push(`RegulaNumerum ${textum.replace(/\P{General_Category=Number}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaNumerum')
-      }
-
-      if (RegulaNumerumDigitum.test(textum)) {
-        resultatum.push(`RegulaNumerumDigitum ${textum.replace(/\P{General_Category=Decimal_Number}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaNumerumDigitum')
-      }
-
-      if (RegulaPunctumInitiale.test(textum)) {
-        resultatum.push(`RegulaPunctumInitiale ${textum.replace(/\P{General_Category=Open_Punctuation}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaPunctumInitiale')
-      }
-
-      if (RegulaPunctumFinale.test(textum)) {
-        resultatum.push(`RegulaPunctumFinale ${textum.replace(/\P{General_Category=Close_Punctuation}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaPunctumFinale')
-      }
-
-      if (RegulaSublineam.test(textum)) {
-        resultatum.push(`RegulaSublineam ${textum.replace(/\P{General_Category=Connector_Punctuation}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaSublineam')
-      }
-      if (RegulaHuphen.test(textum)) {
-        resultatum.push(`RegulaHuphen ${textum.replace(/\P{General_Category=Dash_Punctuation}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaHuphen')
-      }
-
-      if (RegulaExtrapunctum.test(textum)) {
-        resultatum.push(`RegulaExtrapunctum ${textum.replace(/\P{General_Category=Other_Punctuation}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaExtrapunctum')
-      }
-
-      if (RegulaSymbolum.test(textum)) {
-        resultatum.push(`RegulaSymbolum ${textum.replace(/\P{General_Category=Symbol}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaSymbolum')
-      }
-
-      if (RegulaMathematicam.test(textum)) {
-        resultatum.push(`RegulaMathematicam ${textum.replace(/\P{General_Category=Math_Symbol}/gu, '')}`)
-      } else {
-        // resultatum.push('NonRegulaMathematicam')
-      }
-
-      return resultatum
-    }
-
     // @TODO deal with order of apperance https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
     function scientia_basi_in_ast_dot_numerum(scientia) {
       // let resultatum = '# TODO'
@@ -1569,7 +1408,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         let _opt = Object.keys(scientia_datum)
         for (let [codicem_basim, signifo] of Object.entries(scientia_datum)) {
           // dot.addNode(codicem_basim)
-          dot.addNode(codicem_basim, { rank: __codicem_rank(codicem_basim) })
+          // dot.addNode(codicem_basim, { rank: __codicem_rank(codicem_basim) })
+          dot.addNode(codicem_basim, { rank: Primitivum.ordoDeCodicem(codicem_basim) })
         }
 
         _opt.forEach(item => {
@@ -1604,8 +1444,10 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
           // dot.addNode(codicem_basim)
           // console.log(signifo)
           dot.addNode(codicem_basim, {
-            'rank': __codicem_rank(codicem_basim),
-            'verbose': __linearize(signifo)
+            // 'rank': __codicem_rank(codicem_basim),
+            'rank': Primitivum.ordoDeCodicem(codicem_basim),
+            // 'verbose': __linearize(signifo)
+            'verbose': Primitivum.lineatio(signifo)
           })
         }
 
@@ -1646,37 +1488,45 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       return resultatum
     }
 
-    function __codicem_rank(codicem_purum) {
-      if (codicem_purum) {
-        // return codicem_purum.split('.').length
-        return codicem_purum.split(':').length
-      }
-      return -1
-    }
+    // function __codicem_rank(codicem_purum) {
+    //   // throw "@deprecated use Primitivum.ordoDeCodicem"
+    //   return Primitivum.ordoDeCodicem(codicem_purum)
 
-    /**
-     * Flat a deep object into single line array with keys and arrays
-     **/
-    function __linearize(obiectum) {
-      let resultatum = []
+    //   if (codicem_purum) {
+    //     // return codicem_purum.split('.').length
+    //     return codicem_purum.split(':').length
+    //   }
+    //   return -1
+    // }
 
-      const getEntries = (o, prefix = '') =>
-        Object.entries(o).flatMap(([k, v]) =>
-          // Object(v) === v ? getEntries(v, `${prefix}${k}.`) : [[`${prefix}${k}`, v]]
-          // Object(v) === v ? getEntries(v, `${prefix}${k}:`) : [[`${prefix}${k}`, v]]
-          Object(v) === v ? getEntries(v, `${prefix}${k}`) : [[`${prefix}?${k}`, v]]
-        )
+    // /**
+    //  * Flat a deep object into single line array with keys and arrays
+    //  **/
+    // function __linearize(obiectum) {
+    //   // throw "@deprecated use Primitivum.lineatio"
+    //   return Primitivum.lineatio(obiectum)
 
-      // return Object.fromEntries(getEntries(obiectum))
-      Object.entries(Object.fromEntries(getEntries(obiectum))).forEach(pair => {
+    //   // @deprecated use Primitivum.lineatio
 
-        // resultatum.push(`${pair[0]}::${pair[1]}`)
-        // resultatum.push(`${pair[0]}:::${pair[1]}`)
-        resultatum.push(`${pair[0]}=((${pair[1]}))`)
-      });
+    //   let resultatum = []
 
-      return resultatum
-    }
+    //   const getEntries = (o, prefix = '') =>
+    //     Object.entries(o).flatMap(([k, v]) =>
+    //       // Object(v) === v ? getEntries(v, `${prefix}${k}.`) : [[`${prefix}${k}`, v]]
+    //       // Object(v) === v ? getEntries(v, `${prefix}${k}:`) : [[`${prefix}${k}`, v]]
+    //       Object(v) === v ? getEntries(v, `${prefix}${k}`) : [[`${prefix}?${k}`, v]]
+    //     )
+
+    //   // return Object.fromEntries(getEntries(obiectum))
+    //   Object.entries(Object.fromEntries(getEntries(obiectum))).forEach(pair => {
+
+    //     // resultatum.push(`${pair[0]}::${pair[1]}`)
+    //     // resultatum.push(`${pair[0]}:::${pair[1]}`)
+    //     resultatum.push(`${pair[0]}=((${pair[1]}))`)
+    //   });
+
+    //   return resultatum
+    // }
 
     /**
      * @deprecated use quod_significationem_de_caput_item()
@@ -1758,6 +1608,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       let originale = clavem_collectionem.map(function (el) {
         return el.indexOf(',') > -1 ? `"${el}"` : el
       }).join(',')
+
+      let num_ast = new Numerordinatio()
 
       console.log(originale)
 

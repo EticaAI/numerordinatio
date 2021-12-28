@@ -263,6 +263,19 @@ class Numerordinatio {
     throw `formatum [${formatum}] ?`
   }
 
+  exportareDotNumerae(reconstructum = false, optionem = {}) {
+    let obiectum = this.exportareObiectum(reconstructum)
+    let num_ast = new NumerordinatioAST(obiectum, optionem)
+    num_ast.setAST(obiectum)
+    return num_ast.inDot()
+  }
+
+  exportareDotNumerae(reconstructum = false, optionem = {}) {
+    let obiectum = this.exportareObiectum(reconstructum)
+    let num_ast = new NumerordinatioAST(obiectum, optionem)
+    return num_ast.inDotNumerae()
+  }
+
   exportareObiectum(reconstructum = false) {
     if (reconstructum) {
       return this.quod_completum()
@@ -474,6 +487,235 @@ class Numerordinatio {
 }
 
 /**
+ * _[eng-Latn] This class contain primitive helper functions to deal with
+ * smaller tasks related to Numerodination [eng-Latn]_
+ * Trivia:
+ * - prīmitīvum, https://en.wiktionary.org/wiki/primitivus#Latin
+ */
+class Primitivum {
+
+
+  /**
+   * ōrdō de cōdicem
+   * _[eng-Latn] The rank of of a pure code [eng-Latn]_
+   *
+   * Trivia:
+   * - "cōdicem", https://en.wiktionary.org/wiki/codex#Latin
+   * - "cōdicem", https://en.wiktionary.org/wiki/ordinatio
+   *
+   * @param {string} codicem_purum 
+   * @returns {number}
+   */
+  static ordoDeCodicem(codicem_purum) {
+    // throw "@deprecated use Primitivum.lineatio"
+    // return Primitivum.lineatio(obiectum)
+
+    if (codicem_purum) {
+      // return codicem_purum.split('.').length
+      return codicem_purum.split(':').length
+    }
+    return -1
+  }
+
+  /**
+   * Flat a deep object into single line array with keys and arrays
+   * 
+   * Trivia:
+   * - "līnea", https://en.wiktionary.org/wiki/linea#Latin
+   * - "-tio", https://en.wiktionary.org/wiki/-tio#Latin
+   * - (Protologism, https://en.wikipedia.org/wiki/Protologism)
+   **/
+  static lineatio(obiectum) {
+    let resultatum = []
+
+    const getEntries = (o, prefix = '') =>
+      Object.entries(o).flatMap(([k, v]) =>
+        // Object(v) === v ? getEntries(v, `${prefix}${k}.`) : [[`${prefix}${k}`, v]]
+        // Object(v) === v ? getEntries(v, `${prefix}${k}:`) : [[`${prefix}${k}`, v]]
+        Object(v) === v ? getEntries(v, `${prefix}${k}`) : [[`${prefix}?${k}`, v]]
+      )
+
+    // return Object.fromEntries(getEntries(obiectum))
+    Object.entries(Object.fromEntries(getEntries(obiectum))).forEach(pair => {
+
+      // resultatum.push(`${pair[0]}::${pair[1]}`)
+      // resultatum.push(`${pair[0]}:::${pair[1]}`)
+      resultatum.push(`${pair[0]}=((${pair[1]}))`)
+    });
+
+    return resultatum
+  }
+
+  /**
+   * _[eng-Latn]
+   * (Debug) what does this text means into Unicode General Category Property
+   * (using JavaScript Engine) regexes?
+   * [eng-Latn]_
+   *
+   * @see https://www.unicode.org/reports/tr44/#General_Category_Values
+   * @see https://unicode.org/reports/tr18/#General_Category_Property
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes
+   *
+   * @example
+   * ['12.34~5', '١٢.٣٥', '[12.34~5]', '[12.34~5] lorem ipsum', ' Lorem Ipsum [12.34~5]', '[١٢.٣٥] لوريم إيبسوم', 'lorem-ipsum_12-34', 'lorem-ipsum--12-34'].map(Primitivum.quod_significationem_in_regula)
+   *
+   * @param {string} textum
+   * @returns {array}
+   */
+  static quod_significationem_in_regula(textum) {
+    let resultatum = []
+    const RegulaSystemaScribo = /\p{General_Category=Letter}/gu
+    const RegulaNumerum = /\p{General_Category=Number}/gu
+    const RegulaNumerumDigitum = /\p{General_Category=Decimal_Number}/gu
+    const RegulaPunctumInitiale = /\p{General_Category=Open_Punctuation}/gu
+    const RegulaPunctumFinale = /\p{General_Category=Close_Punctuation}/gu
+    const RegulaSublineam = /\p{General_Category=Connector_Punctuation}/gu
+    // @TODO: Non-latinum terminum? https://en.wiktionary.org/wiki/hyphen
+    const RegulaHuphen = /\p{General_Category=Dash_Punctuation}/gu
+    const RegulaExtrapunctum = /\p{General_Category=Other_Punctuation}/gu
+    const RegulaSymbolum = /\p{General_Category=Symbol}/gu
+    const RegulaMathematicam = /\p{General_Category=Math_Symbol}/gu
+
+    // // FULL STOP U+002E https://www.compart.com/en/unicode/U+002E
+    // const SignificationemSeparatum = '.'
+    // // TILDE (U+007E) https://www.compart.com/en/unicode/charsets/containing/U+007E
+    // const SignificationemConiunctum = '~'
+
+    // Strict regex
+    // const RegulaCodicemPurum = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/u
+    // const oi = /^(p{General_Category=Decimal_Number}[p{General_Category=Decimal_Number}|.|~]*p{General_Category=Decimal_Number})$/
+    // const oi = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/
+    // const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
+    const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\:|~]*\\p{General_Category=Decimal_Number})`
+    const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
+    // const RegulaCodicemInVasum = /^(\p{General_Category=Decimal_Number}[\p{General_Category=Decimal_Number}|\.|~]*\p{General_Category=Decimal_Number})$/u
+
+    const RegulaInitiale = /^\p{General_Category=Open_Punctuation}(.*)\p{General_Category=Close_Punctuation}.?/u
+    const RegulaFinale = /.?\p{General_Category=Open_Punctuation}(.*)\p{General_Category=Close_Punctuation}$/u
+    // const RegulaNumerumInitialeEtFinale = /^\p{General_Category=Decimal_Number}([\p{General_Category=Decimal_Number}|\.|~]*)\p{General_Category=Decimal_Number}$/u
+
+    textum = textum.trim()
+
+    const __RegulaCodicemPurum = new RegExp('^' + RegulaCodicemPurum + '$', 'u')
+    if (__RegulaCodicemPurum.test(textum)) {
+      resultatum.push(`RegulaCodicemPurum ${quod_significationem_in_digitum(textum.match(__RegulaCodicemPurum)[0])}`)
+      // resultatum.push(textum.match(RegulaCodicemPurum))
+    } else {
+      // resultatum.push('RegulaCodicemPurum')
+    }
+
+    const __RegulaCodicemPurumInVasum = new RegExp('^' + RegulaCodicemInVasum + '$', 'u')
+    if (__RegulaCodicemPurumInVasum.test(textum)) {
+      let temp = textum.match(__RegulaCodicemPurumInVasum)
+      resultatum.push(`RegulaCodicemInVasum ${quod_significationem_in_digitum(temp[2])} ${temp[1]}`)
+      // resultatum.push(temp)
+    } else {
+      // resultatum.push('Non RegulaCodicemInVasum')
+    }
+
+    const __RegulaCodicemPurumInVasumInitiale = new RegExp('^' + RegulaCodicemInVasum + '(.+)$', 'u')
+    if (__RegulaCodicemPurumInVasumInitiale.test(textum)) {
+      let temp = textum.match(__RegulaCodicemPurumInVasumInitiale)
+      resultatum.push(`RegulaCodicemPurumInVasumInitiale ${quod_significationem_in_digitum(temp[2])} ${temp[1]} <<${temp[3].trim()}>>`)
+      resultatum.push(temp)
+    } else {
+      // resultatum.push('Non RegulaCodicemPurumInVasumInitiale')
+    }
+
+    const __RegulaCodicemPurumInVasumFinale = new RegExp('^(.+)' + RegulaCodicemInVasum + '$', 'u')
+    if (__RegulaCodicemPurumInVasumFinale.test(textum)) {
+      let temp = textum.match(__RegulaCodicemPurumInVasumFinale)
+      resultatum.push(`RegulaCodicemPurumInVasumFinale ${quod_significationem_in_digitum(temp[3])} ${temp[2]} <<${temp[1].trim()}>>`)
+      resultatum.push(temp)
+    } else {
+      // resultatum.push('Non RegulaCodicemPurumInVasumInitiale')
+    }
+
+    // if (RegulaNumerumInitialeEtFinale.test(textum)) {
+    //   resultatum.push(`RegulaNumerumInitialeEtFinale`)
+    //   resultatum.push(textum.match(RegulaNumerumInitialeEtFinale))
+    // } else {
+    //   // resultatum.push('NonRegulaNumerumInitialeEtFinale')
+    // }
+
+    if (RegulaInitiale.test(textum)) {
+      resultatum.push(`RegulaInitiale`)
+      resultatum.push(textum.match(RegulaInitiale))
+    } else {
+      // resultatum.push('NonRegulaInitiale')
+    }
+
+    if (RegulaFinale.test(textum)) {
+      resultatum.push(`RegulaFinale`)
+      resultatum.push(textum.match(RegulaFinale))
+    } else {
+      // resultatum.push('NonRegulaFinale')
+    }
+
+    if (RegulaSystemaScribo.test(textum)) {
+      resultatum.push(`RegulaSystemaScribo ${textum.replace(/\P{General_Category=Letter}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaSystemaScribo')
+    }
+
+    if (RegulaNumerum.test(textum)) {
+      resultatum.push(`RegulaNumerum ${textum.replace(/\P{General_Category=Number}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaNumerum')
+    }
+
+    if (RegulaNumerumDigitum.test(textum)) {
+      resultatum.push(`RegulaNumerumDigitum ${textum.replace(/\P{General_Category=Decimal_Number}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaNumerumDigitum')
+    }
+
+    if (RegulaPunctumInitiale.test(textum)) {
+      resultatum.push(`RegulaPunctumInitiale ${textum.replace(/\P{General_Category=Open_Punctuation}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaPunctumInitiale')
+    }
+
+    if (RegulaPunctumFinale.test(textum)) {
+      resultatum.push(`RegulaPunctumFinale ${textum.replace(/\P{General_Category=Close_Punctuation}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaPunctumFinale')
+    }
+
+    if (RegulaSublineam.test(textum)) {
+      resultatum.push(`RegulaSublineam ${textum.replace(/\P{General_Category=Connector_Punctuation}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaSublineam')
+    }
+    if (RegulaHuphen.test(textum)) {
+      resultatum.push(`RegulaHuphen ${textum.replace(/\P{General_Category=Dash_Punctuation}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaHuphen')
+    }
+
+    if (RegulaExtrapunctum.test(textum)) {
+      resultatum.push(`RegulaExtrapunctum ${textum.replace(/\P{General_Category=Other_Punctuation}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaExtrapunctum')
+    }
+
+    if (RegulaSymbolum.test(textum)) {
+      resultatum.push(`RegulaSymbolum ${textum.replace(/\P{General_Category=Symbol}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaSymbolum')
+    }
+
+    if (RegulaMathematicam.test(textum)) {
+      resultatum.push(`RegulaMathematicam ${textum.replace(/\P{General_Category=Math_Symbol}/gu, '')}`)
+    } else {
+      // resultatum.push('NonRegulaMathematicam')
+    }
+
+    return resultatum
+  }
+}
+
+/**
 scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
 scientia = new CodexDeObiectum(scientia_basi)
 scientia.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
@@ -513,6 +755,123 @@ class CodexDeTabulam extends Numerordinatio {
     return this.datum_reconstructum
   }
 }
+
+class NumerordinatioAST {
+
+  constructor(ast, optionem = {}) {
+    this.ast = ast;
+    this.titulum = optionem.titulum || ''
+    this.annotationem = optionem.annotationem || ''
+  }
+
+  // inDot(ast, titulum, annotationem = '') {
+  inDot() {
+    let resultatum = []
+    // const sumarium = ast_in_summarium(ast)
+    // return sumarium
+    let ast = this.ast
+    let titulum = this.titulum
+    let annotationem = this.annotationem
+
+    let dot = new Graphviz(titulum)
+
+    if (annotationem) {
+      dot.addAnnotation(annotationem)
+    }
+
+    for (let lineam of ast[3]) {
+      if (!lineam) {
+        continue
+      }
+
+      // Habesne codicem? [00.00]
+      // Nom codicem? Indicem (0)
+      let label = (lineam[5] ? `[${lineam[5]}]` : `(${lineam[0]})`)
+
+      // <8:referens_nomen>?
+      if (lineam[8]) {
+        label = label + '\\n' + lineam[8]
+      } else {
+        label = label + '\\n---'
+      }
+      // // <3:aliud_caput> ?
+      // if (lineam[3]) {
+      //   label = label + ' \\n' + lineam[3]
+      // } else {
+      //   label = label + '\\n---'
+      // }
+
+      dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label, style: 'dotted' })
+      if (lineam[7]) {
+        dot.addRelIndirect(`_${lineam[0]}`, lineam[7].map(x => '_' + x))
+      }
+    }
+
+    for (let lineam of ast[0]) {
+      if (!lineam) {
+        continue
+      }
+
+      let label = (lineam[5] ? `[${lineam[5]}]` : `(${lineam[0]})`)
+
+      // <8:referens_nomen>?
+      if (lineam[8]) {
+        label = label + '\\n' + lineam[8]
+      } else {
+        label = label + '\\n---'
+      }
+      // <3:aliud_caput> ?
+      if (lineam[3]) {
+        label = label + ' \\n' + lineam[3]
+      } else {
+        label = label + '\\n---'
+      }
+
+      // dot.addNode(`_${lineam[0]}`, {'cluster': lineam[6]}, { 'label': label })
+      dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label })
+      // console.log(lineam)
+    }
+    if (dot.hasCluster('-1')) {
+      // console.log('tem')
+      dot.addCluster('-1', { 'label': '?' })
+    }
+
+    return dot.render()
+  }
+
+  // document.querySelector('#testum_dot').value = ast_in_dot_numerae(abstractum_syntaxim_arborem(['12.10.34', '12.10.34~2', '', '14.56', '14.56', '14.56~2'])
+  // ast_in_dot_numerae(abstractum_syntaxim_arborem(['12.10.34', '12.10.34~2', '', '14.56', '14.56', '14.56~2']))
+  // summārium, https://en.wiktionary.org/wiki/summarium
+  // inDotNumerae(ast, titulum) {
+  // inDotNumerae(ast, titulum) {
+  inDotNumerae() {
+    let ast = this.ast
+    let titulum = this.titulum
+    let resultatum = []
+    const sumarium = ast_in_summarium(ast)
+    // return sumarium
+
+    resultatum.push(`digraph "${titulum}" {`)
+    Object.entries(sumarium).forEach(([clavem, rem_simplex]) => {
+      console.log(`${clavem} ${rem_simplex}`); // "a 5", "b 7", "c 9"
+      // let rem_simplex_q = rem_simplex.reduce(function (acc, val) {
+      //   return acc + ` "${val}"`
+      // })
+      let rem_simplex_q = rem_simplex.map(function (item) {
+        return `"${item}"`
+      }).join(" ");
+      // rem_simplex.forEach(it => {
+      //   rem_simplex_q
+      // });
+      resultatum.push(`  subgraph "cluster_${clavem}" {${rem_simplex_q}}`)
+    });
+    // resultatum.push('A -> {B C}')
+    resultatum.push('}')
+    return resultatum.join("\n")
+  }
+}
+
+
 
 // CoreMirrorTestumDot.setValue(ast_in_dot_v2(abstractum_syntaxim_arborem(['Attacker name [12.10.34~1]', '', 'Survivor name [12.10.34~2]', 'Something else', 'Company name [14.56~2]']), 'title'))
 class Graphviz {
@@ -1058,4 +1417,4 @@ class Auxilium {
 
 }
 
-export { Auxilium, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDFProofOfConcept }
+export { Auxilium, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
