@@ -340,7 +340,10 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
               </button>
             </li>
             <li class="est-experimentum" style="display:none">
-              <button type="button" class="dropdown-item numerordinatio_exportare" data-numord-fontem="scientiam_agendum"
+              <button type="button" class="dropdown-item numerordinatio_exportare"
+                data-numord-conscientiam="scientiae_focum" data-numord-archivum="tmx"
+                data-numord-constructionem="archivum"
+                data-numord-objectivum-formatum="TMX" data-numord-fontem="scientiam_agendum"
                 data-numord-objectivum-formatum="TMX" data-numord-objectivum-mimetype="application/x-tmx"
                 data-numord-regressum="in_archivum" data-numord-objectivum-archivum="ontologia.tmx">
                 <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
@@ -979,8 +982,11 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         'url': ''
       }
       let de_hash = {}
-      if (externus && document.location.hash.indexOf('#?expertum=') > -1) {
-        let crudum = document.location.hash.replace('#?expertum=', '')
+      let _hash = document.location.hash
+      _hash = _hash.replace('#beta=1', '')
+      // #beta=1#?expertum={"scientia ...
+      if (externus && _hash.indexOf('#?expertum=') > -1) {
+        let crudum = _hash.replace('#?expertum=', '')
         let decodedURI = ''
         // console.log(crudum, decodeURI(crudum))
         try {
@@ -1371,6 +1377,14 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       // #beta=1
       return (document.location.hash.indexOf('beta=1') > -1)
     }
+
+
+    function quod_status_quo_web_pasco(){
+      console.log('quod_status_quo_web_pasco...')
+      // @TODO: this function should syncronize Codemirror with in memory StatusQuo
+      //        in case Codemirror is used AND was changed since last refresh
+    }
+    window.quod_status_quo_web_pasco = quod_status_quo_web_pasco
 
     document.querySelectorAll('.est-experimentum').forEach(function (el) {
       if (estExperimentum()) {

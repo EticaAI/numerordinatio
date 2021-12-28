@@ -7,7 +7,8 @@ const datum_specificum = {
     'archivum': {}
   },
   // https://en.wiktionary.org/wiki/contineo#Latin
-  'contineo': {
+  // "archīvum", https://en.wiktionary.org/wiki/archivum
+  'archivum': {
     'csv': {
       'extesionem': '.csv',
       'mimetype': 'text/csv',
@@ -27,6 +28,10 @@ const datum_specificum = {
     'tbx': {
       'extesionem': '.json',
       'mimetype': 'application/x-tbx',
+    },
+    'tmx': {
+      'extesionem': '.tmx',
+      'mimetype': 'application/x-tmx',
     },
     'ttl': {
       'extesionem': '.ttl',

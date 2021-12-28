@@ -19,6 +19,32 @@
 
 import { datum_specificum } from './numerordinatio.mjs';
 
+// cōnscientiam, https://en.wiktionary.org/wiki/conscientia
+const conscientiam = {
+  // "memoriam", https://en.wiktionary.org/wiki/memoria#Latin
+
+  // https://en.wiktionary.org/wiki/scientia#Latin
+  // https://en.wiktionary.org/wiki/focus#Latin
+  'scientiae_focum': {},
+
+  // https://en.wiktionary.org/wiki/communitas#Latin
+  'scientiae_communitatem': {},
+
+  // "normam", https://en.wiktionary.org/wiki/norma#Latin
+  // "referentia", https://en.wiktionary.org/wiki/referens#Latin
+  'referentia_normam': {},
+}
+
+// experīmentum, https://en.wiktionary.org/wiki/experimentum#Latin
+const experimentum = {
+  // "cōdicem", https://en.wiktionary.org/wiki/codex#Latin
+  'codicem': {},
+  // https://en.wiktionary.org/wiki/verbum#Latin
+  'verbum': {},
+  // verbum collēctiōnī
+  'verbum_collectioni': {}
+}
+
 class StatusQuo {
   constructor(optionem = {}) {
     // this.datum_de_factum = {};
@@ -37,6 +63,9 @@ class StatusQuo {
       'auxilium_linguam': optionem.ui_auxilium_linguam || '#auxilium_linguam',
       'agendum_linguam': optionem.ui_agendum_linguam || '#agendum_linguam'
     }
+
+    this.conscientiam = conscientiam
+    this.experimentum = experimentum
     // this.datum = {
     //   'scientiam_basi': null,
     //   'scientia': null,
@@ -75,6 +104,9 @@ class StatusQuo {
     return this
   }
 
+  /**
+   * _[eng-Latn] Method to initialize without do heavy data processing [eng-Latn]_
+   */
   fiatLux() {
     document.querySelectorAll(this.ui.actionem_exportare).forEach(HtmlElementum =>
       HtmlElementum.addEventListener("click", () => _ui_actionem_exportare(HtmlElementum))
@@ -82,6 +114,15 @@ class StatusQuo {
     document.querySelectorAll(this.ui.numerordinatio_exportare).forEach(HtmlElementum =>
       HtmlElementum.addEventListener("click", () => _ui_actionem_exportare2(HtmlElementum))
     )
+  }
+
+  praeparare() {
+    if (window['quod_status_quo_web_pasco']) {
+      window['quod_status_quo_web_pasco']()
+    } else {
+      throw "ERROREM: Non quod_status_quo_web_pasco() in HTML"
+    }
+    return this
   }
 }
 
@@ -115,6 +156,10 @@ function _ui_actionem_exportare(HtmlElementum) {
 }
 
 function _ui_actionem_exportare2(HtmlElementum) {
+  // data-numord-conscientiam="scientiae_focum"
+  // data-numord-archivum="tmx"
+  // data-numord-constructionem="archivum"
+
   // console.log('_ui_actionem_exportare2', _ui_actionem_exportare2)
   let optionem = {
     'ObjectivumFormatum': '', // data-numord-objectivum-formatum
@@ -132,7 +177,7 @@ function _ui_actionem_exportare2(HtmlElementum) {
     }
   }
   // console.log('optionem', optionem)
-  window['status_quo'].datum(function (datum) {
+  window['status_quo'].praeparare().datum(function (datum) {
     // console.log('_ui_actionem_exportare', HtmlElementum)
     // console.log('_ui_actionem_exportare', HtmlElementum.dataset)
     // console.log('_ui_actionem_exportare optionem', optionem)
