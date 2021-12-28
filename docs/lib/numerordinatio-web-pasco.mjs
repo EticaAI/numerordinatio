@@ -17,6 +17,8 @@
   </script>
 */
 
+import { datum_specificum } from './numerordinatio.mjs';
+
 class StatusQuo {
   constructor(optionem = {}) {
     // this.datum_de_factum = {};
@@ -30,6 +32,7 @@ class StatusQuo {
     // this.ignarum_linguam = new Set()
     this.ui = {
       'actionem_exportare': optionem.ui_actionem_exportare || '.actionem_exportare',
+      'numerordinatio_exportare': optionem.ui_numerordinatio_exportare || '.numerordinatio_exportare',
       'objectivum_linguam': optionem.ui_objectivum_linguam || '#objectivum_linguam',
       'auxilium_linguam': optionem.ui_auxilium_linguam || '#auxilium_linguam',
       'agendum_linguam': optionem.ui_agendum_linguam || '#agendum_linguam'
@@ -43,7 +46,7 @@ class StatusQuo {
     // }
   }
 
-  datum(regressum, fontem, formatum = 'obiectum', reconstructum = false){
+  datum(regressum, fontem, formatum = 'obiectum', reconstructum = false) {
     // scientia_basi
     // communitatibus
     // usum_professori_obiectum
@@ -76,6 +79,9 @@ class StatusQuo {
     document.querySelectorAll(this.ui.actionem_exportare).forEach(HtmlElementum =>
       HtmlElementum.addEventListener("click", () => _ui_actionem_exportare(HtmlElementum))
     )
+    document.querySelectorAll(this.ui.numerordinatio_exportare).forEach(HtmlElementum =>
+      HtmlElementum.addEventListener("click", () => _ui_actionem_exportare2(HtmlElementum))
+    )
   }
 }
 
@@ -97,7 +103,36 @@ function _ui_actionem_exportare(HtmlElementum) {
     }
   }
   // console.log('optionem', optionem)
-  window['status_quo'].datum(function(datum){
+  window['status_quo'].datum(function (datum) {
+    // console.log('_ui_actionem_exportare', HtmlElementum)
+    // console.log('_ui_actionem_exportare', HtmlElementum.dataset)
+    // console.log('_ui_actionem_exportare optionem', optionem)
+    if (optionem.Regressum) {
+      window[optionem.Regressum](datum, optionem, errorem)
+    }
+  }, optionem.Fontem, optionem.ObjectivumFormatum)
+
+}
+
+function _ui_actionem_exportare2(HtmlElementum) {
+  // console.log('_ui_actionem_exportare2', _ui_actionem_exportare2)
+  let optionem = {
+    'ObjectivumFormatum': '', // data-numord-objectivum-formatum
+    'ObjectivumPostformatum': '', // data-numord-objectivum-postformatum
+    'ObjectivumMimetype': 'text/plain',
+    'ObjectivumArchivum': 'data.txt' // data-numord-objectivum-archivum
+  }
+  let datum = ''
+  let errorem = []
+  if (HtmlElementum.dataset) {
+    for (let [codicem, rem] of Object.entries(HtmlElementum.dataset)) {
+      if (codicem.indexOf('numord') === 0) {
+        optionem[codicem.replace('numord', '')] = rem
+      }
+    }
+  }
+  // console.log('optionem', optionem)
+  window['status_quo'].datum(function (datum) {
     // console.log('_ui_actionem_exportare', HtmlElementum)
     // console.log('_ui_actionem_exportare', HtmlElementum.dataset)
     // console.log('_ui_actionem_exportare optionem', optionem)

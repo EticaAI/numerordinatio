@@ -1,6 +1,50 @@
 // Dominium Publicum
 // SPDX-License-Identifier: Unlicense
 
+const datum_specificum = {
+  // "cōnstrūctiōnem", https://en.wiktionary.org/wiki/constructio#Latin
+  'constructionem': {
+    'archivum': {}
+  },
+  // https://en.wiktionary.org/wiki/contineo#Latin
+  'contineo': {
+    'csv': {
+      'extesionem': '.csv',
+      'mimetype': 'text/csv',
+    },
+    'gv': {
+      'extesionem': '.gv',
+      'mimetype': 'text/vnd.graphviz',
+    },
+    'hxl.csv': {
+      'extesionem': '.hxl.csv',
+      'mimetype': 'text/csv',
+    },
+    'json': {
+      'extesionem': '.json',
+      'mimetype': 'application/json',
+    },
+    'tbx': {
+      'extesionem': '.json',
+      'mimetype': 'application/x-tbx',
+    },
+    'ttl': {
+      'extesionem': '.ttl',
+      'mimetype': 'application/x-turtle',
+    },
+    'yml': {
+      'extesionem': '.yml',
+      'mimetype': 'text/x-yaml',
+    },
+  },
+  // https://en.wiktionary.org/wiki/varians#Latin
+  'varians':  {
+    'numerae':{},
+    'verbosum':{}
+  }
+}
+
+
 /**
  * _[eng-Latn] While there is no immediate need, remaining JavaScript code
  * from index.html which could be ported to a non-web environment (such as
@@ -674,6 +718,83 @@ class Primitivum {
     return resultatum
   }
 
+
+  static __ast_in_dot_v2(ast, titulum, annotationem = '') {
+    // throw "ast_in_dot_v2 -> Primitivum.__ast_in_dot_v2"
+    // @deprecated use NumerordinatioAST
+
+    let resultatum = []
+    // const sumarium = ast_in_summarium(ast)
+    // return sumarium
+
+    let dot = new Graphviz(titulum)
+
+    if (annotationem) {
+      dot.addAnnotation(annotationem)
+    }
+
+    for (let lineam of ast[3]) {
+      if (!lineam) {
+        continue
+      }
+
+      // Habesne codicem? [00.00]
+      // Nom codicem? Indicem (0)
+      let label = (lineam[5] ? `[${lineam[5]}]` : `(${lineam[0]})`)
+
+      // <8:referens_nomen>?
+      if (lineam[8]) {
+        label = label + '\\n' + lineam[8]
+      } else {
+        label = label + '\\n---'
+      }
+      // // <3:aliud_caput> ?
+      // if (lineam[3]) {
+      //   label = label + ' \\n' + lineam[3]
+      // } else {
+      //   label = label + '\\n---'
+      // }
+
+      // dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label, style: 'dotted' })
+      dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': Primitivum.ordoDeCodicem(lineam[5]) }, { 'label': label, style: 'dotted' })
+      if (lineam[7]) {
+        dot.addRelIndirect(`_${lineam[0]}`, lineam[7].map(x => '_' + x))
+      }
+    }
+
+    for (let lineam of ast[0]) {
+      if (!lineam) {
+        continue
+      }
+
+      let label = (lineam[5] ? `[${lineam[5]}]` : `(${lineam[0]})`)
+
+      // <8:referens_nomen>?
+      if (lineam[8]) {
+        label = label + '\\n' + lineam[8]
+      } else {
+        label = label + '\\n---'
+      }
+      // <3:aliud_caput> ?
+      if (lineam[3]) {
+        label = label + ' \\n' + lineam[3]
+      } else {
+        label = label + '\\n---'
+      }
+
+      // dot.addNode(`_${lineam[0]}`, {'cluster': lineam[6]}, { 'label': label })
+      // dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': __codicem_rank(lineam[5]) }, { 'label': label })
+      dot.addNode(`_${lineam[0]}`, { 'cluster': lineam[6], 'rank': Primitivum.ordoDeCodicem(lineam[5]) }, { 'label': label })
+      // console.log(lineam)
+    }
+    if (dot.hasCluster('-1')) {
+      // console.log('tem')
+      dot.addCluster('-1', { 'label': '?' })
+    }
+
+    return dot.render()
+  }
+
   /**
    * @TODO temporary name; maybe replace or remove
    *
@@ -778,6 +899,175 @@ class Primitivum {
     }
 
     return dot.render()
+  }
+
+
+  /**
+   * @deprecated deprecated with abstractum_syntaxim_arborem_de_conscientiam()
+   *
+   * @example
+   *
+   * quod_cognitionem(scientia_basi, {codicem:'12'})
+   **/
+  static quod_cognitionem(scientia_basi, optionem = {}) {
+    // codicem, objectivum_linguam, agendum_linguam, terminum_indicem
+    if (!scientia_basi || !optionem || !optionem.codicem || !scientia_basi[optionem.codicem]) {
+      return false
+    }
+    let terminum_indicem = optionem.terminum_indicem || "0"
+    let clavem_optionem = Object.keys(scientia_basi[optionem.codicem])
+    let clavem = Primitivum.__quod_linguam(clavem_optionem, optionem.objectivum_linguam, optionem.agendum_linguam)
+    // console.log(clavem)
+
+    if (!scientia_basi[optionem.codicem][clavem][terminum_indicem]) {
+      return false
+    }
+    // [<0:referens_nomen>, <1:linguam>, <2:terminum_indicem>]
+    return [scientia_basi[optionem.codicem][clavem][terminum_indicem], clavem, terminum_indicem]
+  }
+
+  /**
+   * @deprecated deprecated with abstractum_syntaxim_arborem_de_conscientiam()
+   **/
+  static quod_linguam(optionem = [], objectivum_linguam = null, agendum_linguam = []) {
+    // @TODO create javascript version of bcp47_langtag
+    //       https://github.com/EticaAI/tico-19-hxltm/blob/main/scripts/fn/linguacodex.py#L1064
+    let aliquid = false
+    if (!objectivum_linguam || !agendum_linguam) {
+      return optionem[0]
+    }
+    if (objectivum_linguam) {
+      for (let opt of optionem) {
+        if (opt.toLowerCase() == objectivum_linguam) {
+          return opt
+        }
+      }
+    } else if (agendum_linguam) {
+      for (agendum in agendum_linguam) {
+        if (agendum === '*') {
+          aliquid = true
+        }
+        for (let opt of optionem) {
+          if (opt.toLowerCase() == agendum) {
+            return opt
+          }
+        }
+      }
+    }
+    if (aliquid) {
+      return optionem[0]
+    }
+
+    return false
+  }
+
+
+  /**
+   * @deprecated use quod_significationem_de_caput_item()
+   **/
+  static __quod_codicem(textum) {
+    // @see https://stackoverflow.com/questions/14891129
+    //      /regular-expression-pl-and-pn/14891168
+    // let removedText = textum.replace(/\D+/g, '');
+    let coniunctum = 0
+    let codicem_completum = null
+    // let codicem_cor = textum.replace(/[^0-9_~\.\^\-\[\]\(\)\{\}]/g, '');
+    let codicem_cor = textum.replace(/[^0-9_~\:\^\-\[\]\(\)\{\}]/g, '');
+    if (codicem_cor.match(/\((.*)\)/)) {
+      codicem_cor = codicem_cor.match(/\((.*)\)/).pop()
+    }
+    if (codicem_cor.match(/\[(.*)\]/)) {
+      codicem_cor = codicem_cor.match(/\[(.*)\]/).pop()
+    }
+    if (codicem_cor.indexOf("~") > -1) {
+      let temp = codicem_cor.split("~")
+      codicem_cor = temp[0]
+      // entitatem = parseInt(temp[1])
+    } else {
+      codicem_completum = codicem_cor
+    }
+
+    // @TODO alternative-name--12-34
+    // @TODO altrrnative-nane_12-34
+
+    // console.log(textum_cor, textum)
+    // @TODO: textum without code parts
+
+    return [codicem_completum, codicem_cor, coniunctum, textum]
+  }
+
+  static __quod_conceptum(datum, codicem) {
+    if (datum[codicem]) {
+      return datum[codicem]
+    }
+    return null
+  }
+
+  static __quod_terminum(conceptum, objectivum_linguam, agendum_linguam) {
+    // console.log(objectivum_linguam, conceptum[objectivum_linguam])
+    if (conceptum[objectivum_linguam] && conceptum[objectivum_linguam]['0']) {
+      return conceptum[objectivum_linguam]['0']
+    }
+    if (agendum_linguam) {
+      agendum_linguam.forEach(item => {
+        if (conceptum[item] && conceptum[item]['0']) {
+          return conceptum[item]['0']
+        }
+      });
+    }
+    return null
+  }
+
+  static __quod_resumens(fontem, ast_rem) {
+    let resultatum = {
+      fontem: fontem,
+      objectivum: []
+    }
+    ast_rem.forEach(item => {
+      resultatum.objectivum.push(item.est_textum)
+    });
+
+    return resultatum
+  }
+
+
+  /**
+   * @see https://stackoverflow.com/questions/1293147/example-javascript-code-to-parse-csv-data/14991797#14991797
+   **/
+  static __parseCSV(str) {
+    var arr = [];
+    var quote = false;  // 'true' means we're inside a quoted field
+
+    // Iterate over each character, keep track of current row and column (of the returned array)
+    for (var row = 0, col = 0, c = 0; c < str.length; c++) {
+      var cc = str[c], nc = str[c + 1];        // Current character, next character
+      arr[row] = arr[row] || [];             // Create a new row if necessary
+      arr[row][col] = arr[row][col] || '';   // Create a new column (start with empty string) if necessary
+
+      // If the current character is a quotation mark, and we're inside a
+      // quoted field, and the next character is also a quotation mark,
+      // add a quotation mark to the current column and skip the next character
+      if (cc == '"' && quote && nc == '"') { arr[row][col] += cc; ++c; continue; }
+
+      // If it's just one quotation mark, begin/end quoted field
+      if (cc == '"') { quote = !quote; continue; }
+
+      // If it's a comma and we're not in a quoted field, move on to the next column
+      if (cc == ',' && !quote) { ++col; continue; }
+
+      // If it's a newline (CRLF) and we're not in a quoted field, skip the next character
+      // and move on to the next row and move to column 0 of that new row
+      if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+
+      // If it's a newline (LF or CR) and we're not in a quoted field,
+      // move on to the next row and move to column 0 of that new row
+      if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+      if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+
+      // Otherwise, append the current character to the current column
+      arr[row][col] += cc;
+    }
+    return arr;
   }
 
   /**
@@ -1990,4 +2280,4 @@ class Auxilium {
 
 }
 
-export { Auxilium, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
+export { Auxilium, datum_specificum, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
