@@ -29,13 +29,54 @@ class StatusQuo {
     // // Trivia: ignārum, https://en.wiktionary.org/wiki/ignarus#Latin
     // this.ignarum_linguam = new Set()
     this.ui = {
-      'objectivum_linguam': optionem.ui_objectivum_linguam,
-      'auxilium_linguam': optionem.ui_auxilium_linguam,
-      'agendum_linguam': optionem.ui_agendum_linguam
+      'actionem_exportare': optionem.ui_actionem_exportare || '.actionem_exportare',
+      'objectivum_linguam': optionem.ui_objectivum_linguam || '#objectivum_linguam',
+      'auxilium_linguam': optionem.ui_auxilium_linguam || '#auxilium_linguam',
+      'agendum_linguam': optionem.ui_agendum_linguam || '#agendum_linguam'
     }
+  }
+
+  est(rem, clavem, collectionem) {
+    if (collectionem) {
+      this[collectionem][clavem] = rem
+    } else {
+      this[clavem] = rem
+    }
+
+    return this
+  }
+
+  fiatLux() {
+    document.querySelectorAll(this.ui.actionem_exportare).forEach(HtmlElementum =>
+      HtmlElementum.addEventListener("click", () => _ui_actionem_exportare(HtmlElementum))
+    )
   }
 }
 
+// https://stackoverflow.com/questions/30521224/javascript-convert-pascalcase-to-underscore-case-snake-case
+function _ui_actionem_exportare(HtmlElementum) {
+  let optionem = {
+    'ObjectivumFormatum': '', // data-numord-objectivum-formatum
+    'ObjectivumPostformatum': '', // data-numord-objectivum-mimetype
+    'ObjectivumMimetype': 'text/plain',
+    'ObjectivumArchivum': 'data.txt' // data-numord-objectivum-archivum
+  }
+  let datum = ''
+  let errorem = []
+  if (HtmlElementum.dataset) {
+    for (let [codicem, rem] of Object.entries(HtmlElementum.dataset)) {
+      if (codicem.indexOf('numord') === 0) {
+        optionem[codicem.replace('numord', '')] = rem
+      }
+    }
+  }
+  console.log('_ui_actionem_exportare', HtmlElementum)
+  console.log('_ui_actionem_exportare', HtmlElementum.dataset)
+  console.log('_ui_actionem_exportare optionem', optionem)
+  if (optionem.Regressum) {
+    window[optionem.Regressum](datum, optionem, errorem)
+  }
+}
 
 // function fetchAll(...resources) {
 function fetchAll(resources) {
