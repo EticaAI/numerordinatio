@@ -7,7 +7,7 @@
  * command line) eventually could be moved to here. [eng-Latn]_
  */
 
-class CodexBasim {
+class Numerordinatio {
   constructor() {
     this.datum_de_factum = {};
     this.datum_reconstructum = {};
@@ -483,7 +483,8 @@ scientia.praeparare()
 scientia.quod_terminum('12')
 // scientia.reversumLogicae('alternative name')
 */
-class CodexDeObiectum extends CodexBasim {
+class CodexDeObiectum extends Numerordinatio {
+  // @deprecated use Numerordinatio
   constructor(datum_de_factum) {
     super();
     this.datum_de_factum = datum_de_factum;
@@ -500,7 +501,8 @@ class CodexDeObiectum extends CodexBasim {
 
 }
 
-class CodexDeTabulam extends CodexBasim {
+class CodexDeTabulam extends Numerordinatio {
+  // @deprecated use Numerordinatio
   constructor(datum_de_factum = {}) {
     super();
     this.datum_de_factum = datum_de_factum;
@@ -1056,6 +1058,4 @@ class Auxilium {
 
 }
 
-
-
-export { Auxilium, CodexBasim, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDFProofOfConcept }
+export { Auxilium, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDFProofOfConcept }
