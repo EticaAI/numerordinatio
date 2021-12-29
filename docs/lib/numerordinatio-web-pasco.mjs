@@ -124,14 +124,17 @@ class StatusQuo {
    * @param {string} conscientiam 
    */
   datum_hamo_pre(functionem_regressae, datum_conscientiam = '', datum_exportare_archivum) {
-    // Not necessary yet
+    // console.log('datum_hamo_pre', this.hamo_conscientiam[datum_conscientiam])
     if (this.hamo_conscientiam[datum_conscientiam]) {
+      // debugger;
       if (this.hamo_conscientiam[datum_conscientiam]['pre']) {
+        // console.log('quase dentro')
         this.hamo_conscientiam[datum_conscientiam]['pre'](function () {
+          // console.log('dentro')
           functionem_regressae(this.conscientiam[datum_conscientiam])
         })
       } else {
-        console.log(`DEBUG: no pre in [${datum_conscientiam}]`)
+        console.info(`INFO: no pre in [${datum_conscientiam}]; Optionem ${this.hamo_conscientiam.keys()}`)
       }
       functionem_regressae(this.conscientiam[datum_conscientiam])
     } else {
@@ -159,12 +162,12 @@ class StatusQuo {
     document.querySelectorAll(this.ui.numerordinatio_exportare).forEach(HtmlElementum =>
       HtmlElementum.addEventListener("click", () => _web_pasco_exportare(HtmlElementum))
     )
-    console.log(this.hamo_conscientiam)
+    // console.log(this.hamo_conscientiam)
     for (let [conscientiam_nomen, rem] of Object.entries(this.hamo_conscientiam)) {
       if (rem['init']) {
         rem['init'](functionem_regressae)
       } else {
-        console.log(`DEBUG: no init in [${conscientiam_nomen}][${JSON.stringify(rem)}]`)
+        // console.log(`DEBUG: no init in [${conscientiam_nomen}][${JSON.stringify(rem)}]`)
       }
     }
     // this.conscientiam.forEach(function(rem) {
@@ -255,7 +258,7 @@ function _web_pasco_exportare(HtmlElementum) {
 
   // console.log('optionem', optionem)
   window['status_quo'].datum_neo(function (numerordinatio_abstractum) {
-    console.log('_ui_actionem_exportare numerordinatio_abstractum', numerordinatio_abstractum)
+    // console.log('_ui_actionem_exportare numerordinatio_abstractum', numerordinatio_abstractum)
     // console.log('_ui_actionem_exportare', HtmlElementum.dataset)
     // console.log('_ui_actionem_exportare optionem', optionem)
     // console.log('_web_pasco_exportare numerordinatio_abstractum', numerordinatio_abstractum, HtmlElementum, HtmlElementum.dataset.numordVarians)

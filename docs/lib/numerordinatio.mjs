@@ -286,9 +286,9 @@ class Numerordinatio {
 
   exportare(formatum, reconstructum = false, varians = '', optionem = {}) {
 
-    console.log('Numerordinatio expoerare reconstructum', reconstructum)
-    console.log('Numerordinatio expoerare varians', varians)
-    console.log('Numerordinatio expoerare formatum', formatum)
+    // console.log('Numerordinatio expoerare reconstructum', reconstructum)
+    // console.log('Numerordinatio expoerare varians', varians)
+    // console.log('Numerordinatio expoerare formatum', formatum)
     // console.log('expoerare', formatum, reconstructum, varians, typeof varians, varians, 'numerum', varians === 'numerum')
     let formatum_normale = formatum.toLowerCase().replace(/\-/g, '')
     if (formatum_normale.indexOf('tmx') === 0) {
@@ -360,6 +360,8 @@ class Numerordinatio {
   }
 
   exportareObiectum(reconstructum = false) {
+
+    // console.log('exportareObiectum', reconstructum, this)
     if (reconstructum) {
       return this.quod_completum()
     } else {
@@ -1134,7 +1136,11 @@ class Primitivum {
   static codex_de_tabulam_in_obiectum(usum_professori_tabulam) {
     let obiectum = {}
 
-    let codex = new CodexDeTabulam()
+    // let codex = new CodexDeTabulam()
+    let codex = new Numerordinatio()
+
+    // console.log('codex_de_tabulam_in_obiectum', usum_professori_tabulam)
+    // console.log('codex_de_tabulam_in_obiectum[0]', usum_professori_tabulam[0])
 
     usum_professori_tabulam.forEach(lineam => {
       // console.log('lineam', lineam)
@@ -1160,11 +1166,12 @@ class Primitivum {
 
     codex.praeparare()
 
-    console.log('codex usum_professori_tabulam', usum_professori_tabulam)
-    console.log('codex resultatum', codex.resultatum())
+    // console.log('codex usum_professori_tabulam', usum_professori_tabulam)
+    // console.log('codex resultatum', codex.resultatum())
 
     // return usum_professori_tabulam
-    return codex.resultatum()
+    // return codex.resultatum()
+    return codex
   }
 
 
@@ -1502,7 +1509,7 @@ class Primitivum {
 
     // @see https://www.unicode.org/reports/tr44/#General_Category_Values
     // Regula cor: 00.00~0
-    const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\.|~]*\\p{General_Category=Decimal_Number})`
+    const RegulaCodicemPurum = `(\\p{General_Category=Decimal_Number}[\\p{General_Category=Decimal_Number}|\:|~]*\\p{General_Category=Decimal_Number})`
     // Regula cor: [00.00~0]
     const RegulaCodicemInVasum = `(\\p{General_Category=Open_Punctuation}${RegulaCodicemPurum}\\p{General_Category=Close_Punctuation})`
 

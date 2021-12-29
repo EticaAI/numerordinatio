@@ -506,11 +506,31 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
                 usum-professori.json
               </button>
             </li>
-            <!-- <li><a class="dropdown-item" href="#">Something else here</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="#">Separated link</a></li> -->
+            <li class="est-experimentum" style="display:none">
+              <button type="button" class="dropdown-item numerordinatio_exportare"
+                data-numord-conscientiam="referentia_normam" data-numord-archivum="yml" data-numord-varians=""
+                data-numord-constructionem="crudum" data-numord-reconstructum="false"
+                data-numord-functionem-finale="download_yml" data-numord-titulum="referentia-normam">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                referentia-normam.yml
+              </button>
+            </li>
+            <li class="est-experimentum" style="display:none">
+              <button type="button" class="dropdown-item numerordinatio_exportare"
+                data-numord-conscientiam="referentia_normam" data-numord-archivum="json" data-numord-varians=""
+                data-numord-constructionem="crudum" data-numord-reconstructum="false"
+                data-numord-functionem-finale="download_json" data-numord-titulum="referentia-normam">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
+                  <use xlink:href="#bi-file-earmark-arrow-down" />
+                </svg>
+                referentia-normam.json
+              </button>
+            </li>
           </ul>
         </div>
 
@@ -1136,19 +1156,49 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     function __hook_codemirror_csv(functionem_regressae, codemirror_rem, conscientiam = 'defallo') {
       try {
 
-        let crudum_tabula = Primitivum.__parseCSV(codemirror_rem.getValue())
-        let crudum = Primitivum.codex_de_tabulam_in_obiectum(crudum_tabula)
+        // console.log('__hook_codemirror_csv', functionem_regressae, codemirror_rem, conscientiam)
 
-        rem = new CodexDeObiectum(crudum)
-        rem.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-        rem.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-        rem.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-        rem.praeparare()
+        let crudum_textum = codemirror_rem.getValue()
+        // console.log('__hook_codemirror_csv crudum_textum', crudum_textum)
 
-        // window['scientiam_agendum'] = scientia
-        window['status_quo'].conscientiam[conscientiam] = rem
-        functionem_regressae(window['status_quo'].conscientiam[conscientiam])
-        // console.log(scientia_basi);
+
+        // Papa.parse("a,b\n1,2", {
+        //   complete: function (results) {
+        //     console.log('Papa.parse("a,b\n1,2")', results)
+        //   },
+        // })
+
+        Papa.parse(crudum_textum, {
+          complete: function (results) {
+            const results_clone = Object.assign({}, results);
+            var results_deepclone = JSON.parse(JSON.stringify(results.data));
+
+            // console.log('__hook_codemirror_csv papaparse [0]', results.data[0])
+            // console.log('__hook_codemirror_csv papaparse', results.data)
+            // console.log('__hook_codemirror_csv papaparse results_clone', results_clone)
+            // console.log('__hook_codemirror_csv papaparse results_deepclone', results_deepclone)
+            // let crudum = Primitivum.codex_de_tabulam_in_obiectum(results.data)
+            let rem = Primitivum.codex_de_tabulam_in_obiectum(results_deepclone)
+            // console.log('oioioi', rem)
+            // console.log('Primitivum.codex_de_tabulam_in_obiectum(results.data)', results.data, crudum)
+            // let rem = new CodexDeObiectum(crudum)
+            rem.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
+            rem.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
+            rem.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
+            rem.praeparare()
+
+            // console.log('rem', rem)
+
+            // console.log('rem.datum_de_factum', rem.datum_de_factum)
+
+            // window['scientiam_agendum'] = scientia
+            window['status_quo'].conscientiam[conscientiam] = rem
+            // window['status_quo'].conscientiam[conscientiam + '_debug'] = rem
+            // functionem_regressae(window['status_quo'].conscientiam[conscientiam])
+            functionem_regressae()
+          }
+        })
+
       } catch (e) {
         console.log(e);
       }
@@ -1166,6 +1216,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
           saveAs(blob, `${HtmlElementum.dataset.numordTitulum}${datum_specificum_rem.extesionem}`);
         },
         'download_yml': function (crudum_datum, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem) {
+          console.log('download_yml', crudum_datum)
           let _yaml = jsyaml.dump(crudum_datum, { forceQuotes: true })
           var blob = new Blob([_yaml], { type: "text/x-yaml;charset=utf-8" });
           saveAs(blob, `${HtmlElementum.dataset.numordTitulum}${datum_specificum_rem.extesionem}`);
@@ -1195,7 +1246,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
           'init': null,
           'pre': function () {
             __hook_codemirror_yml(function () {
-              console.log('updated')
+              // console.log('__hook_codemirror_yml updated')
             }, CoreMirrorOntologia, 'scientiae_focum')
           }
         },
@@ -1207,12 +1258,13 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
 
         // "normam", https://en.wiktionary.org/wiki/norma#Latin
         // "referentia", https://en.wiktionary.org/wiki/referens#Latin
-        'hamo_referentia_normam': {
+        'referentia_normam': {
           'init': null,
           'pre': function () {
             __hook_codemirror_csv(function () {
-              console.log('updated')
-            }, CoreMirrorOntologia, 'referentia_normam')
+              // debugger;
+              // console.log('updated')
+            }, CoreMirrorProfessorem, 'referentia_normam')
           }
         },
       },
