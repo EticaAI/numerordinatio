@@ -1,0 +1,29 @@
+= Numerordĭnātĭo (English in Latin Script)
+
+IMPORTANT: This is a quick draft.
+
+// +++<em lang="la">Numerordĭnātĭo</em>+++ is (...)
+
+== +++<em lang="la">Numerordĭnātĭo</em>+++ conventions
+
+=== About the coding system
+
+1. Numbers can be anything between zero to infinite.
+2. Numbers must be integers.
+3. Numbers in a same rank must be unidimensional (typical case: if both positive and negative values could be represented, only one is allowed)
+
+=== About the raking system
+
+1. Number collections can optionally be ranked as children of a maximum of one parent and can have zero to infinite descendents.
+   The arrangements between such collections is the major form of prejudge explicit ranking now was the time the taxonomy was developed.
+2. No order of importance can be prejudged between numbers of the same rank based on how bigger they are without any additional context.
+   More often they're categorical codes than than https://www.wikidata.org/wiki/Q191780[ordinal number].
+3. Ranking from taxonomies from different sources can (and often will) have different levels of intermediate even when referring to near the same concepts,
+   so in general more level of herdeiros for completely different base rankings (without additional context) cannot be assumed greater level of relevance.
+
+
+== Implementation notes: what explicitly is NOT part of +++<em lang="la">Numerordĭnātĭo</em>+++
+
+=== +++<em lang="la">Numerordĭnātĭo Multilinguae</em>+++
+
+#@TODO explain#
