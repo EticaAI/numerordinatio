@@ -267,6 +267,10 @@ function _web_pasco_exportare(HtmlElementum) {
 
     let datum_specificum_rem = datum_specificum['archivum'][archivum]
 
+    if (functionem_constructionem === 'crudum') {
+      hamo_functionem_finale(datum, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem)
+      return true
+    }
     if (functionem_constructionem === 'blob') {
       let mime = datum_specificum_rem['mimetype']
       var blob = new Blob([datum], { type: `${mime};charset=utf-8` });

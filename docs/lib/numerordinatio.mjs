@@ -26,7 +26,7 @@ const datum_specificum = {
       'mimetype': 'application/json',
     },
     'tbx': {
-      'extesionem': '.json',
+      'extesionem': '.tbx',
       'mimetype': 'application/x-tbx',
     },
     'tmx': {
@@ -43,11 +43,11 @@ const datum_specificum = {
     },
   },
   // https://en.wiktionary.org/wiki/varians#Latin
-  'varians':  {
+  'varians': {
     // "numerum", https://en.wiktionary.org/wiki/numerus#Latin
-    'numerum':{},
+    'numerum': {},
     // "verbōsum", https://en.wiktionary.org/wiki/verbosus#Latin
-    'verbosum':{}
+    'verbosum': {}
   }
 }
 
@@ -286,6 +286,7 @@ class Numerordinatio {
 
   exportare(formatum, reconstructum = false, varians = '', optionem = {}) {
 
+    console.log('Numerordinatio expoerare reconstructum', reconstructum)
     console.log('Numerordinatio expoerare varians', varians)
     console.log('Numerordinatio expoerare formatum', formatum)
     // console.log('expoerare', formatum, reconstructum, varians, typeof varians, varians, 'numerum', varians === 'numerum')
@@ -309,6 +310,17 @@ class Numerordinatio {
       }
       throw `TODO: [${formatum}]; need be migrated from html to here. Varians [${varians}]`
     }
+
+    // Note: the old version keept the YAML comments, the new one not. We could try to keep it somewhere else
+    if (formatum === 'yml') {
+      return this.exportareObiectum(reconstructum, optionem)
+    }
+    if (formatum === 'json') {
+      return this.exportareObiectum(reconstructum, optionem)
+    }
+    if (formatum === 'ttl') {
+      return this.exportareRDFTurtle(reconstructum, optionem)
+    }
     if (formatum_normale.indexOf('tabulam') === 0 || formatum_normale.indexOf('csv') === 0) {
 
       // Note: CSV-like formats still need conversion to string
@@ -326,16 +338,25 @@ class Numerordinatio {
   }
 
   exportareDot(reconstructum = false, optionem = {}) {
+    // let obiectum = this.exportareObiectum(reconstructum)
+    // let num_ast = new NumerordinatioAST(obiectum, optionem)
+    // num_ast.setAST(obiectum)
+    // return num_ast.inDot()
+
     let obiectum = this.exportareObiectum(reconstructum)
-    let num_ast = new NumerordinatioAST(obiectum, optionem)
-    num_ast.setAST(obiectum)
-    return num_ast.inDot()
+
+    return Primitivum.__scientia_basi_in_ast_dot_verbosum(obiectum, optionem)
   }
 
   exportareDotNumerae(reconstructum = false, optionem = {}) {
+    // let obiectum = this.exportareObiectum(reconstructum)
+    // let num_ast = new NumerordinatioAST(obiectum, optionem)
+    // console.log('exportareDotNumerae', num_ast)
+    // return num_ast.inDotNumerae()
+
     let obiectum = this.exportareObiectum(reconstructum)
-    let num_ast = new NumerordinatioAST(obiectum, optionem)
-    return num_ast.inDotNumerae()
+
+    return Primitivum.__scientia_basi_in_ast_dot_numerum(obiectum, optionem)
   }
 
   exportareObiectum(reconstructum = false) {
@@ -422,7 +443,7 @@ class Numerordinatio {
     return resultatum
   }
 
-  exportareTabulamHXL(reconstructum = false) {
+  exportareTabulamHXL(reconstructum = false, optionem = {}) {
     let tabulam = this.exportareTabulam(reconstructum)
     let hxl_caput = []
     let indicem = 1
@@ -438,21 +459,21 @@ class Numerordinatio {
     return tabulam
   }
 
-  exportareRDFTurtle(reconstructum = false) {
+  exportareRDFTurtle(reconstructum = false, optionem = {}) {
     let obiectum = this.exportareObiectum(reconstructum)
     let tmx = new RDFProofOfConcept()
     tmx.setAST(obiectum)
     return tmx.export()
   }
 
-  exportareTMX(reconstructum = false) {
+  exportareTMX(reconstructum = false, optionem = {}) {
     let obiectum = this.exportareObiectum(reconstructum)
     let tmx = new TMX()
     tmx.setAST(obiectum)
     return tmx.export()
   }
 
-  exportareTBXBasic2008(reconstructum = false) {
+  exportareTBXBasic2008(reconstructum = false, optionem = {}) {
     let obiectum = this.exportareObiectum(reconstructum)
     let tbx = new TBXBasic2008()
     tbx.setAST(obiectum)
@@ -843,12 +864,21 @@ class Primitivum {
   }
 
   // @TODO deal with order of apperance https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
-  static __scientia_basi_in_ast_dot_numerum(scientia) {
+  static __scientia_basi_in_ast_dot_numerum(scientia, optionem = {}) {
     // let resultatum = '# TODO'
 
-    let scientia_datum = scientia.quod_completum()
+    let titulum = optionem.titulum || 'ontologia-numerae'
+    let scientia_datum = null
+    // replace it later
+    if (scientia.quod_completum) {
+      scientia_datum = scientia.quod_completum()
+    } else {
+      scientia_datum = scientia
+    }
 
-    let dot = new Graphviz('ontologia-numerae')
+
+    // let dot = new Graphviz('ontologia-numerae')
+    let dot = new Graphviz(titulum)
 
     // console.log(scientia, scientia)
 
@@ -885,7 +915,14 @@ class Primitivum {
       'node': { 'style': 'filled' }
     })
 
-    let scientia_datum = scientia.quod_completum()
+    let scientia_datum = null
+
+    // replace it later
+    if (scientia.quod_completum) {
+      scientia_datum = scientia.quod_completum()
+    } else {
+      scientia_datum = scientia
+    }
 
     // console.log('scientia_datum', scientia_datum)
 
