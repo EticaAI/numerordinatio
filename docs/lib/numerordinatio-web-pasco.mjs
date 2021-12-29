@@ -68,6 +68,7 @@ class StatusQuo {
     this.hamo_conscientiam = hamo_de_status_quo.hamo_conscientiam
     this.hamo_experimentum = hamo_de_status_quo.hamo_experimentum
     this.functionem_constructionem = hamo_de_status_quo.functionem_constructionem
+    this.hamo_functionem_finale = hamo_de_status_quo.hamo_functionem_finale
     this.conscientiam = {}
     this.experimentum = {}
     // this.datum = {
@@ -98,7 +99,7 @@ class StatusQuo {
     // return window[nomen]
   }
   datum_neo(functionem_regressae, datum_conscientiam, datum_archivum) {
-    console.log('DEBUG: datum_neo')
+    // console.log('DEBUG: datum_neo')
     // scientia_basi
     // communitatibus
     // usum_professori_obiectum
@@ -106,8 +107,8 @@ class StatusQuo {
     // console.log('datum', fontem)
 
     // TODO: refresh options from UI, such as language and etc
-    window['status_quo'].datum_hamo_pre(function(resultatum){
-      console.log('done datum_neo', resultatum)
+    window['status_quo'].datum_hamo_pre(function (resultatum) {
+      // console.log('done datum_neo', resultatum)
       functionem_regressae(resultatum)
     }, datum_conscientiam)
   }
@@ -126,7 +127,7 @@ class StatusQuo {
     // Not necessary yet
     if (this.hamo_conscientiam[datum_conscientiam]) {
       if (this.hamo_conscientiam[datum_conscientiam]['pre']) {
-        this.hamo_conscientiam[datum_conscientiam]['pre'](function() {
+        this.hamo_conscientiam[datum_conscientiam]['pre'](function () {
           functionem_regressae(this.conscientiam[datum_conscientiam])
         })
       } else {
@@ -220,23 +221,65 @@ function _web_pasco_exportare(HtmlElementum) {
   // data-numord-constructionem="blob"
   // data-numord-constructionem="encodeURI"
 
+  // let functionem_constructionem = window['status_quo']['functionem_constructionem'][HtmlElementum.dataset.numordConstructionem]
+  let functionem_constructionem = HtmlElementum.dataset.numordConstructionem
+  let hamo_functionem_finale = window['status_quo']['hamo_functionem_finale'][HtmlElementum.dataset.numordFunctionemFinale]
+  let varians = HtmlElementum.dataset.numordVarians
+  let archivum = HtmlElementum.dataset.numordArchivum
+  let titulum = HtmlElementum.dataset.numordTitulum
   let reconstructum = false
-  let functionem_constructionem = window['status_quo']['functionem_constructionem'][HtmlElementum.dataset.numordConstructionem]
+  if (HtmlElementum.dataset.numordReconstructum) {
+    if (/^\s*(true|1|on)\s*$/i.test(HtmlElementum.dataset.numordReconstructum)) {
+      reconstructum = true
+    }
+  } else if (varians === 'verbosum') {
+    reconstructum = true
+  }
 
-  console.log('HtmlElementum', HtmlElementum)
+  let optionem = {
+    'titulum': titulum
+  }
+
+  // console.log('functionem_constructionem', functionem_constructionem)
+  // console.log('functionem_constructionem', functionem_constructionem)
+
+
+  // hamo_functionem_finale = 
+
+  // console.log('HtmlElementum', HtmlElementum)
+  // console.log('HtmlElementum.dataset', HtmlElementum.dataset)
+  // console.log('HtmlElementum.dataset.numordVarians 33333', HtmlElementum.dataset.numordVarians)
+  // console.log('HtmlElementum.dataset.numordVarians 33333', varians)
 
   // console.log('_ui_actionem_exportare2', _ui_actionem_exportare2)
 
   // console.log('optionem', optionem)
   window['status_quo'].datum_neo(function (numerordinatio_abstractum) {
-    // console.log('_ui_actionem_exportare', HtmlElementum)
+    console.log('_ui_actionem_exportare numerordinatio_abstractum', numerordinatio_abstractum)
     // console.log('_ui_actionem_exportare', HtmlElementum.dataset)
     // console.log('_ui_actionem_exportare optionem', optionem)
-    console.log('_web_pasco_exportare numerordinatio_abstractum', numerordinatio_abstractum)
+    // console.log('_web_pasco_exportare numerordinatio_abstractum', numerordinatio_abstractum, HtmlElementum, HtmlElementum.dataset.numordVarians)
 
-    let datum = numerordinatio_abstractum.exportare(HtmlElementum.dataset.numordArchivum)
-    console.log('status_quo datum', datum)
-    functionem_constructionem(datum, HtmlElementum, numerordinatio_abstractum)
+    // let datum = numerordinatio_abstractum.exportare(archivum, varians)
+    // let datum = numerordinatio_abstractum.exportare(archivum, reconstructum, 'numerum', optionem)
+    let datum = numerordinatio_abstractum.exportare(archivum, reconstructum, varians, optionem)
+    // console.log('status_quo datum', datum)
+
+    let datum_specificum_rem = datum_specificum['archivum'][archivum]
+
+    if (functionem_constructionem === 'blob') {
+      let mime = datum_specificum_rem['mimetype']
+      var blob = new Blob([datum], { type: `${mime};charset=utf-8` });
+      hamo_functionem_finale(blob, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem)
+      return true
+    }
+    if (functionem_constructionem === 'encodeURI') {
+      let data_encoded = encodeURI(datum)
+      hamo_functionem_finale(data_encoded, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem)
+      return true
+    }
+    throw `ERROREM: functionem_constructionem? (data-numord-constructionem="${functionem_constructionem}")`
+
     // if (optionem.Regressum) {
     //   window[optionem.Regressum](datum, optionem, errorem)
     // }

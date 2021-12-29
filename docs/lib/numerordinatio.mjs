@@ -44,7 +44,9 @@ const datum_specificum = {
   },
   // https://en.wiktionary.org/wiki/varians#Latin
   'varians':  {
-    'numerae':{},
+    // "numerum", https://en.wiktionary.org/wiki/numerus#Latin
+    'numerum':{},
+    // "verbōsum", https://en.wiktionary.org/wiki/verbosus#Latin
     'verbosum':{}
   }
 }
@@ -282,7 +284,11 @@ class Numerordinatio {
     return this
   }
 
-  exportare(formatum, reconstructum = false) {
+  exportare(formatum, reconstructum = false, varians = '', optionem = {}) {
+
+    console.log('Numerordinatio expoerare varians', varians)
+    console.log('Numerordinatio expoerare formatum', formatum)
+    // console.log('expoerare', formatum, reconstructum, varians, typeof varians, varians, 'numerum', varians === 'numerum')
     let formatum_normale = formatum.toLowerCase().replace(/\-/g, '')
     if (formatum_normale.indexOf('tmx') === 0) {
       return this.exportareTMX(reconstructum)
@@ -293,8 +299,15 @@ class Numerordinatio {
     if (formatum_normale.indexOf('rdf') === 0) {
       return this.exportareRDFTurtle(reconstructum)
     }
-    if (formatum_normale.indexOf('graphviz') === 0 || formatum_normale.indexOf('gv') === 0 || formatum_normale.indexOf('dot') === 0) {
-      throw `TODO: [${formatum}]; need be migrated from html to here`
+    // if (formatum_normale.indexOf('graphviz') === 0 || formatum_normale.indexOf('gv') === 0 || formatum_normale.indexOf('dot') === 0) {
+    if (formatum === 'gv') {
+      if (varians === 'verbosum') {
+        return this.exportareDot(reconstructum, optionem)
+      }
+      if (varians === 'numerum') {
+        return this.exportareDotNumerae(reconstructum, optionem)
+      }
+      throw `TODO: [${formatum}]; need be migrated from html to here. Varians [${varians}]`
     }
     if (formatum_normale.indexOf('tabulam') === 0 || formatum_normale.indexOf('csv') === 0) {
 
@@ -312,7 +325,7 @@ class Numerordinatio {
     throw `formatum [${formatum}] ?`
   }
 
-  exportareDotNumerae(reconstructum = false, optionem = {}) {
+  exportareDot(reconstructum = false, optionem = {}) {
     let obiectum = this.exportareObiectum(reconstructum)
     let num_ast = new NumerordinatioAST(obiectum, optionem)
     num_ast.setAST(obiectum)
@@ -1716,7 +1729,7 @@ class NumerordinatioAST {
     let ast = this.ast
     let titulum = this.titulum
     let resultatum = []
-    const sumarium = ast_in_summarium(ast)
+    const sumarium = Primitivum.__ast_in_summarium(ast)
     // return sumarium
 
     resultatum.push(`digraph "${titulum}" {`)

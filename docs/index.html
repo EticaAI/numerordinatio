@@ -341,12 +341,8 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
             </li>
             <li class="est-experimentum" style="display:none">
               <button type="button" class="dropdown-item numerordinatio_exportare"
-                data-numord-conscientiam="scientiae_focum" data-numord-archivum="tmx"
-                data-numord-constructionem="blob"
-                data-numord-objectivum-formatum="TMX"
-                data-numord-fontem="scientiam_agendum" data-numord-objectivum-formatum="TMX"
-                data-numord-objectivum-mimetype="application/x-tmx" data-numord-regressum="in_archivum"
-                data-numord-objectivum-archivum="ontologia.tmx">
+                data-numord-conscientiam="scientiae_focum" data-numord-archivum="tmx" data-numord-constructionem="blob"
+                data-numord-functionem-finale="download_blob" data-numord-titulum="ontologia3">
                 <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Archivum:">
                   <use xlink:href="#bi-file-earmark-arrow-down" />
                 </svg>
@@ -414,6 +410,17 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
                 </svg>
                 ontologia-numerae2.gv
               </button>
+            </li>
+            <li class="est-experimentum" style="display:none">
+              <a target="_blank" href="#" class="dropdown-item numerordinatio_exportare"
+                data-numord-conscientiam="scientiae_focum" data-numord-archivum="gv" 
+                data-numord-varians="numerum" data-numord-constructionem="encodeURI"
+                data-numord-functionem-finale="graphviz_online" data-numord-titulum="scientiam-basi-in-numero">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Globe:">
+                  <use xlink:href="#bi-globe" />
+                </svg>
+                scientiam-basi-in-numero3.gv
+              </a>
             </li>
           </ul>
         </div>
@@ -1116,17 +1123,21 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       }
     }
 
-
     // _[eng-Latn] Literal: "hook on the status quo" [eng-Latn]_
     // "hāmum", https://en.wiktionary.org/wiki/hamus#Latin
     const hamo_de_status_quo = {
       'conscientiam': {}, // conscientiam stores the Numerordinatio memory reference
 
-      'functionem_constructionem': {
-        'archivum': function (datum, HtmlElementum, numerordinatio_abstractum) {
-          console.log('functionem_constructionem archivum')
-          var blob = new Blob([datum], { type: "application/x-tmx;charset=utf-8" });
-          saveAs(blob, "ontologia.tmx");
+      'hamo_functionem_finale': {
+        'download_blob': function (blob, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem) {
+          console.log('functionem_constructionem download_blob', blob)
+          // var blob = new Blob([datum], { type: "application/x-tmx;charset=utf-8" });
+          saveAs(blob, `${HtmlElementum.dataset.numordTitulum}${datum_specificum_rem.extesionem}`);
+        },
+        'graphviz_online': function (data_encoded, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem) {
+          console.log('functionem_constructionem graphviz_online', data_encoded)
+          HtmlElementum.href = 'https://edotor.net/?engine=dot#' + data_encoded
+          return false;
         },
       },
       // 'globum': 'status_quo', // window.status_quo
