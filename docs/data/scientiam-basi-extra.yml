@@ -29,7 +29,7 @@
     '0': 'https://www.wikidata.org/wiki/Q845956'
 '47:15924':
   qaa-Zyyy:
-    '0': 'https://www.wikidata.org/wiki/Q845956'
+    '0': 'https://www.wikidata.org/wiki/Q16866'
     '1': 'https://unicode.org/iso15924/iso15924.txt'
 '47:15924:160':
   qaa-Zyyy:
@@ -61,12 +61,30 @@
 # string = 1*(DIGIT / ALPHA / "-")
 ### '93.2'? 
 # BCP
-'93.2': {}
+'93:2': {}
 
 ### '93.2.47'?
 # BCP47; https://en.wikipedia.org/wiki/IETF_language_tag
-'93.2.47':
+'93:2:47':
   qaa-Zyyy:
     '0': https://www.rfc-editor.org/info/bcp47
 
 # Exemplum: <urn:93:2:47#eng-Latn>
+
+### '1603'?
+# - https://en.wiktionary.org/wiki/ontology#English
+# - https://archive.org/details/bub_gb_rM5gdGMu-rAC
+'1603':
+  qaa-Zyyy:
+    '0': https://en.wiktionary.org/wiki/ontology#English
+    '1': https://archive.org/details/bub_gb_rM5gdGMu-rAC
+'1603:10':
+  qaa-Zyyy:
+    '0': https://www.w3.org/TR/swbp-skos-core-spec/#Concept
+    '1': https://www.ttt.org/oscarStandards/tbx/tbx_oscar.pdf#<termEntry>
+'1603:11':
+  qaa-Zyyy:
+    '0': https://www.ttt.org/oscarStandards/tbx/tbx_oscar.pdf#<langSet>
+'1603:12':
+  qaa-Zyyy:
+    '0': https://www.ttt.org/oscarStandards/tbx/tbx_oscar.pdf#<term>
