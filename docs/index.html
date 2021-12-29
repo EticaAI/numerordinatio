@@ -63,6 +63,8 @@ SPDX-License-Identifier: Unlicense
 -->
 
 <body>
+
+  <!-- initium de Instrumentum archa -->
   <nav class="navbar navbar-light fixed-bottom" style="background-color: #e3f2fd; border-top: solid #0d6efd;">
     <div class="container">
       <h2 class="visually-hidden">Instrumentum archa</h2>
@@ -88,71 +90,9 @@ SPDX-License-Identifier: Unlicense
       </div>
     </div>
   </nav>
+  <!-- fīnāle de Instrumentum archa -->
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title" id="exampleModalLabel">Simplex auxilium</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Exitus"></button>
-        </div>
-        <div class="modal-body">
-          <div lang="en">
-            <p>English (Latin writing system)</p>
-            <dl>
-              <dt><dfn lang="la" translate="no">Ordonumerae</dfn></dt>
-              <dd>
-                1. (protologism; contemporary latin) a generic strategy of arranging numbers in an taxonomy-like
-                explicit
-                way.
-              </dd>
-              <dd>2. Etymology: <em lang="la" translate="no">"ordo"</em> from Latin <em lang="la"
-                  translate="no">ōrdō</em>;
-                ordo , ĭnis, m. from root or-; Sanscr. ar-, to go, strive upward; cf. orior, through an adj. stem ordo-;
-                (See <a href="http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=ordo">ordo in
-                  Charlton T. Lewis and Charles Short (1879)</a>).
-                Numerae, from Latin <em lang="la" translate="no">nŭmĕrus</em> , i, m. Gr. νέμω, to distribute; cf.:
-                numa, nemus, nummus, (See <a
-                  href="http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=numerus">nŭmĕrus in
-                  Charlton T. Lewis and Charles Short (1879)</a>)</dd>
-              <dt><span lang="la" translate="no">Ordonumerum multilinguae</span></dt>
-              <dd>
-                1. (protologism; contemporary Latin) a generic strategy of arranging numbers in a taxonomy-like explicit
-                strategy applied to aid exchange of multilingual terminology without need of specifying any arbitrary
-                writing system.
-              </dd>
-              <dt><span lang="la" translate="no">Scientiam basī</span></dt>
-              <dd>Knowledge Base</dd>
-              <dt><span lang="la" translate="no">Scientiam basī prīncipāle</span></dt>
-              <dd>1. Structured knowledge with both natural language and reference for external identifiers related to
-                same
-                concepts (literal: main knowledge base)</dd>
-              <dt><span lang="la" translate="no">Scientiam basī de exemplum bonō</span></dt>
-              <dd>
-                Knowledge from previously labeled (most likely) good implementations of the concepts.
-              </dd>
-              <dt><span lang="la" translate="no">Reversum logicae</span></dt>
-              <dd>
-                1. Reverse engineering (literal translation: reverse logic)
-              </dd>
-              <dd>
-                2. Based on existing knowledge base help to label new content.
-              </dd>
-            </dl>
-            <mark>Ad como opus</mark>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exitus</button>
-          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <main class="container">
+  <main class="container-fluid">
     <h1>Numerordĭnātĭo</h1>
 
     <img title="Dominium publicum" alt="Dominium publicum" src="img/dominium-publicum.png" class="">
@@ -165,31 +105,52 @@ SPDX-License-Identifier: Unlicense
 
     <section id="w-scientiam" class="clearfix">
       <h2 id="h-scientiam"><a href="#h-scientiam">§</a> 1. Scientiam basī</h2>
-      <div class="collapse" id="peritumModum">
-        <div class="card card-body">
-          <mark>Ad como opus</mark>
-          <div class="mb-3">
-            <label for="of" class="form-label">Fontem de scientiam basī (YAML aut JSON)</label>
-            <textarea class="form-control instrumentum-optionem" id="of" rows="3">data/scientiam-basi.yml</textarea>
-          </div>
-          <div class="mb-3">
-            <label for="of" class="form-label">Fontem ex scientiam commūnitātibus (YAML aut JSON)</label>
-            <textarea class="form-control instrumentum-optionem" id="cf" rows="3">data/scientiam-basi.yml
+
+      <!-- initium de Instrumentum archa -->
+
+      <div class="collapse card" id="peritumModum">
+        <div class="card border-primary card-body">
+          <!--
+            Trivia:
+              - https://en.wiktionary.org/wiki/optio#Latin
+              - https://www.englishhints.com/latin-prefixes.html
+              - https://en.wiktionary.org/wiki/peritus#Latin
+          -->
+          <h3>Optiones ad peritum</h3>
+          <section>
+            <!-- Trivia: https://en.wiktionary.org/wiki/conscientia#Latin -->
+            <h4>Cōnscientiam</h4>
+            <div class="row">
+              <div class="mb-3">
+                <label for="of" class="form-label">Fontem de scientiam basī (YAML aut JSON)</label>
+                <textarea class="form-control instrumentum-optionem" id="of" rows="3">data/scientiam-basi.yml</textarea>
+              </div>
+              <div class="mb-3">
+                <label for="of" class="form-label">Fontem ex scientiam commūnitātibus (YAML aut JSON)</label>
+                <textarea class="form-control instrumentum-optionem" id="cf" rows="3">data/scientiam-basi.yml
 data/scientiam-basi-extra.yml</textarea>
+              </div>
+              <div class="mb-3">
+                <label for="ef" class="form-label">Fontem de referentia normam</label>
+                <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
+                <!-- <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
+  data/usum-exemplis-un-htcds.csv</textarea> -->
+              </div>
+            </div>
+          </section>
+          <div class="row">
+            <div class="form-check form-switch">
+              <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
+              <label class="form-check-label" for="minimae">
+                Memoriam usum minimae
+              </label>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="ef" class="form-label">Fontem de ūsum normae</label>
-            <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
-            <!-- <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
-data/usum-exemplis-un-htcds.csv</textarea> -->
+          <div class="row">
+            <div class="alert alert-info" role="alert">
+              Neo URL: <a target="_blank" id="expertum-url" href="#">#</a>
+            </div>
           </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
-            <label class="form-check-label" for="minimae">
-              Memoriam usum minimae
-            </label>
-          </div>
-          Neo URL: <a target="_blank" id="expertum-url" href="#">#</a>
         </div>
         <div>
         </div>
@@ -666,9 +627,71 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
           </section>
         </section>
       </section>
-
     </section>
   </main>
+
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Simplex auxilium</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Exitus"></button>
+        </div>
+        <div class="modal-body">
+          <div lang="en">
+            <p>English (Latin writing system)</p>
+            <dl>
+              <dt><dfn lang="la" translate="no">Ordonumerae</dfn></dt>
+              <dd>
+                1. (protologism; contemporary latin) a generic strategy of arranging numbers in an taxonomy-like
+                explicit
+                way.
+              </dd>
+              <dd>2. Etymology: <em lang="la" translate="no">"ordo"</em> from Latin <em lang="la"
+                  translate="no">ōrdō</em>;
+                ordo , ĭnis, m. from root or-; Sanscr. ar-, to go, strive upward; cf. orior, through an adj. stem ordo-;
+                (See <a href="http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=ordo">ordo in
+                  Charlton T. Lewis and Charles Short (1879)</a>).
+                Numerae, from Latin <em lang="la" translate="no">nŭmĕrus</em> , i, m. Gr. νέμω, to distribute; cf.:
+                numa, nemus, nummus, (See <a
+                  href="http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=numerus">nŭmĕrus in
+                  Charlton T. Lewis and Charles Short (1879)</a>)</dd>
+              <dt><span lang="la" translate="no">Ordonumerum multilinguae</span></dt>
+              <dd>
+                1. (protologism; contemporary Latin) a generic strategy of arranging numbers in a taxonomy-like explicit
+                strategy applied to aid exchange of multilingual terminology without need of specifying any arbitrary
+                writing system.
+              </dd>
+              <dt><span lang="la" translate="no">Scientiam basī</span></dt>
+              <dd>Knowledge Base</dd>
+              <dt><span lang="la" translate="no">Scientiam basī prīncipāle</span></dt>
+              <dd>1. Structured knowledge with both natural language and reference for external identifiers related to
+                same
+                concepts (literal: main knowledge base)</dd>
+              <dt><span lang="la" translate="no">Scientiam basī de exemplum bonō</span></dt>
+              <dd>
+                Knowledge from previously labeled (most likely) good implementations of the concepts.
+              </dd>
+              <dt><span lang="la" translate="no">Reversum logicae</span></dt>
+              <dd>
+                1. Reverse engineering (literal translation: reverse logic)
+              </dd>
+              <dd>
+                2. Based on existing knowledge base help to label new content.
+              </dd>
+            </dl>
+            <mark>Ad como opus</mark>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exitus</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- @see https://getbootstrap.com/docs/5.1/components/alerts/#icons -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -755,12 +778,6 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     window.RDFProofOfConcept = NumOrd.RDFProofOfConcept
 
 
-
-
-
-    //CodexDeObiectum, CodexDeTabulam, Graphviz, TMX, TBXBasic2008, RDF
-
-
     /****** _[eng-Latn] Edit this section [eng-Latn]_ ******/
     const debug = false
     let datum_globum = {}
@@ -773,11 +790,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
     let usum_professori_obiectum = {} // CSV
     let scientia_datum = null // CSV
 
-    // window.scientia_basi = scientia_basi
-    // window.scientia = scientia
     window.scientiam_communitatibus = scientiam_communitatibus
-    // window.usum_normae = usum_normae // @TODO use this instead of usum_professori_obiectum
-    // window.inspectionem = inspectionem // @TODO use this for csv test
 
     /****** _[eng-Latn] Edit this section [eng-Latn]_ ******/
     // const yaml = require('js-yaml');
@@ -994,8 +1007,10 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       let _hash = document.location.hash
       _hash = _hash.replace('#beta=1', '')
       // #beta=1#?expertum={"scientia ...
-      if (externus && _hash.indexOf('#?expertum=') > -1) {
-        let crudum = _hash.replace('#?expertum=', '')
+      // if (externus && _hash.indexOf('#?expertum=') > -1) {
+      //   let crudum = _hash.replace('#?expertum=', '')
+      if (externus && _hash.indexOf('#?peritum=') > -1) {
+        let crudum = _hash.replace('#?peritum=', '')
         let decodedURI = ''
         // console.log(crudum, decodeURI(crudum))
         try {
@@ -1127,30 +1142,17 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         Papa.parse(crudum_textum, {
           complete: function (results) {
             const results_clone = Object.assign({}, results);
-            var results_deepclone = JSON.parse(JSON.stringify(results.data));
+            let results_deepclone = JSON.parse(JSON.stringify(results.data));
 
-            // console.log('__hook_codemirror_csv papaparse [0]', results.data[0])
-            // console.log('__hook_codemirror_csv papaparse', results.data)
-            // console.log('__hook_codemirror_csv papaparse results_clone', results_clone)
-            // console.log('__hook_codemirror_csv papaparse results_deepclone', results_deepclone)
-            // let crudum = Primitivum.codex_de_tabulam_in_obiectum(results.data)
             let rem = Primitivum.codex_de_tabulam_in_obiectum(results_deepclone)
-            // console.log('oioioi', rem)
-            // console.log('Primitivum.codex_de_tabulam_in_obiectum(results.data)', results.data, crudum)
-            // let rem = new CodexDeObiectum(crudum)
+
             rem.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
             rem.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
             rem.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
             rem.praeparare()
 
-            // console.log('rem', rem)
-
-            // console.log('rem.datum_de_factum', rem.datum_de_factum)
-
-            // window['scientiam_agendum'] = scientia
             window['status_quo'].conscientiam[conscientiam] = rem
-            // window['status_quo'].conscientiam[conscientiam + '_debug'] = rem
-            // functionem_regressae(window['status_quo'].conscientiam[conscientiam])
+
             functionem_regressae()
           }
         })
@@ -1585,11 +1587,7 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
         // console.log('loop', item)
 
         let resultatum_main = main(scientia_basi, item, adhoc_objectivum_linguam, adhoc_agendum_linguam)
-        // console.log(abstractum_syntaxim_arborem)
-        // console.log(abstractum_syntaxim_arborem)
-        // console.log(resultatum_main.resumens.fontem)
-        // console.log(resultatum_main.resumens.objectivum)
-        // console.log(resultatum_main)
+
         CoreMirrorTestumDot.setValue(resultatum_main.ast.dot)
 
         // CoreMirrorTestumDot.setValue(ast_in_dot_numerae(abstractum_syntaxim_arborem(['12.10.34', '12.10.34~2', '', '14.56', '14.56', '14.56~2']), 'ast'))
@@ -1601,139 +1599,6 @@ data/usum-exemplis-un-htcds.csv</textarea> -->
       actionem_index = actionem_index + 1
     });
 
-    // // Uses https://github.com/eligrey/FileSaver.js
-    // ui_ontologia_yml.addEventListener("click", function (el) {
-    //   var blob = new Blob([CoreMirrorOntologia.getValue()], { type: "text/x-yaml;charset=utf-8" });
-    //   saveAs(blob, "ontologia.yml");
-    // });
-
-    // ui_ontologia_json.addEventListener("click", function (el) {
-    //   try {
-    //     scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
-    //   } catch (e) {
-    //     console.log(e)
-    //     alert(e);
-    //   }
-    //   var blob = new Blob([JSON.stringify(scientia_basi, null, 2)], { type: "application/json;charset=utf-8" });
-    //   saveAs(blob, "ontologia.json");
-    // });
-
-    // document.querySelector('#ontologia-archivum-tmx').addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   var blob = new Blob([scientia.exportareTMX()], { type: "application/x-tmx;charset=utf-8" });
-    //   saveAs(blob, "ontologia.tmx");
-    // });
-    // document.querySelector('#ontologia-archivum-tbx').addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   var blob = new Blob([scientia.exportareTBXBasic2008()], { type: "application/x-tbx;charset=utf-8" });
-    //   saveAs(blob, "ontologia.tmx");
-    // });
-
-    // document.querySelector('#ontologia-rdf-urn-ttl-archivum').addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   var blob = new Blob([scientia.exportareRDFTurtle()], { type: "application/x-turtle;charset=utf-8" });
-    //   saveAs(blob, "ontologia-urn.ttl");
-    // });
-
-    // document.querySelector('#ontologia-archivum-csv').addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   let scientia_tabulam = scientia.exportareTabulam()
-    //   let csv_data = Papa.unparse(scientia_tabulam)
-
-    //   var blob = new Blob([csv_data], { type: "text/csv;charset=utf-8" });
-    //   saveAs(blob, "ontologia.csv");
-    // });
-
-    // document.querySelector('#ontologia-archivum-hxl-csv').addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   let scientia_tabulam = scientia.exportareTabulamHXL()
-    //   let hxl_data = Papa.unparse(scientia_tabulam)
-
-    //   var blob = new Blob([hxl_data], { type: "text/csv;charset=utf-8" });
-    //   saveAs(blob, "ontologia.hxl.csv");
-    // });
-
-    // ui_ontologia_ast_dot_online.addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   // console.log('scientia', scientia)
-    //   // let scientia_numerum_dot = scientia_basi_in_ast_dot_numerum(scientia)
-    //   let scientia_numerum_dot = Primitivum.__scientia_basi_in_ast_dot_numerum(scientia)
-    //   this.href = 'https://edotor.net/?engine=dot#' + encodeURI(scientia_numerum_dot)
-    //   return false;
-    // });
-
-    // ui_ontologia_ast_dot_verbosum_online.addEventListener("click", function (el) {
-    //   prepare_scientia()
-    //   // console.log('scientia', scientia)
-    //   // let scientia_numerum_dot = scientia_basi_in_ast_dot_verbosum(scientia)
-    //   let scientia_numerum_dot = Primitivum.__scientia_basi_in_ast_dot_verbosum(scientia)
-    //   this.href = 'https://edotor.net/?engine=dot#' + encodeURI(scientia_numerum_dot)
-    //   return false;
-    // });
-
-    // ui_professorem_ast_dot_verbosum_online.addEventListener("click", function (el) {
-    //   // prepare_scientia()
-    //   prepare_usum_professori()
-    //   // console.log('scientia', scientia)
-    //   // let usum_professori_dot = scientia_basi_in_ast_dot_verbosum(scientia_datum_reconstructum)
-    //   // let usum_professori_dot = scientia_basi_in_ast_dot_verbosum(usum_professori_obiectum)
-    //   let usum_professori_dot = Primitivum.__scientia_basi_in_ast_dot_verbosum(usum_professori_obiectum)
-    //   this.href = 'https://edotor.net/?engine=dot#' + encodeURI(usum_professori_dot)
-    //   return false;
-    // });
-
-    // document.querySelector('#usum-professori-archivum-yml').addEventListener("click", function (el) {
-    //   // prepare_scientia()
-    //   // prepare_usum_professori()
-
-    //   prepare_usum_professori2(function () {
-    //     let _obiectum = usum_professori_obiectum.exportareObiectum()
-    //     let _yaml = jsyaml.dump(_obiectum, { forceQuotes: true })
-
-    //     console.log('usum-professori-archivum-yml', _obiectum, _yaml, usum_professori_obiectum)
-    //     var blob = new Blob([_yaml], { type: "text/x-yaml;charset=utf-8" });
-    //     saveAs(blob, "usum-professori.yml");
-    //   })
-    // });
-
-    // document.querySelector('#usum-professori-archivum-json').addEventListener("click", function (el) {
-    //   prepare_usum_professori()
-    //   let _obiectum = usum_professori_obiectum.exportareObiectum()
-    //   var blob = new Blob([JSON.stringify(_obiectum, null, 2)], { type: "application/json;charset=utf-8" });
-    //   saveAs(blob, "usum-professori.json");
-    // });
-
-    // document.querySelector('#usum-professori-archivum-tmx').addEventListener("click", function (el) {
-    //   prepare_usum_professori()
-    //   var blob = new Blob([usum_professori_obiectum.exportareTMX()], { type: "application/x-tmx;charset=utf-8" });
-    //   saveAs(blob, "usum-professori.tmx");
-    // });
-
-    // document.querySelector('#usum-professori-archivum-tbx').addEventListener("click", function (el) {
-    //   prepare_usum_professori()
-    //   var blob = new Blob([usum_professori_obiectum.exportareTBXBasic2008()], { type: "application/x-tbx;charset=utf-8" });
-    //   saveAs(blob, "usum-professori.tmx");
-    // });
-
-    // document.querySelector('#usum-professori-archivum-csv').addEventListener("click", function (el) {
-    //   prepare_usum_professori()
-    //   let professori = usum_professori_obiectum.exportareTabulam()
-    //   let csv_data = Papa.unparse(professori)
-
-    //   var blob = new Blob([csv_data], { type: "text/csv;charset=utf-8" });
-    //   saveAs(blob, "usum-professori.csv");
-    // });
-
-    // document.querySelector('#usum-professori-archivum-hxl-csv').addEventListener("click", function (el) {
-    //   prepare_usum_professori()
-    //   let professori = usum_professori_obiectum.exportareTabulamHXL()
-    //   console.log('usum_professori_obiectum', usum_professori_obiectum)
-    //   console.log(professori)
-    //   let csv_data = Papa.unparse(professori)
-
-    //   var blob = new Blob([csv_data], { type: "text/csv;charset=utf-8" });
-    //   saveAs(blob, "usum-professori.hxl.csv");
-    // });
 
     ui_testum_csv.addEventListener("click", function (el) {
       var blob = new Blob([CoreMirrorTestum.getValue()], { type: "text/csv;charset=utf-8" });

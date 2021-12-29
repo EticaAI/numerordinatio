@@ -856,7 +856,7 @@ class Primitivum {
     if (all_options) {
       all_options.forEach(item => {
         // console.log('item', item)
-        if (item.indexOf(`${code}`) > -1) {
+        if (item.indexOf(`${code}`) === 0) {
           // let option_level = item.split('.').length
           let option_level = item.split(':').length
           // console.log('oi  code, code_level, item, option_level', code, code_level, item, option_level)

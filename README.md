@@ -1,5 +1,5 @@
-# numerordinatio
-Etymology: "ordo" from Latin ōrdō; ordo , ĭnis, m. from root or-; Sanscr. ar-, to go, strive upward; cf. orior, through an adj. stem ordo-; (See ordo in Charlton T. Lewis and Charles Short (1879)). Numerae, from Latin nŭmĕrus , i, m. Gr. νέμω, to distribute; cf.: numa, nemus, nummus, (See nŭmĕrus in Charlton T. Lewis and Charles Short (1879))
+# Numerordĭnātĭo
+<!-- Etymology: "ordo" from Latin ōrdō; ordo , ĭnis, m. from root or-; Sanscr. ar-, to go, strive upward; cf. orior, through an adj. stem ordo-; (See ordo in Charlton T. Lewis and Charles Short (1879)). Numerae, from Latin nŭmĕrus , i, m. Gr. νέμω, to distribute; cf.: numa, nemus, nummus, (See nŭmĕrus in Charlton T. Lewis and Charles Short (1879)) -->
 
 ## Etymologiam
 
@@ -24,4 +24,17 @@ Etymology: "ordo" from Latin ōrdō; ordo , ĭnis, m. from root or-; Sanscr. ar-
 - ūsum, https://en.wiktionary.org/wiki/usus#Latin
 - normae, https://en.wiktionary.org/wiki/norma#Latin
 - https://github.com/HXLStandard/libhxl-js/blob/main/hxl.js
+
+### Example of checklist with markdown from github
+
+- [ ] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
+- [ ] Saturn
+- [ ] Uranus
+- [ ] Neptune
+- [ ] Comet Haley
+
 -->
