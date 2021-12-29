@@ -330,7 +330,7 @@ class Numerordinatio {
       // Note: CSV-like formats still need conversion to string
       return this.exportareTabulamHXL(reconstructum)
     }
-    if (formatum_normale.indexOf('obiectum') === 0 || formatum_normale.indexOf('json') === 0 || formatum_normale.indexOf('yaml') === 0) {
+    if (formatum_normale.indexOf('obiectum') === 0) {
       // Note: JSON and YAML formats still need conversion to string later
       return this.exportareTabulam(reconstructum)
     }
@@ -345,6 +345,8 @@ class Numerordinatio {
 
     let obiectum = this.exportareObiectum(reconstructum)
 
+    // console.log('exportareDot', obiectum)
+
     return Primitivum.__scientia_basi_in_ast_dot_verbosum(obiectum, optionem)
   }
 
@@ -355,6 +357,9 @@ class Numerordinatio {
     // return num_ast.inDotNumerae()
 
     let obiectum = this.exportareObiectum(reconstructum)
+
+
+    // console.log('exportareDotNumerae', obiectum)
 
     return Primitivum.__scientia_basi_in_ast_dot_numerum(obiectum, optionem)
   }
@@ -699,7 +704,7 @@ class Primitivum {
     if (ast_finale[0]) {
       for (let index = 1; index < ast_finale[0].length; index++) {
         if (ast_finale[0][index][5]) {
-          let referens_nomen = quod_cognitionem(scientia_basi, { codicem: ast_finale[0][index][5] })
+          let referens_nomen = Primitivum.quod_cognitionem(scientia_basi, { codicem: ast_finale[0][index][5] })
           if (referens_nomen && referens_nomen[0]) {
             ast_finale[0][index][8] = referens_nomen[0]
             // console.log('deu', referens_nomen[0])
@@ -715,7 +720,7 @@ class Primitivum {
         // <5:codicem_basem>
         // <8:referens_nomen>
         if (ast_finale[3][index][5]) {
-          let referens_nomen = quod_cognitionem(scientia_basi, { codicem: ast_finale[3][index][5] })
+          let referens_nomen = Primitivum.quod_cognitionem(scientia_basi, { codicem: ast_finale[3][index][5] })
           if (referens_nomen && referens_nomen[0]) {
             ast_finale[3][index][8] = referens_nomen[0]
             // console.log('deu2', referens_nomen[0])
@@ -958,7 +963,6 @@ class Primitivum {
     return dot.render()
   }
 
-
   /**
    * @deprecated deprecated with abstractum_syntaxim_arborem_de_conscientiam()
    *
@@ -973,7 +977,7 @@ class Primitivum {
     }
     let terminum_indicem = optionem.terminum_indicem || "0"
     let clavem_optionem = Object.keys(scientia_basi[optionem.codicem])
-    let clavem = Primitivum.__quod_linguam(clavem_optionem, optionem.objectivum_linguam, optionem.agendum_linguam)
+    let clavem = Primitivum.quod_linguam(clavem_optionem, optionem.objectivum_linguam, optionem.agendum_linguam)
     // console.log(clavem)
 
     if (!scientia_basi[optionem.codicem][clavem][terminum_indicem]) {
@@ -2021,6 +2025,8 @@ class Graphviz {
 // https://github.com/liderproject/tbx2rdfservice
 // http://tbx2rdf.lider-project.eu/converter/
 // https://www.w3.org/TR/rdf11-concepts/
+// https://rdf.js.org/
+// https://github.com/OpenLinkSoftware/OSDS_extension
 /*
 let codex = (new CodexDeObiectum(jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8')))
 let ast =  codex.praeparare().exportareObiectum(true)
