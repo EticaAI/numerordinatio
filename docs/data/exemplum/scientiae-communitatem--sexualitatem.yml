@@ -1,0 +1,68 @@
+# @TODO https://datatracker.ietf.org/doc/html/rfc8141
+# @see https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml
+# https://github.com/UNMigration/HTCDS
+# gender    Feminine    Feminine
+# gender    Masculine    Masculine
+# gender    TransgenderFeminine    Transgender Feminine
+# gender    TransgenderMasculine    Transgender Masculine
+# gender    NonConforming    Non-Conforming
+# gender    NonSpecifiedUnknown    Not Specified/Unknown
+
+# - generī, https://en.wiktionary.org/wiki/genus#Latin
+# - sexum, https://en.wiktionary.org/wiki/sexus#Latin
+# - https://en.wiktionary.org/wiki/medicus#Latin
+# http://www.perseus.tufts.edu/hopper/morph?l=sexo&la=la#lexicon
+# - (sexus) ūs, m  SAC-, a sex (only sing gen . and abl.): hominum genus et in sexu consideratur, virile an muliebre sit: puberes virilis sexūs, L.
+# - https://en.wiktionary.org/wiki/-icus#Latin
+# - On Grammatical gender, https://en.wiktionary.org/wiki/genus#Latin
+
+# - //gender identity//@eng-Latn
+#   - 'sexum generī'
+#   - 'genus sexuī'
+#   - '//sexugenus//' (see http://www.perseus.tufts.edu/hopper/resolveform?type=end&lookup=genus&lang=la)
+#   - 'genus sexuicus'
+# - //biological sex//
+#   - 'sexum medicō'
+#   - 'sexum corporis'
+# - Three groups
+#   - 'genus sexuicus'
+#     - genus sexuicus neutrī̆us (https://en.wiktionary.org/wiki/neuter#Latin)
+#   - 'corporis sexum'
+#     - 'transsexum'
+#   - 'genus grammaticum' (https://en.wiktionary.org/wiki/genus#Latin)
+#     - [genus] fēminīnum, [genus] masculīnum, [genus] neutrum, genus commūne, genus omne
+
+'9999': {}
+'9999.1':
+  lat-Latn:
+    '0': '/corporis sexum/'
+  # eng-Latn-x-unhtcds: {}
+'9999.2':
+  lat-Latn:
+    '0': 'genus grammaticum'
+    '100': https://en.wiktionary.org/wiki/grammaticus#Latin
+  eng-Latn-x-unhtcds: {}
+'9999.3':
+  lat-Latn:
+    '0': '//genus sexuicus//'
+    '100': https://en.wiktionary.org/wiki/grammaticus#Latin
+  eng-Latn-x-unhtcds:
+    '0': 'gender'
+'9999.3.0':
+  eng-Latn-x-unhtcds:
+    '0': 'Not Specified/Unknown'
+'9999.3.1':
+  eng-Latn-x-unhtcds:
+    '0': 'Feminine'
+'9999.3.2':
+  eng-Latn-x-unhtcds:
+    '0': 'Masculine'
+'9999.3.3':
+  eng-Latn-x-unhtcds:
+    '0': 'Transgender Feminine'
+'9999.3.4':
+  eng-Latn-x-unhtcds:
+    '0': 'Transgender Masculine'
+'9999.3.5':
+  eng-Latn-x-unhtcds:
+    '0': 'Non-Conforming'

@@ -1,6 +1,36 @@
 // Dominium Publicum
 // SPDX-License-Identifier: Unlicense
 
+/*
+_[eng-Latn]
+
+Crash course from names in Latin to English
+----------
+@TODO: copy relevant parts from
+       https://github.com/EticaAI/hxltm/blob/main/bin/hxltmcli.py except
+       the parts about always use accusative case.
+
+Trivia
+----------
+
+- 'Marcus loves/likes his dog', in Latin (same meaning different emphasis):
+   - Marcus canem amat.
+   - Canem Marcus amat.
+   - Amat canem Marcus.
+   - Marcus amat canem.
+   - Canem amat Marcus.
+   - Amat Marcus canem.
+   - Marcum canis amat.
+   - Canis Marcum amat.
+   - Amat canis Marcum.
+   - Marcum amat canis.
+   - Canis amat Marcum.
+   - Amat Marcum canis.
+
+[eng-Latn]_
+
+*/
+
 const datum_specificum = {
   // "cōnstrūctiōnem", https://en.wiktionary.org/wiki/constructio#Latin
   'constructionem': {

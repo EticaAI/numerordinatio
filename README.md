@@ -38,3 +38,33 @@
 - [ ] Comet Haley
 
 -->
+
+<!--
+- generī, https://en.wiktionary.org/wiki/genus#Latin
+- sexum, https://en.wiktionary.org/wiki/sexus#Latin
+- https://en.wiktionary.org/wiki/medicus#Latin
+http://www.perseus.tufts.edu/hopper/morph?l=sexo&la=la#lexicon
+- (sexus) ūs, m  SAC-, a sex (only sing gen . and abl.): hominum genus et in sexu consideratur, virile an muliebre sit: puberes virilis sexūs, L.
+- https://en.wiktionary.org/wiki/-icus#Latin
+- On Grammatical gender, https://en.wiktionary.org/wiki/genus#Latin
+
+- //gender identity//@eng-Latn
+  - 'sexum generī'
+  - 'genus sexuī'
+  - '//sexugenus//' (see http://www.perseus.tufts.edu/hopper/resolveform?type=end&lookup=genus&lang=la)
+  - 'genus sexuicus'
+- //biological sex//
+  - 'sexum medicō'
+  - 'sexum corporis'
+
+
+- Three groups
+  - 'genus sexuicus'
+    - genus sexuicus neutrī̆us (https://en.wiktionary.org/wiki/neuter#Latin)
+  - 'corporis sexum'
+    - 'transsexum'
+  - 'genus grammaticum' (https://en.wiktionary.org/wiki/genus#Latin)
+    - [genus] fēminīnum, [genus] masculīnum, [genus] neutrum, genus commūne, genus omne
+
+
+-->
