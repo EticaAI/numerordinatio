@@ -117,48 +117,64 @@ SPDX-License-Identifier: Unlicense
               - https://en.wiktionary.org/wiki/peritus#Latin
           -->
           <h3>Optiones ad peritum</h3>
-          <section>
-            <!-- Trivia: https://en.wiktionary.org/wiki/conscientia#Latin -->
-            <h4>Cōnscientiam</h4>
-            <div class="row">
-              <div class="mb-3">
-                <label for="of" class="form-label">Fontem de scientiam basī (YAML aut JSON)</label>
-                <textarea class="form-control instrumentum-optionem" id="of" rows="3">data/scientiam-basi.yml</textarea>
-              </div>
-              <div class="mb-3">
-                <label for="of" class="form-label">Fontem ex scientiam commūnitātibus (YAML aut JSON)</label>
-                <textarea class="form-control instrumentum-optionem" id="cf" rows="3">data/scientiam-basi.yml
-data/scientiam-basi-extra.yml</textarea>
-              </div>
-              <div class="mb-3">
-                <label for="ef" class="form-label">Fontem de referentia normam</label>
-                <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv</textarea>
-                <!-- <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/usum-normae.csv
-  data/usum-exemplis-un-htcds.csv</textarea> -->
-              </div>
-            </div>
-          </section>
-          <div class="row">
-            <div class="form-check form-switch">
-              <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
-              <label class="form-check-label" for="minimae">
-                Memoriam usum minimae
-              </label>
-            </div>
-          </div>
           <div class="row">
             <div class="alert alert-info" role="alert">
-              Neo URL: <a target="_blank" id="expertum-url" href="#">#</a>
+              Neo IRI: <a target="_blank" id="peritum-iri" href="#">#</a>
             </div>
           </div>
+          <h4 style="text-align: center;">Cōnscientiam</h4>
+          <div class="row">
+
+            <div class="col-lg-8">
+              <!-- Trivia: https://en.wiktionary.org/wiki/conscientia#Latin -->
+
+              <section>
+                <h5>Focum scientiae</h5>
+                <div class="mb-3">
+                  <label for="of" class="form-label">Fontem de scientiam basī (YAML aut JSON)</label>
+                  <textarea class="form-control instrumentum-optionem" id="of"
+                    rows="3">data/exemplum/scientiae-focum.yml</textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="of" class="form-label">Fontem ex scientiam commūnitātibus (YAML aut JSON)</label>
+                  <textarea class="form-control instrumentum-optionem" id="cf"
+                    rows="3">data/exemplum/scientiae-communitatem.yml</textarea>
+                </div>
+                <!-- Trivia: exemplārĭum, http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=exemplarium -->
+                <!-- Trivia: normae, https://en.wiktionary.org/wiki/norma#Latin-->
+                <div class="mb-3">
+                  <label for="ef" class="form-label">Fontem de referentia normam</label>
+                  <textarea class="form-control instrumentum-optionem" id="ef" rows="3">data/exemplum/normae-exemplarium.csv
+data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
+                </div>
+              </section>
+              <section>
+                <h5>Reversum logicae</h5>
+                <mark>Ad como opus</mark>
+                <div class="mb-3">
+                  <label for="rl" class="form-label">Fontem de reversum logicae</label>
+                  <textarea class="form-control instrumentum-optionem" id="ef"
+                    rows="3">data/logicae-reversum/exemplum-1.csv</textarea>
+                </div>
+              </section>
+            </div>
+            <div class="col-lg-2">
+              <h5>Et cētera</h5>
+              <div class="form-check form-switch">
+                <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="minimae">
+                <label class="form-check-label" for="minimae">
+                  Memoriam usum minimae
+                </label>
+              </div>
+            </div>
+          </div>
+          <div>
+          </div>
         </div>
-        <div>
-        </div>
-      </div>
     </section>
 
     <section class="ontologia">
-      <h3 id="h-ontologia"><a href="#h-ontologia">§</a> 1.1. Scientiam basī prīncipāle</h3>
+      <h3 id="h-ontologia"><a href="#h-ontologia">§</a> 1.1. Scientiam in focō</h3>
       <textarea id="ontologia" class="c-ontologia" style="width:100%;min-height: 10em;">
 # Loading...
       </textarea>
@@ -331,7 +347,7 @@ data/scientiam-basi-extra.yml</textarea>
 
     </section>
     <section class="professorem">
-      <h3 id="h-professorem"><a href="#h-professorem">§</a> 1.2. Scientiam basī ex ūsum normae</h3>
+      <h3 id="h-professorem"><a href="#h-professorem">§</a> 1.2. Scientiam ex exemplārĭum normae</h3>
       <textarea id="professorem">
 # Loading...
       </textarea>
@@ -997,11 +1013,16 @@ data/scientiam-basi-extra.yml</textarea>
     /** Hackish user interface helper to get things working **/
     function scientia_fontem(externus = true) {
       let resultatum = {
-        'scientiam': [],
-        'communitatem': [],
-        'exemplum': [],
+        'conscientiam': {
+          'focum': [],
+          'communitatem': [],
+          'normam': [],
+        },
+        // 'scientiam': [],
+        // 'communitatem': [],
+        // 'exemplum': [],
         'minimam': true,
-        'url': ''
+        'iri': ''
       }
       let de_hash = {}
       let _hash = document.location.hash
@@ -1018,9 +1039,19 @@ data/scientiam-basi-extra.yml</textarea>
           // console.log('decodedURI', decodedURI)
           de_hash = JSON.parse(decodedURI)
 
-          resultatum.scientiam = de_hash.scientiam
-          resultatum.communitatem = de_hash.communitatem
-          resultatum.exemplum = de_hash.exemplum
+          // resultatum.scientiam = de_hash.scientiam
+          // resultatum.communitatem = de_hash.communitatem
+          // resultatum.exemplum = de_hash.exemplum
+          // resultatum.minimam = de_hash.minimam
+          if (de_hash) {
+            if (de_hash.conscientiam) {
+              resultatum.conscientiam.focum = de_hash.conscientiam.focum || [[]]
+              resultatum.conscientiam.communitatem = de_hash.conscientiam.communitatem || []
+              resultatum.conscientiam.normam = de_hash.conscientiam.normam || []
+            }
+          }
+
+          // resultatum.exemplum = de_hash.exemplum = 
           resultatum.minimam = de_hash.minimam
         } catch (error) {
           alert('scientiam_fontem (URL) ' + error)
@@ -1028,9 +1059,9 @@ data/scientiam-basi-extra.yml</textarea>
           // console.log('scientia_fontem decodedURI', decodedURI)
         }
 
-        document.querySelector('#of').value = resultatum.scientiam.join('\n')
-        document.querySelector('#cf').value = resultatum.communitatem.join('\n')
-        document.querySelector('#ef').value = resultatum.exemplum.join('\n')
+        document.querySelector('#of').value = resultatum.conscientiam.focum.join('\n')
+        document.querySelector('#cf').value = resultatum.conscientiam.communitatem.join('\n')
+        document.querySelector('#ef').value = resultatum.conscientiam.normam.join('\n')
         document.querySelector('#minimae').checked = resultatum.minimam
 
         // console.log(de_hash)
@@ -1038,23 +1069,21 @@ data/scientiam-basi-extra.yml</textarea>
         let of = document.querySelector('#of').value.split(/\r?\n/);
         let cf = document.querySelector('#cf').value.split(/\r?\n/);
         let ef = document.querySelector('#ef').value.split(/\r?\n/);
-        resultatum.scientiam = of
-        resultatum.communitatem = cf
-        resultatum.exemplum = ef
+        resultatum.conscientiam.focum = of
+        resultatum.conscientiam.communitatem = cf
+        resultatum.conscientiam.normam = ef
         resultatum.minimam = document.querySelector('#minimae').checked
       }
 
-      resultatum.url = window.location.href.replace(location.hash, '') + '#?expertum=' + JSON.stringify({
-        scientiam: resultatum.scientiam,
-        communitatem: resultatum.communitatem,
-        exemplum: resultatum.exemplum,
-        minimam: resultatum.minimam,
-      })
+      let resultatum_et_iri = resultatum
+      delete resultatum_et_iri.iri
+
+      resultatum.iri = window.location.href.replace(location.hash, '') + '#?peritum=' + JSON.stringify(resultatum_et_iri)
 
       let _base = window.location.href.replace(location.hash, '')
 
-      document.querySelector('#expertum-url').innerHTML = resultatum.url
-      document.querySelector('#expertum-url').href = resultatum.url
+      document.querySelector('#peritum-iri').innerHTML = resultatum.iri
+      document.querySelector('#peritum-iri').href = resultatum.iri
 
       // console.log(resultatum)
 
@@ -1289,7 +1318,8 @@ data/scientiam-basi-extra.yml</textarea>
       CoreMirrorProfessorem.setValue(Papa.unparse(exemplum_et_all))
     }
 
-    WebPasco.fetchAll(scientia_fontem_initiale.exemplum).then(function (exemplum_collectionem) {
+    // WebPasco.fetchAll(scientia_fontem_initiale.exemplum).then(function (exemplum_collectionem) {
+    WebPasco.fetchAll(scientia_fontem_initiale.conscientiam.normam).then(function (exemplum_collectionem) {
       exemplum_collectionem.map(item => {
         item.text().then(function (text) {
           Papa.parse(text, {
@@ -1303,17 +1333,19 @@ data/scientiam-basi-extra.yml</textarea>
 
     // @TODO: maybe try keep comments, see @https://github.com/liorbentov/preserve-yaml-comments/blob/master/src/index.js
 
-    let usum_exemplis = 'data/usum-exemplis.csv'
+    // let usum_exemplis = 'data/usum-exemplis.csv'
+    let usum_exemplis = 'data/logicae-reversum/exemplum-1.csv'
     fetch(usum_exemplis).then(function (response) {
       response.text().then(function (text) {
         CoreMirrorTestum.setValue(text)
       });
     });
 
-    if (scientia_fontem_initiale.scientiam.length < 2) {
+    // if (scientia_fontem_initiale.scientiam.length < 2) {
+    if (scientia_fontem_initiale.conscientiam.focum.length < 2) {
       // let ontologia_referens = 'ontologia.yml'
       // fetch(ontologia_referens).then(function (response) {
-      fetch(scientia_fontem_initiale.scientiam[0]).then(function (response) {
+      fetch(scientia_fontem_initiale.conscientiam.focum[0]).then(function (response) {
         response.text().then(function (text) {
           CoreMirrorOntologia.setValue(text)
         });
@@ -1329,7 +1361,8 @@ data/scientiam-basi-extra.yml</textarea>
         // console.log('exemplum_et_all', exemplum_et_all)
         CoreMirrorProfessorem.setValue(Papa.unparse(exemplum_et_all))
       }
-      WebPasco.fetchAll(scientia_fontem_initiale.scientiam).then(function (scientia_collectionem) {
+      // WebPasco.fetchAll(scientia_fontem_initiale.scientiam).then(function (scientia_collectionem) {
+      WebPasco.fetchAll(scientia_fontem_initiale.conscientiam.focum).then(function (scientia_collectionem) {
         let scientia_meta = null
         let fontem = []
         scientia_collectionem.map(item => {
@@ -1375,7 +1408,8 @@ data/scientiam-basi-extra.yml</textarea>
     //   CoreMirrorProfessorem.setValue(Papa.unparse(exemplum_et_all))
     // }
     // console.log('scientia_fontem_initiale', scientia_fontem_initiale)
-    WebPasco.fetchAll(scientia_fontem_initiale.communitatem).then(function (communitatem_collectionem) {
+    // WebPasco.fetchAll(scientia_fontem_initiale.communitatem).then(function (communitatem_collectionem) {
+    WebPasco.fetchAll(scientia_fontem_initiale.conscientiam.communitatem).then(function (communitatem_collectionem) {
       let scientia_meta = null
       let fontem = []
       communitatem_collectionem.map(item => {
@@ -1400,134 +1434,88 @@ data/scientiam-basi-extra.yml</textarea>
       })
     })
 
-    function prepare_scientia() {
-      try {
-        // const doc = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
-        scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
+    // function prepare_scientia() {
+    //   try {
+    //     // const doc = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
+    //     scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
 
-        scientia = new CodexDeObiectum(scientia_basi)
-        scientia.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-        scientia.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-        scientia.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-        scientia.praeparare()
+    //     scientia = new CodexDeObiectum(scientia_basi)
+    //     scientia.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
+    //     scientia.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
+    //     scientia.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
+    //     scientia.praeparare()
 
-        window['scientiam_agendum'] = scientia
-        // console.log(scientia_basi);
-      } catch (e) {
-        console.log(e);
-      }
-    }
+    //     window['scientiam_agendum'] = scientia
+    //     // console.log(scientia_basi);
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
 
-    window.prepare_scientia = prepare_scientia
+    // window.prepare_scientia = prepare_scientia
 
-
-    // @deprecated deprecated without replacement
-    function prepare_usum_professori(callback) {
-      try {
-        let _temp = CoreMirrorProfessorem.getValue()
-
-        usum_professori_tabulam = Primitivum.__parseCSV(_temp)
-
-        let _usum_professori_obiectum = Primitivum.codex_de_tabulam_in_obiectum(usum_professori_tabulam)
-        usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
-        usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-        usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-        usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-
-        usum_professori_obiectum.praeparare()
-
-        if (callback) {
-          callback(true)
-        }
-      } catch (e) {
-        console.log(e)
-        alert(e);
-      }
-    }
-
-    window.prepare_usum_professori = prepare_usum_professori
 
     // @deprecated deprecated without replacement
-    function prepare_usum_professori2(callback) {
-      return prepare_usum_professori(callback)
-      let crudum_data = CoreMirrorProfessorem.getValue()
-      console.log('crudum_data', crudum_data)
-      // console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
-      // console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
-      crudum_data = "a,b\n1,2"
-      try {
-        Papa.parse(crudum_data, {
-          complete: function (result) {
-            console.log('result.data', result.data)
-            console.log('result', result)
-            // let _usum_professori_obiectum = codex_de_tabulam_in_obiectum(result.data)
-            let _usum_professori_obiectum = Primitivum.codex_de_tabulam_in_obiectum(result.data)
-            usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
-            usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-            usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-            usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-            // scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
-            // scientia_datum_reconstructum = scientia_basi_de_crudum(usum_professori_obiectum)
-            // console.log('usum_professori_obiectum', usum_professori_obiectum)
-            usum_professori_obiectum.praeparare()
+    // function prepare_usum_professori(callback) {
+    //   try {
+    //     let _temp = CoreMirrorProfessorem.getValue()
 
-            if (callback) {
-              callback(true)
-            }
-          }
-        })
-      } catch (e) {
-        console.log(e)
-        alert(e);
-      }
-    }
+    //     usum_professori_tabulam = Primitivum.__parseCSV(_temp)
+
+    //     let _usum_professori_obiectum = Primitivum.codex_de_tabulam_in_obiectum(usum_professori_tabulam)
+    //     usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
+    //     usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
+    //     usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
+    //     usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
+
+    //     usum_professori_obiectum.praeparare()
+
+    //     if (callback) {
+    //       callback(true)
+    //     }
+    //   } catch (e) {
+    //     console.log(e)
+    //     alert(e);
+    //   }
+    // }
+
+    // window.prepare_usum_professori = prepare_usum_professori
+
+    // // @deprecated deprecated without replacement
+    // function prepare_usum_professori2(callback) {
+    //   return prepare_usum_professori(callback)
+    //   let crudum_data = CoreMirrorProfessorem.getValue()
+    //   console.log('crudum_data', crudum_data)
+    //   // console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
+    //   // console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
+    //   crudum_data = "a,b\n1,2"
+    //   try {
+    //     Papa.parse(crudum_data, {
+    //       complete: function (result) {
+    //         console.log('result.data', result.data)
+    //         console.log('result', result)
+    //         // let _usum_professori_obiectum = codex_de_tabulam_in_obiectum(result.data)
+    //         let _usum_professori_obiectum = Primitivum.codex_de_tabulam_in_obiectum(result.data)
+    //         usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
+    //         usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
+    //         usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
+    //         usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
+
+    //         usum_professori_obiectum.praeparare()
+
+    //         if (callback) {
+    //           callback(true)
+    //         }
+    //       }
+    //     })
+    //   } catch (e) {
+    //     console.log(e)
+    //     alert(e);
+    //   }
+    // }
 
     /** _[eng-Latn] Helper functions, start **/
 
-    function in_archivum(data, optionem, errorem) {
-      // console.log('in_archivum', data, optionem, errorem)
-
-      function _archivum(data) {
-        var blob = new Blob([data], { type: `${optionem.ObjectivumMimetype};charset=utf-8` });
-        saveAs(blob, optionem.ObjectivumArchivum);
-      }
-
-      if (!errorem || errorem.length < 1) {
-        if (optionem.ObjectivumPostformatum) {
-          window[optionem.ObjectivumPostformatum](data, _archivum)
-        } else {
-          _archivum(data)
-        }
-      } else {
-        console.error('in_archivum', errorem)
-        alert(JSON.stringify(errorem))
-      }
-    }
-    window.in_archivum = in_archivum
-
-    function in_archivum_externum(...args) {
-      console.log('in_archivum', args)
-    }
-    window.in_archivum_externum = in_archivum_externum
-
-    function in_csv_textum(data, regressum) {
-      let hxl_data = Papa.unparse(data)
-      regressum(hxl_data)
-    }
-    window.in_csv_textum = in_csv_textum
-
-    function in_json_textum(data, regressum) {
-      regressum(JSON.stringify(data, null, 2))
-    }
-    window.in_json_textum = in_json_textum
-
-    function in_yaml_textum(data, regressum) {
-      let _yaml = jsyaml.dump(_obiectum, { forceQuotes: true })
-      regressum(_yaml)
-    }
-    window.in_yaml_textum = in_yaml_textum
-
-    /** _[eng-Latn] Helper functions, start **/
 
     function estExperimentum() {
       // #beta=1
