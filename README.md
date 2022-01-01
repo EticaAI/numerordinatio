@@ -21,6 +21,9 @@
 
 <!--
 
+@TODO: https://json-ld.org/playground/
+@TODO: https://prefix.cc/popular/all
+
 - ūsum, https://en.wiktionary.org/wiki/usus#Latin
 - normae, https://en.wiktionary.org/wiki/norma#Latin
 - https://github.com/HXLStandard/libhxl-js/blob/main/hxl.js
