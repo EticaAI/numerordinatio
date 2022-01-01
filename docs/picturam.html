@@ -1,105 +1,102 @@
 <!doctype html>
 <html lang="la">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"
-      referrerpolicy="no-referrer">
-    <link rel="icon" href="img/favicon.png">
-    <title>Hello, world!</title>
-    <!-- <style>
-      .svg-container {
-          display: inline-block;
-          position: relative;
-          width: 100%;
-          padding-bottom: 100%;
-          /* aspect ratio */
-          vertical-align: top;
-          overflow: hidden;
-      }
-      
-      .svg-content-responsive {
-          display: inline-block;
-          position: absolute;
-          top: 10px;
-          left: 0;
-      }
-      </style> -->
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
-    <div id="picturam-w">
-      <!-- <svg id="picturam" preserveAspectRatio="xMinYMin meet" viewBox="0 0 800 960"></svg> -->
-      <svg id="picturam" preserveAspectRatio="xMinYMin meet" viewBox="0 0 800 960"></svg>
-    </div>
-    <div class="d3_svg_demo2"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"
-      referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.min.js"
-      integrity="sha512-wkduu4oQG74ySorPiSRStC0Zl8rQfjr/Ty6dMvYTmjZw6RS5bferdx8TR7ynxeh79ySEp/benIFFisKofMjPbg=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="module">
-      import * as Picturam from './lib/numerordinatio-picturam.mjs';
-      d3.select("#d3_p").style("color", "blue");
-      // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => { console.log(data); })
-      
-      const el = d3.select("#d3_svg_demo2");
-      let width = 500
-      let height = 500
-      
-      // d3.json("https://raw.githubusercontent.com/iamspruce/intro-d3/main/nigeria-states.json").then(({ data }) => {
-      // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then(({ data }) => {
-      //     el
-      //         .selectAll("p")
-      //         .data(data)
-      //         .join("p")
-      //         // .text((d) => d.Name)
-      //         .text((d) => d)
-      // });
-      
-      // @see https://www.tutorialspoint.com/d3js/d3js_introduction_to_svg.htm
-      // @see http://jsfiddle.net/VmnEC/
-      
-      const svg = d3.select("#picturam")
-          .attr("width", width)
-          .attr("height", height);
-      
-      d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => {
-          console.log(Object.keys(data))
-          if (!data || !Object.keys(data).length) {
-              throw "non data"
-          }
-        //   console.log(data)
-        //   console.log(svg)
-      
-          svg.data(data)
-              .enter().append("g")
-              .attr("transform", function (d, i) { return "translate(100,100)"; });
-      
-      
-        //   // debug
-        //   svg
-        //     //   .select(".selector")
-        //       .call((d) => console.log(d))
-      
-          svg.append("line")
-              .attr("x1", 100)
-              .attr("y1", 100)
-              .attr("x2", 200)
-              .attr("y2", 200)
-              .style("stroke", "rgb(255,0,0)")
-              .style("stroke-width", 2);
-          // // svg.append("text").text(function(d, i) { return d[whichevernode];})
-          // svg.append("text").text('teste')
-          // el
-          //     .selectAll("p")
-          //     .data(data)
-          //     .join("p")
-          //     // .text((d) => d.Name)
-          //     .text((d) => d)
-      });
-    </script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"
+    referrerpolicy="no-referrer">
+  <link rel="icon" href="img/favicon.png">
+  <title>numerordinatio-picturam</title>
+</head>
+
+<body>
+  <h1>numerordinatio-picturam</h1>
+
+  <picture id="picturam">
+  </picture>
+  <div id="picturam-html">
+  </div>
+
+  <div class="d3_svg_demo2"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.min.js"
+    integrity="sha512-wkduu4oQG74ySorPiSRStC0Zl8rQfjr/Ty6dMvYTmjZw6RS5bferdx8TR7ynxeh79ySEp/benIFFisKofMjPbg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="module">
+    import * as Picturam from './lib/numerordinatio-picturam.mjs';
+
+    let pic = new Picturam.PicturamDL(d3, '#picturam')
+    let pic_html = new Picturam.PicturamDL(d3, '#picturam-html')
+
+    d3.select("#d3_p").style("color", "blue");
+    // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => { console.log(data); })
+
+    const el = d3.select("#d3_svg_demo2");
+    let width = 500
+    let height = 500
+
+    // d3.json("https://raw.githubusercontent.com/iamspruce/intro-d3/main/nigeria-states.json").then(({ data }) => {
+    // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then(({ data }) => {
+    //     el
+    //         .selectAll("p")
+    //         .data(data)
+    //         .join("p")
+    //         // .text((d) => d.Name)
+    //         .text((d) => d)
+    // });
+
+    // @see https://www.tutorialspoint.com/d3js/d3js_introduction_to_svg.htm
+    // @see http://jsfiddle.net/VmnEC/
+
+    const svg = d3.select("#picturam")
+      .attr("width", width)
+      .attr("height", height);
+
+    d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => {
+
+      pic_html.estData(data)
+
+      pic_html.fiatLuxHtml()
+
+
+      // console.log(Object.keys(data))
+      // if (!data || !Object.keys(data).length) {
+      //   throw "non data"
+      // }
+      //   console.log(data)
+      //   console.log(svg)
+
+      //   svg.data(data)
+      //       .enter().append("g")
+      //       .attr("transform", function (d, i) { return "translate(100,100)"; });
+
+
+      //   // debug
+      //   svg
+      //     //   .select(".selector")
+      //       .call((d) => console.log(d))
+
+      // svg.append("line")
+      //   .attr("x1", 100)
+      //   .attr("y1", 100)
+      //   .attr("x2", 200)
+      //   .attr("y2", 200)
+      //   .style("stroke", "rgb(255,0,0)")
+      //   .style("stroke-width", 2);
+      // // svg.append("text").text(function(d, i) { return d[whichevernode];})
+      // svg.append("text").text('teste')
+      // el
+      //     .selectAll("p")
+      //     .data(data)
+      //     .join("p")
+      //     // .text((d) => d.Name)
+      //     .text((d) => d)
+    });
+  </script>
+</body>
+
 </html>

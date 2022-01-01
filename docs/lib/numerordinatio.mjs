@@ -2292,7 +2292,62 @@ class TMX {
   }
 }
 
+class AuxPCrudum {
+  constructor(){
+    this.profundum_obiectum = {}
+  }
+
+  addRem(clavem, rem) {
+
+    console.log(_clavem)
+    return this
+  }
+
+  praeparare(){
+
+    // @TODO: sorts
+    return this
+  }
+
+  resultatum() {
+    return this.profundum_obiectum
+  }
+}
+
 class Auxilium {
+
+  static _temp(basi, clavem, rem){
+    let basi_neo = (basi ? basi : {})
+
+    basi_neo[clavem] = rem
+
+    return basi_neo
+  }
+
+  // The oposite is here https://stackoverflow.com/questions/34513964/how-to-convert-this-nested-object-into-a-flat-object
+  // https://javascript.plainenglish.io/how-to-unflatten-a-json-object-with-javascript-933d3c74768a
+  static de_planum_in_profundum(planum_obiectum) {
+    // console.log('de_planum_in_profundum')
+    let profundum_obiectum = {}
+
+
+    let profundum_obiectum2 = new AuxPCrudum()
+  
+
+    for (let [_clavem, _rem] of Object.entries(planum_obiectum)) {
+      // console.log(_clavem)
+
+      profundum_obiectum2.addRem(_clavem, _rem)
+
+
+      // profundum_obiectum = Auxilium._temp(profundum_obiectum, _clavem, _rem)
+    }
+
+    profundum_obiectum2.praeparare()
+
+    return profundum_obiectum2.resultatum()
+  }
+
   /**
    * _[eng-Latn] Normalize arrays of arrays all have same number of columns
    * [eng-Latn]_
