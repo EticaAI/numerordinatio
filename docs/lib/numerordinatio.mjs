@@ -31,6 +31,8 @@ Trivia
 
 */
 
+// const codicem_separato = ':'
+
 const datum_specificum = {
   // "cōnstrūctiōnem", https://en.wiktionary.org/wiki/constructio#Latin
   'constructionem': {
@@ -92,6 +94,7 @@ class Numerordinatio {
   constructor() {
     this.datum_de_factum = {};
     this.datum_reconstructum = {};
+    this.datum_profundum = {};
 
     // @TODO: convert languages to new Set()
     this.objectivum_linguam = [];
@@ -521,7 +524,10 @@ class Numerordinatio {
    * _[eng-Latn]Rebuild internal object before be able to be usable[eng-Latn]_
    * @returns {object} this
    */
-  praeparare() {
+  praeparare(profundum = false) {
+    const codicem_separato = ':'
+
+
     // console.log('praeparare')
     let non_clavem = new Set()
     let est_clavem = []
@@ -546,6 +552,10 @@ class Numerordinatio {
         this.datum_reconstructum[item] = this.datum_de_factum[item]
       }
     }
+    if (profundum) {
+      this.datum_profundum =  Auxilium._flat_to_nested(this.datum_reconstructum, ':')
+    }
+
     // console.log('this.datum_reconstructum', this.datum_reconstructum)
     return this
   }
@@ -559,6 +569,10 @@ class Numerordinatio {
       return this.datum_reconstructum[codicem_basim]
     }
     return false
+  }
+
+  quod_profundum() {
+    return this.datum_profundum
   }
 
   quod_terminum(codicem_basim, multilinguae = false) {
@@ -1206,6 +1220,32 @@ class Primitivum {
     // return usum_professori_tabulam
     // return codex.resultatum()
     return codex
+  }
+  /**
+   * _[eng-Latn]From an alredy linealized object, re-reate the Numerordinatio
+   * [eng-Latn]_
+   */
+  static codex_de_obiectum(data_obiectum) {
+    let obiectum = {}
+
+    console.log('codex_de_obiectum', data_obiectum)
+
+    // let codex = new CodexDeTabulam()
+    let codex = new Numerordinatio()
+
+
+    for (let [codicem, conceptum_significatini] of Object.entries(data_obiectum)) {
+      // console.log(codicem)
+      for (let [linguam, terminum_collectionem] of Object.entries(conceptum_significatini)) {
+        codex.addereRem(codicem, linguam, terminum_collectionem)
+        // console.log(codicem, linguam, terminum_collectionem)
+      }
+      // profundum_obiectum = Auxilium._temp(profundum_obiectum, _clavem, _rem)
+    }
+
+    codex.praeparare(true)
+
+    return codex.quod_profundum()
   }
 
 
@@ -2293,17 +2333,17 @@ class TMX {
 }
 
 class AuxPCrudum {
-  constructor(){
+  constructor() {
     this.profundum_obiectum = {}
   }
 
   addRem(clavem, rem) {
 
-    console.log(_clavem)
+    // console.log(_clavem)
     return this
   }
 
-  praeparare(){
+  praeparare() {
 
     // @TODO: sorts
     return this
@@ -2316,7 +2356,7 @@ class AuxPCrudum {
 
 class Auxilium {
 
-  static _temp(basi, clavem, rem){
+  static _temp(basi, clavem, rem) {
     let basi_neo = (basi ? basi : {})
 
     basi_neo[clavem] = rem
@@ -2326,27 +2366,29 @@ class Auxilium {
 
   // The oposite is here https://stackoverflow.com/questions/34513964/how-to-convert-this-nested-object-into-a-flat-object
   // https://javascript.plainenglish.io/how-to-unflatten-a-json-object-with-javascript-933d3c74768a
-  static de_planum_in_profundum(planum_obiectum) {
-    // console.log('de_planum_in_profundum')
-    let profundum_obiectum = {}
+  // static de_planum_in_profundum(planum_obiectum) {
+  //   // console.log('de_planum_in_profundum')
+  //   let profundum_obiectum = {}
 
 
-    let profundum_obiectum2 = new AuxPCrudum()
-  
-
-    for (let [_clavem, _rem] of Object.entries(planum_obiectum)) {
-      // console.log(_clavem)
-
-      profundum_obiectum2.addRem(_clavem, _rem)
+  //   let profundum_obiectum2 = new Numerordinatio()
 
 
-      // profundum_obiectum = Auxilium._temp(profundum_obiectum, _clavem, _rem)
-    }
+  //   for (let [codicem, conceptum_significatini] of Object.entries(obiectum)) {
+  //     // console.log(_clavem)
 
-    profundum_obiectum2.praeparare()
 
-    return profundum_obiectum2.resultatum()
-  }
+  //     for (let [linguam, terminum_collectionem] of Object.entries(conceptum_significatini)) {
+  //       profundum_obiectum2.addereRem(codicem, linguam, terminum_collectionem)
+  //       console.log(codicem, linguam, terminum_collectionem)
+  //     }
+  //     // profundum_obiectum = Auxilium._temp(profundum_obiectum, _clavem, _rem)
+  //   }
+
+  //   profundum_obiectum2.praeparare(true)
+
+  //   return profundum_obiectum2.resultatum()
+  // }
 
   /**
    * _[eng-Latn] Normalize arrays of arrays all have same number of columns
@@ -2397,6 +2439,21 @@ class Auxilium {
 
     return resultatum
 
+  }
+
+  static _flat_to_nested(flat_object, code_sep = ':', neo_prefix = '{', neo_suffix = '}') {
+
+    function setValue(object, path, value) {
+      // var keys = path.split('.'),
+      let keys = path.split(code_sep)
+      let last = keys.pop()
+
+      keys.reduce((o, k) => o[`${neo_prefix}${k}${neo_suffix}`] = o[`${neo_prefix}${k}${neo_suffix}`] || {}, object)[`${neo_prefix}${last}${neo_suffix}`] = value;
+      return object;
+    }
+
+    let target = Object.entries(flat_object).reduce((o, [k, v]) => setValue(o, k, v), {});
+    return target
   }
 
   /**

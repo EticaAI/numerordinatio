@@ -1,7 +1,7 @@
 // Dominium Publicum
 // SPDX-License-Identifier: Unlicense
 
-import { Auxilium } from './numerordinatio.mjs';
+import { Auxilium, Primitivum } from './numerordinatio.mjs';
 // import { datum_specificum } from './numerordinatio.mjs';
 // import * as D3 from 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.js';
 // import { * } from 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.js'
@@ -13,21 +13,26 @@ class Picturam {
     this.d3 = d3
     this.radicem = radicem
     this.data = {}
+    this.codex = null
   }
 
   estData(data) {
     if (!data || !Object.keys(data).length) {
       throw "non data"
     }
+    // console.log('ooi')
 
-    this.data = Auxilium.de_planum_in_profundum(data)
+    this.data = data
+    this.codex = Primitivum.codex_de_obiectum(this.data)
+
+    // this.codex.praeparare(true)
     return this
   }
 
   fiatLux() {
-    console.log('fiatlux')
+    // console.log('fiatlux')
     console.log(this.data)
-    console.log(this.radicem)
+    // console.log(this.radicem)
   }
 }
 
@@ -40,6 +45,10 @@ class PicturamDL extends Picturam {
   // }
 
   fiatLuxHtml() {
+    let raw_html = ''
+
+
+
     console.log('fiatlux2')
     // console.log(this.data)
     // console.log(this.radicem)
@@ -47,12 +56,16 @@ class PicturamDL extends Picturam {
     //   console.log(d, i)
     // })
 
-    // this.d3.select("body")
-    this.d3.select(this.radicem)
-      // .selectAll("p")
-      .data([4, 8, 15, 16, 23, 42])
-      .enter().append("p")
-      .text(function (d) { return "I'm number " + d + "!"; });
+    // let codex = Primitivum.codex_de_obiectum(this.data)
+
+    console.log(this.codex)
+
+    // // this.d3.select("body")
+    // this.d3.select(this.radicem)
+    //   // .selectAll("p")
+    //   .data([4, 8, 15, 16, 23, 42])
+    //   .enter().append("p")
+    //   .text(function (d) { return "I'm number " + d + "!"; });
   }
 }
 
