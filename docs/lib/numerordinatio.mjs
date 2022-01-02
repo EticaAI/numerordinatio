@@ -733,7 +733,7 @@ class BCP47Langtag {
       return this._resultatum[clavem]
     }
     let resultatum_neo = {}
-    for (let clave_item of clavem){
+    for (let clave_item of clavem) {
       resultatum_neo[clave_item] = this._resultatum[clave_item]
     }
     return resultatum_neo
@@ -742,6 +742,9 @@ class BCP47Langtag {
   _praeparare() {
     // let skip = 0
     let rem = this.rem
+    let parts
+
+
     if ((typeof this.rem === 'string' || this.rem instanceof String) && this.rem.length > 0) {
       rem = this.rem.replace('_', '-').trim()
     } else {
@@ -758,18 +761,110 @@ class BCP47Langtag {
     }
 
     if (this._regular.map(item => item.toLowerCase()).indexOf(rem.toLowerCase()) > -1) {
-      let parts = rem.split('-')
+      parts = rem.split('-')
       this._resultatum['language'] = parts.shift().toLowerCase()
       this._resultatum['variant'].push(parts.join('-').toLowerCase())
       this._resultatum['grandfathered'] = rem
       this._skip = 1
     }
 
-    // if not isinstance(rem, str) or len(rem) == 0:
-    //     result['_error'].append('Empty/wrong type')
-    //     skip = 1
-    // else:
-    //     rem = rem.replace('_', '-').strip()
+    parts = rem.split('-')
+    let leftover = []
+
+    let deep = 0
+    while (parts.length > 0 && this._skip === 0 && deep < 100) {
+      deep = deep + 1
+
+      // BCP47 can start with private tag, without language at all
+      if (parts[0].toLowerCase() === 'x') {
+        parts.shift()
+        while (parts.length > 0) {
+          this._resultatum['privateuse'].push(parts.shift())
+          break
+        }
+      }
+
+      // if len(parts[0]) == 1 and parts[0].isalpha():
+      if (parts[0].length === 1 && /^[a-z]+$/i.test(parts[0])) {
+        if (parts[0].toLowerCase() === 'i') {
+          this._resultatum['_error'].push('Only grandfathered can use i-')
+        }
+
+        let extension_key = parts.shift().toLowerCase()
+        if (parts.length === 0 || parts[0].length === 1) {
+          // BCP47 2.2.6. : "Each singleton MUST be followed by at least
+          // one extension subtag (...)
+          this._resultatum['extension'] = {}
+          this._resultatum['_error'].push(
+            'extension [' + extension_key + '] empty')
+          continue
+        }
+
+        this._resultatum['extension'][extension_key] = []
+        while (parts.length > 0 && parts[0].length !== 1) {
+          // Extensions may have more strict rules than -x-
+          // @see https://datatracker.ietf.org/doc/html/rfc6497 (-t-)
+          // @see https://datatracker.ietf.org/doc/html/rfc6067 (-u-)
+          this._resultatum['extension'][extension_key] = this._resultatum['extension'][extension_key] +
+            '-' + parts.shift().toLowerCase()
+
+          // trim any extra '-' at start or end
+          // this._resultatum['extension'][extension_key] =  this._resultatum['extension'][extension_key].trim('-')
+          this._resultatum['extension'][extension_key] = this._resultatum['extension'][extension_key].replace(/^\-+|\-+$/g, "")
+        }
+
+        continue
+      }
+
+      // for part in parts:
+      if (this._resultatum['language'] === null) {
+        if (/^[a-z]+$/i.test(parts[0]) && (parts[0].length === 2 || parts[0].length === 3)) {
+          this._resultatum['language'] = parts[0].toLowerCase()
+        } else {
+          this._resultatum['language'] = false
+          this._resultatum['_error'].push('language?')
+        }
+        parts.shift()
+        continue
+      }
+
+      // Edge case to test for numeric in 4 (not 3): 'de-CH-1996'
+      if (parts[0].length === 4 && /^[a-z]+$/i.test(parts[0]) && this._resultatum['script'] === null) {
+        if (this._resultatum['privateuse'].length === 0) {
+          this._resultatum['script'] = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+        } else {
+          this._resultatum['script'] = false
+          this._resultatum['_error'].push('script after region/privateuse')
+        }
+        parts.shift()
+        continue
+      }
+
+      // @TODO
+      // # Edge case to test for numeric in 4 (not 3): 'de-CH-1996'
+      if (parts[0].length === 2 && this._resultatum['region'] === null) {
+        if (/^[a-z]+$/i.test(parts[0])) {
+          this._resultatum['region'] = parts[0].toUpperCase()
+        } else {
+          this._resultatum['region'] = false
+          this._resultatum['_error'].push('region?')
+        }
+        parts.shift()
+        continue
+      }
+
+      leftover.push(parts.shift())
+    }
+
+    // @TODO
+    //    >>> bcp47_langtag('de-CH-1996', 'variant')
+    //    ['1996']
+
+    this._resultatum['_unknown'] = leftover
+
+
+    // (new BCP47Langtag('por-Latn-a-teste')).resultatum()
+    // (new BCP47Langtag('por-Latn-a-teste')).resultatum()
     return this
   }
 
