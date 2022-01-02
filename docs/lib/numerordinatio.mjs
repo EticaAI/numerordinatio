@@ -623,12 +623,76 @@ class Numerordinatio {
  * @license: SPDX-License-Identifier: Unlicense OR 0BSD
  *
  * @example
+ * // 'pt'
+ * (new BCP47Langtag('pt-Latn-BR')).resultatum('language')
+ *
+ * @example
+ * // 'BR'
+ * (new BCP47Langtag('pt-Latn-BR')).resultatum('region')
+ *
+ * @example
+ * // ['1996']
+ * (new BCP47Langtag('de-CH-1996')).resultatum('variant')
+ *
+ * @example
  * // ['min-nan']
  * (new BCP47Langtag('zh-min-nan')).resultatum('variant')
+ *
+ * @TODO fix this example @example, consider 'fr' language, not private use
+ * // {language: 'ch', region: null, privateuse: Array(1)}
+ * (new BCP47Langtag('x-fr-CH')).resultatum(['language', 'region', 'privateuse'])
+ *
+ * @example
+ * // 'i-klingon'
+ * (new BCP47Langtag('i-klingon')).resultatum('grandfathered')
  *
  * @example
  * // 'zh'
  * (new BCP47Langtag('zh-min-nan')).resultatum('language')
+ *
+ * @example
+ * // '419'
+ * (new BCP47Langtag('es-419')).resultatum('region')
+ *
+ * @example <caption>Oxford English Dictionary</caption>
+ * // ['oxendict']
+ * (new BCP47Langtag('en-oxendict')).resultatum('variant')
+ *
+ * @example <caption>Pinyin romanization</caption>
+ * // ['pinyin']
+ * (new BCP47Langtag('zh-pinyin')).resultatum('variant')
+ *
+ * @example <caption>Limitation: cannot infer Latn</caption>
+ * // null
+ * (new BCP47Langtag('zh-pinyin')).resultatum('script')
+ *
+ * @TODO fix this @example, not same result as the python reference
+ * // null
+ * (new BCP47Langtag('en-a-bbb-x-a-ccc')).resultatum('privateuse')
+ *
+ * @TODO fix this @example (Uncaught ["region?"])
+ * // {a: 'bbb'}
+ * (new BCP47Langtag('en-a-bbb-x-a-ccc')).resultatum('extension')
+ *
+ * @example
+ * // Uncaught ["extension [a] empty"]
+ * (new BCP47Langtag('tlh-a-b-foo')).resultatum('_error')
+ *
+ * @example
+ * // ['extension [a] empty']
+ * (new BCP47Langtag('tlh-a-b-foo')).resultatum('_error', false)
+ *
+ * @example
+ * // ['extension [a] empty']
+ * (new BCP47Langtag('tlh-a-b-foo', null, false)).resultatum('_error')
+ *
+ * @TODO fix this example
+ * //
+ * (new BCP47Langtag('zh-Latn-CN-variant1-a-extend1-x-wadegile-private1')).resultatum(['variant', 'extension', 'privateuse'])
+ *
+ * @TODO fix this example
+ * //
+ * (new BCP47Langtag('en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678')).resultatum()
  *
  * ---------------------------------------------------------------------------
   The syntax of the language tag in ABNF [RFC5234] is:
@@ -729,7 +793,7 @@ class BCP47Langtag {
   }
 
   _clavem(clavem) {
-    if (typeof this.rem === 'string' || this.rem instanceof String) {
+    if (typeof clavem === 'string' || this.rem instanceof String) {
       return this._resultatum[clavem]
     }
     let resultatum_neo = {}
@@ -840,8 +904,7 @@ class BCP47Langtag {
         continue
       }
 
-      // @TODO
-      // # Edge case to test for numeric in 4 (not 3): 'de-CH-1996'
+      // Regions, such as ISO 3661-1, like BR
       if (parts[0].length === 2 && this._resultatum['region'] === null) {
         if (/^[a-z]+$/i.test(parts[0])) {
           this._resultatum['region'] = parts[0].toUpperCase()
@@ -853,6 +916,39 @@ class BCP47Langtag {
         continue
       }
 
+      // Regions, such as ISO 3661-1, like 076
+      if (parts[0].length === 3 && this._resultatum['region'] === null) {
+        if (/^[0-9]+$/i.test(parts[0])) {
+          this._resultatum['region'] = parts[0]
+        } else {
+          this._resultatum['region'] = false
+          this._resultatum['_error'].push('region?')
+        }
+        parts.shift()
+        continue
+      }
+
+      if (Object.keys(this._resultatum['extension']).length === 0 && this._resultatum['privateuse'].length === 0) {
+        // "Variant subtags that begin with a letter (a-z, A-Z) MUST be
+        // at least five characters long."
+
+        // console.log('oi', parts)
+
+        // Example: eng-simple
+        // (new BCP47Langtag('eng-simple')).resultatum()
+        if (/^[a-z]+$/i.test(parts[0]) && parts[0].length >= 5) {
+          this._resultatum['variant'].push(parts.shift())
+          continue
+        }
+        // Example: 'de-CH-1996'
+        // (new BCP47Langtag('de-CH-1996')).resultatum()
+        if (/^[0-9]+$/i.test(parts[0]) && parts[0].length >= 4) {
+          this._resultatum['variant'].push(parts.shift())
+          continue
+        }
+      }
+
+      // any leftover?
       leftover.push(parts.shift())
     }
 
@@ -862,6 +958,53 @@ class BCP47Langtag {
 
     this._resultatum['_unknown'] = leftover
 
+    if (this._resultatum['_error'].length === 0) {
+      let norm = []
+
+      if (this._resultatum['language']) {
+        norm.push(this._resultatum['language'])
+      }
+      if (this._resultatum['script']) {
+        norm.push(this._resultatum['script'])
+      }
+      if (this._resultatum['region']) {
+        norm.push(this._resultatum['region'])
+      }
+      if (this._resultatum['variant'].length > 0) {
+        norm.push(this._resultatum['variant'].join('-'))
+      }
+      if (Object.keys(this._resultatum['extension']).length > 0) {
+        //  TODO: maybe re-implement only for know extensions,
+        //        like -t-, -u-, -h-. For now we're not trying to
+        //        normalize ordering of unknow future extensions, BUT
+        //        we sort key from different extensions
+        let sorted_extension = {}
+
+        const ordered = Object.keys(this._resultatum['extension']).sort().reduce(
+          (obj, key) => {
+            obj[key] = this._resultatum['extension'][key];
+            return obj;
+          },
+          {}
+        );
+
+        this._resultatum['extension'] = ordered
+
+        for (let [_clavem, rem] of Object.entries(this._resultatum['extension'])) {
+          if (this._resultatum['extension'][_clavem][0] === null) {
+            norm.push(_clavem)
+          } else {
+            norm.push(_clavem)
+            norm.push(this._resultatum['extension'][_clavem])
+          }
+          // @TODO: this part needs more testing
+        }
+
+        norm.push(this._resultatum['variant'].join('-'))
+      }
+
+      this._resultatum['Language-Tag_normalized'] = norm.join('-')
+    }
 
     // (new BCP47Langtag('por-Latn-a-teste')).resultatum()
     // (new BCP47Langtag('por-Latn-a-teste')).resultatum()
@@ -870,9 +1013,13 @@ class BCP47Langtag {
 
   resultatum(clavem = null, strictum = null) {
     clavem = clavem || this.clavem
-    strictum = strictum || this.strictum
+    strictum = (strictum !== null ? strictum : this.strictum)
     // let result = 
     this._praeparare()
+
+    if (strictum && this._resultatum['_error'].length > 0) {
+      throw JSON.stringify(this._resultatum['_error'])
+    }
 
     if (clavem) {
       return this._clavem(clavem)
@@ -910,7 +1057,7 @@ def bcp47_langtag(
     /src/main/resources/org/unicode/cldr/util/data/langtagTest.txt
     Exemplōrum gratiā (et Python doctest, id est, testum automata):
     (run with python3 -m doctest myscript.py)
-    >>> bcp47_langtag('pt-Latn-BR', 'language')
+    >>> bcp47_langtag('pt-Latn-BR', 'e')
     'pt'
     >>> bcp47_langtag('pt-Latn-BR', 'script')
     'Latn'
@@ -1162,7 +1309,7 @@ def bcp47_langtag(
                         norm.append(key)
                         # norm.extend(result['extension'][key])
                         norm.append(result['extension'][key])
-
+this._resultatum['extension'][_clavem
             if len(result['privateuse']) > 0:
                 norm.append('x-' + '-'.join(result['privateuse']))
 
