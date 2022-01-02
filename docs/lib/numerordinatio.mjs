@@ -31,7 +31,7 @@ Trivia
 
 */
 
-// const codicem_separato = ':'
+const codicem_separato = ':'
 
 const datum_specificum = {
   // "cōnstrūctiōnem", https://en.wiktionary.org/wiki/constructio#Latin
@@ -525,7 +525,7 @@ class Numerordinatio {
    * @returns {object} this
    */
   praeparare(profundum = false) {
-    const codicem_separato = ':'
+    // const codicem_separato = ':'
 
 
     // console.log('praeparare')
@@ -542,9 +542,7 @@ class Numerordinatio {
       }
     }
     praefectum = [...est_clavem, ...non_clavem].sort()
-    // console.log('est_clavem', est_clavem)
-    // console.log('non_clavem', non_clavem)
-    // console.log('praefectum', praefectum)
+
     for (let item of praefectum) {
       if (!this.datum_de_factum[item]) {
         this.datum_reconstructum[item] = {}
@@ -1228,7 +1226,7 @@ class Primitivum {
   static codex_de_obiectum(data_obiectum) {
     let obiectum = {}
 
-    console.log('codex_de_obiectum', data_obiectum)
+    // console.log('codex_de_obiectum', data_obiectum)
 
     // let codex = new CodexDeTabulam()
     let codex = new Numerordinatio()
@@ -2490,4 +2488,4 @@ class Auxilium {
 
 }
 
-export { Auxilium, datum_specificum, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
+export { Auxilium, datum_specificum, codicem_separato, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
