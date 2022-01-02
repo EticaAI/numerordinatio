@@ -551,7 +551,7 @@ class Numerordinatio {
       }
     }
     if (profundum) {
-      this.datum_profundum =  Auxilium._flat_to_nested(this.datum_reconstructum, ':')
+      this.datum_profundum = Auxilium._flat_to_nested(this.datum_reconstructum, ':')
     }
 
     // console.log('this.datum_reconstructum', this.datum_reconstructum)
@@ -617,6 +617,480 @@ class Numerordinatio {
     return resultatum
   }
 }
+
+/**
+ * @author: Emerson Rocha <rocha(at)ieee.org>
+ * @license: SPDX-License-Identifier: Unlicense OR 0BSD
+ *
+ * @example
+ * // ['min-nan']
+ * (new BCP47Langtag('zh-min-nan')).resultatum('variant')
+ *
+ * @example
+ * // 'zh'
+ * (new BCP47Langtag('zh-min-nan')).resultatum('language')
+ *
+ * ---------------------------------------------------------------------------
+  The syntax of the language tag in ABNF [RFC5234] is:
+  Language-Tag  = langtag             ; normal language tags
+              / privateuse          ; private use tag
+              / grandfathered       ; grandfathered tags
+  langtag       = language
+                  ["-" script]
+                  ["-" region]
+                  *("-" variant)
+                  *("-" extension)
+                  ["-" privateuse]
+  language      = 2*3ALPHA            ; shortest ISO 639 code
+                  ["-" extlang]       ; sometimes followed by
+                                      ; extended language subtags
+              / 4ALPHA              ; or reserved for future use
+              / 5*8ALPHA            ; or registered language subtag
+  extlang       = 3ALPHA              ; selected ISO 639 codes
+                  *2("-" 3ALPHA)      ; permanently reserved
+  script        = 4ALPHA              ; ISO 15924 code
+  region        = 2ALPHA              ; ISO 3166-1 code
+              / 3DIGIT              ; UN M.49 code
+  variant       = 5*8alphanum         ; registered variants
+              / (DIGIT 3alphanum)
+  extension     = singleton 1*("-" (2*8alphanum))
+                                      ; Single alphanumerics
+                                      ; "x" reserved for private use
+  singleton     = DIGIT               ; 0 - 9
+              / %x41-57             ; A - W
+              / %x59-5A             ; Y - Z
+              / %x61-77             ; a - w
+              / %x79-7A             ; y - z
+  privateuse    = "x" 1*("-" (1*8alphanum))
+  grandfathered = irregular           ; non-redundant tags registered
+              / regular             ; during the RFC 3066 era
+  irregular     = "en-GB-oed"         ; irregular tags do not match
+              / "i-ami"             ; the 'langtag' production and
+              / "i-bnn"             ; would not otherwise be
+              / "i-default"         ; considered 'well-formed'
+              / "i-enochian"        ; These tags are all valid,
+              / "i-hak"             ; but most are deprecated
+              / "i-klingon"         ; in favor of more modern
+              / "i-lux"             ; subtags or subtag
+              / "i-mingo"           ; combination
+              / "i-navajo"
+              / "i-pwn"
+              / "i-tao"
+              / "i-tay"
+              / "i-tsu"
+              / "sgn-BE-FR"
+              / "sgn-BE-NL"
+              / "sgn-CH-DE"
+  regular       = "art-lojban"        ; these tags match the 'langtag'
+              / "cel-gaulish"       ; production, but their subtags
+              / "no-bok"            ; are not extended language
+              / "no-nyn"            ; or variant subtags: their meaning
+              / "zh-guoyu"          ; is defined by their registration
+              / "zh-hakka"          ; and all of these are deprecated
+              / "zh-min"            ; in favor of a more modern
+              / "zh-min-nan"        ; subtag or sequence of subtags
+              / "zh-xiang"
+  alphanum      = (ALPHA / DIGIT)     ; letters and numbers
+  ---------------------------------------------------------------------------
+ **/
+class BCP47Langtag {
+  /**
+   * @param {string} rem
+   * @param {string|array} clavem
+   * @param {bool} strictum
+   */
+  constructor(rem, clavem = null, strictum = true) {
+    this.rem = rem
+    this.clavem = clavem
+    this.strictum = strictum
+    this._resultatum = {
+      //# The input Language-Tag, _as it is_
+      'Language-Tag': this.rem,
+      //# The Language-Tag normalized syntax, if no errors
+      'Language-Tag_normalized': null,
+      'language': null,
+      'script': null,
+      'region': null,
+      'variant': [],
+      'extension': {},   // Example {'a': ['bbb', 'ccc'], 'd': True}
+      'privateuse': [],  // Example: ['wadegile', 'private1']
+      'grandfathered': null,
+      '_unknown': [],
+      '_error': [],
+    }
+    this._skip = 0
+
+    this._grandfathered = ['en-GB-oed', 'i-ami', 'i-bnn', 'i-default',
+      'i-enochian', 'i-hak', 'i-klingon', 'i-lux', 'i-ming', 'i-navajo',
+      'i-pwn', 'i-tao', 'i-tay', 'i-tsu', 'sgn-BE-FR', 'sgn-BE-NL',
+      'sgn-CH-DE']
+    this._regular = ['art-lojban', 'cel-gaulish', 'no-bok', 'no-nyn',
+      'zh-guoyu', 'zh-hakka', 'zh-min', 'zh-min-nan', 'zh-xiang']
+  }
+
+  _clavem(clavem) {
+    if (typeof this.rem === 'string' || this.rem instanceof String) {
+      return this._resultatum[clavem]
+    }
+    let resultatum_neo = {}
+    for (let clave_item of clavem){
+      resultatum_neo[clave_item] = this._resultatum[clave_item]
+    }
+    return resultatum_neo
+  }
+
+  _praeparare() {
+    // let skip = 0
+    let rem = this.rem
+    if ((typeof this.rem === 'string' || this.rem instanceof String) && this.rem.length > 0) {
+      rem = this.rem.replace('_', '-').trim()
+    } else {
+      this._resultatum['_error'].push('Empty/wrong type')
+      this._skip = 1
+    }
+
+    // (new BCP47Langtag('i-klingon')).resultatum()
+    // (new BCP47Langtag('zh-min-nan')).resultatum()
+    if (this._grandfathered.map(item => item.toLowerCase()).indexOf(rem.toLowerCase()) > -1) {
+      this._resultatum['language'] = rem.toLowerCase()
+      this._resultatum['grandfathered'] = rem
+      this._skip = 1
+    }
+
+    if (this._regular.map(item => item.toLowerCase()).indexOf(rem.toLowerCase()) > -1) {
+      let parts = rem.split('-')
+      this._resultatum['language'] = parts.shift().toLowerCase()
+      this._resultatum['variant'].push(parts.join('-').toLowerCase())
+      this._resultatum['grandfathered'] = rem
+      this._skip = 1
+    }
+
+    // if not isinstance(rem, str) or len(rem) == 0:
+    //     result['_error'].append('Empty/wrong type')
+    //     skip = 1
+    // else:
+    //     rem = rem.replace('_', '-').strip()
+    return this
+  }
+
+  resultatum(clavem = null, strictum = null) {
+    clavem = clavem || this.clavem
+    strictum = strictum || this.strictum
+    // let result = 
+    this._praeparare()
+
+    if (clavem) {
+      return this._clavem(clavem)
+    }
+    return this._resultatum
+  }
+}
+
+
+/*
+def bcp47_langtag(
+        rem: str,
+        clavem: Type[Union[str, list]] = None,
+        strictum: bool = True
+) -> dict:
+    """Public domain python function to process BCP47 langtag
+    Created at 2021-11-22. Partial implementation of BCP47 (RFC 5646).
+    See https://tools.ietf.org/search/bcp47.
+    Args:
+        rem (str):                       The BCP47 langtag
+        clavem (Type[Union[str, list]]): Key (string) for specific value or keys
+                                         (list) to return a dict (optional)
+        strictum (bool):                 Throw exceptions. False replace values
+                                        with False (optional)
+    Returns:
+        dict: Python dictionary. None means not found. False means the feature
+                                 is not implemented
+    Author:
+        Emerson Rocha <rocha(at)ieee.org>
+    License:
+        SPDX-License-Identifier: Unlicense OR 0BSD
+
+    Most tests use examples from https://tools.ietf.org/search/bcp47 and
+    https://github.com/unicode-org/cldr/blob/main/tools/cldr-code
+    /src/main/resources/org/unicode/cldr/util/data/langtagTest.txt
+    Exemplōrum gratiā (et Python doctest, id est, testum automata):
+    (run with python3 -m doctest myscript.py)
+    >>> bcp47_langtag('pt-Latn-BR', 'language')
+    'pt'
+    >>> bcp47_langtag('pt-Latn-BR', 'script')
+    'Latn'
+    >>> bcp47_langtag('pt-Latn-BR', 'region')
+    'BR'
+    >>> bcp47_langtag('de-CH-1996', 'variant')
+    ['1996']
+    >>> bcp47_langtag('x-fr-CH', ['language', 'region', 'privateuse'])
+    {'language': None, 'region': None, 'privateuse': ['fr', 'CH']}
+    >>> bcp47_langtag('i-klingon', 'grandfathered')
+    'i-klingon'
+    >>> bcp47_langtag('zh-min-nan', 'language')
+    'zh'
+    >>> bcp47_langtag('zh-min-nan', 'variant')
+    ['min-nan']
+    >>> bcp47_langtag('es-419', 'region')
+    '419'
+    >>> bcp47_langtag('en-oxendict', 'variant') # Oxford English Dictionary
+    ['oxendict']
+    >>> bcp47_langtag('zh-pinyin', 'variant') # Pinyin romanization
+    ['pinyin']
+    >>> bcp47_langtag('zh-pinyin', 'script') # Limitation: cannot infer Latn
+    >>> bcp47_langtag('en-a-bbb-x-a-ccc', 'privateuse')
+    ['a', 'ccc']
+    >>> bcp47_langtag('en-a-bbb-x-a-ccc', 'extension')
+    {'a': 'bbb'}
+    >>> bcp47_langtag('tlh-a-b-foo', '_error')
+    Traceback (most recent call last):
+    ...
+    ValueError: Errors for [tlh-a-b-foo]: extension [a] empty
+    >>> bcp47_langtag('tlh-a-b-foo', '_error', False)
+    ['extension [a] empty']
+    >>> bcp47_langtag(
+    ... 'zh-Latn-CN-variant1-a-extend1-x-wadegile-private1',
+    ... ['variant', 'extension', 'privateuse'])
+    {'variant': ['variant1'], 'extension': {'a': 'extend1'}, \
+'privateuse': ['wadegile', 'private1']}
+    >>> bcp47_langtag(
+    ... 'en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678')
+    {'Language-Tag': \
+'en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678', \
+'Language-Tag_normalized': \
+'en-Latn-US-lojban-gaulish-a-12345678-abcd-b-abcdefgh-x-a-b-c-12345678', \
+'language': 'en', 'script': 'Latn', 'region': 'US', \
+'variant': ['lojban', 'gaulish'], \
+'extension': {'a': '12345678-abcd', 'b': 'abcdefgh'}, \
+'privateuse': ['a', 'b', 'c', '12345678'], \
+'grandfathered': None, '_unknown': [], '_error': []}
+    # BCP47: "Example: The language tag "en-a-aaa-b-ccc-bbb-x-xyz" is in
+    # canonical form, while "en-b-ccc-bbb-a-aaa-X-xyz" is well-formed (...)
+    >>> bcp47_langtag(
+    ... 'en-b-ccc-bbb-a-aaa-X-xyz')
+    {'Language-Tag': 'en-b-ccc-bbb-a-aaa-X-xyz', \
+'Language-Tag_normalized': 'en-a-aaa-b-ccc-bbb-x-xyz', \
+'language': 'en', 'script': None, 'region': None, 'variant': [], \
+'extension': {'a': 'aaa', 'b': 'ccc-bbb'}, 'privateuse': ['xyz'], \
+'grandfathered': None, '_unknown': [], '_error': []}
+    """
+    # For sake of copy-and-paste portability, we ignore a few pylints:
+    # pylint: disable=too-many-branches,too-many-statements,too-many-locals
+    result = {
+        # The input Language-Tag, _as it is_
+        'Language-Tag': rem,
+        # The Language-Tag normalized syntax, if no errors
+        'Language-Tag_normalized': None,
+        'language': None,
+        'script': None,
+        'region': None,
+        'variant': [],
+        'extension': {},   # Example {'a': ['bbb', 'ccc'], 'd': True}
+        'privateuse': [],  # Example: ['wadegile', 'private1']
+        'grandfathered': None,
+        '_unknown': [],
+        '_error': [],
+    }
+
+    skip = 0
+
+    if not isinstance(rem, str) or len(rem) == 0:
+        result['_error'].append('Empty/wrong type')
+        skip = 1
+    else:
+        rem = rem.replace('_', '-').strip()
+
+    # The weird tags first: grandfathered/irregular
+    if rem in [
+        'en-GB-oed', 'i-ami', 'i-bnn', 'i-default', 'i-enochian',
+        'i-hak', 'i-klingon', 'i-lux', 'i-ming', 'i-navajo', 'i-pwn',
+            'i-tao', 'i-tay', 'i-tsu', 'sgn-BE-FR', 'sgn-BE-NL', 'sgn-CH-DE']:
+        # result['langtag'] = None
+        result['language'] = rem.lower()
+        result['grandfathered'] = rem
+        skip = 1
+    # The weird tags first: grandfathered/regular
+    if rem in [
+            'art-lojban', 'cel-gaulish', 'no-bok', 'no-nyn', 'zh-guoyu',
+            'zh-hakka', 'zh-min', 'zh-min-nan', 'zh-xiang']:
+
+        parts_r = rem.split('-')
+        # result['langtag'] = None
+        result['language'] = parts_r.pop(0).lower()
+        result['variant'].append('-'.join(parts_r).lower())
+        result['grandfathered'] = rem
+        skip = 1
+
+    parts = rem.split('-')
+    leftover = []
+
+    deep = 0
+    while len(parts) > 0 and skip == 0 and deep < 100:
+        deep = deep + 1
+
+        # BCP47 can start with private tag, without language at all
+        if parts[0].lower() == 'x':
+            parts.pop(0)
+            while len(parts) > 0:
+                result['privateuse'].append(parts.pop(0))
+            break
+
+        # BCP47 extensions start with one letter.
+        if len(parts[0]) == 1 and parts[0].isalpha():
+            if parts[0].isalpha() == 'i':
+                result['_error'].append('Only grandfathered can use i-')
+
+            extension_key = parts.pop(0).lower()
+            if len(parts) == 0 or len(parts[0]) == 1:
+                # BCP47 2.2.6. : "Each singleton MUST be followed by at least
+                # one extension subtag (...)
+                result['extension'][extension_key] = [None]
+                result['_error'].append(
+                    'extension [' + extension_key + '] empty')
+                continue
+
+            # result['extension'][extension_key] = []
+            result['extension'][extension_key] = ''
+            while len(parts) > 0 and len(parts[0]) != 1:
+                # Extensions may have more strict rules than -x-
+                # @see https://datatracker.ietf.org/doc/html/rfc6497 (-t-)
+                # @see https://datatracker.ietf.org/doc/html/rfc6067 (-u-)
+                # result['extension'][extension_key].append(
+                #     parts.pop(0).lower())
+                result['extension'][extension_key] = \
+                    result['extension'][extension_key] + \
+                    '-' + parts.pop(0).lower()
+
+                result['extension'][extension_key] = \
+                    result['extension'][extension_key].strip('-')
+
+            continue
+
+        # for part in parts:
+        if result['language'] is None:
+            if parts[0].isalnum() and len(parts[0]) == 2 or len(parts[0]) == 3:
+                result['language'] = parts[0].lower()
+            else:
+                result['language'] = False
+                result['_error'].append('language?')
+            parts.pop(0)
+            continue
+
+        # Edge case to test for numeric in 4 (not 3): 'de-CH-1996'
+        if len(parts[0]) == 4 and parts[0].isalpha() \
+                and result['script'] is None:
+            # if parts[0].isalpha() and result['script'] is None:
+            if parts[0].isalpha():
+                if result['region'] is None and len(result['privateuse']) == 0:
+                    result['script'] = parts[0].capitalize()
+                else:
+                    result['script'] = False
+                    result['_error'].append('script after region/privateuse')
+            else:
+                result['script'] = False
+                result['_error'].append('script?')
+            parts.pop(0)
+            continue
+
+        if len(parts[0]) == 2 and result['region'] is None:
+            if parts[0].isalpha():
+                result['region'] = parts[0].upper()
+            else:
+                result['region'] = False
+                result['_error'].append('region?')
+            parts.pop(0)
+            continue
+
+        if len(parts[0]) == 3 and result['region'] is None:
+            if parts[0].isnumeric():
+                result['region'] = parts.pop(0)
+            else:
+                result['region'] = False
+                result['_error'].append('region?')
+                parts.pop(0)
+            continue
+
+        if len(result['extension']) == 0 and len(result['privateuse']) == 0:
+            # "Variant subtags that begin with a letter (a-z, A-Z) MUST be
+            # at least five characters long."
+            if parts[0][0].isalpha() and len(parts[0]) >= 5:
+                result['variant'].append(parts.pop(0))
+                continue
+            if parts[0][0].isnumeric() and len(parts[0]) >= 4:
+                result['variant'].append(parts.pop(0))
+                continue
+
+        leftover.append(parts.pop(0))
+
+    result['_unknown'] = leftover
+
+    # TODO: maybe re-implement only for know extensions, like -t-, -u-, -h-
+    # if len(result['extension']) > 0:
+    #     extension_norm = {}
+    #     # keys
+    #     keys_sorted = sorted(result['extension'])
+    #     # values
+    #     for key in keys_sorted:
+    #         extension_norm[key] = sorted(result['extension'][key])
+
+    #     result['extension'] = extension_norm
+
+    if len(result['_error']) == 0:
+
+        if result['grandfathered']:
+            result['Language-Tag_normalized'] = result['grandfathered']
+        else:
+            norm = []
+            if result['language']:
+                norm.append(result['language'])
+            if result['script']:
+                norm.append(result['script'])
+            if result['region']:
+                norm.append(result['region'])
+            if len(result['variant']) > 0:
+                norm.append('-'.join(result['variant']))
+
+            if len(result['extension']) > 0:
+                #  TODO: maybe re-implement only for know extensions,
+                #        like -t-, -u-, -h-. For now we're not trying to
+                #        normalize ordering of unknow future extensions, BUT
+                #        we sort key from different extensions
+                sorted_extension = {}
+                for key in sorted(result['extension']):
+                    sorted_extension[key] = result['extension'][key]
+                result['extension'] = sorted_extension
+
+                for key in result['extension']:
+                    if result['extension'][key][0] is None:
+                        norm.append(key)
+                    else:
+                        norm.append(key)
+                        # norm.extend(result['extension'][key])
+                        norm.append(result['extension'][key])
+
+            if len(result['privateuse']) > 0:
+                norm.append('x-' + '-'.join(result['privateuse']))
+
+            result['Language-Tag_normalized'] = '-'.join(norm)
+
+    if strictum and len(result['_error']) > 0:
+        raise ValueError(
+            'Errors for [' + rem + ']: ' + ', '.join(result['_error']))
+
+    if clavem is not None:
+        if isinstance(clavem, str):
+            return result[clavem]
+        if isinstance(clavem, list):
+            result_partial = {}
+            for item in clavem:
+                result_partial[item] = result[item]
+            return result_partial
+        raise TypeError(
+            'clavem [' + str(type(clavem)) + '] != [str, list]')
+
+    return result
+
+*/
 
 /**
  * _[eng-Latn] This class contain primitive helper functions to deal with
@@ -2488,4 +2962,4 @@ class Auxilium {
 
 }
 
-export { Auxilium, datum_specificum, codicem_separato, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
+export { Auxilium, datum_specificum, codicem_separato, BCP47Langtag, Numerordinatio, CodexDeObiectum, CodexDeTabulam, Graphviz, Primitivum, TMX, TBXBasic2008, RDFProofOfConcept }
