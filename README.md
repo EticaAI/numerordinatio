@@ -18,6 +18,9 @@
 1. ([protologism](https://en.wiktionary.org/wiki/protologism)) ([Latinitatis Vivae](https://en.wikipedia.org/wiki/Contemporary_Latin))
     - \_[eng-Latn] a generic strategy of arranging numbers in an taxonomy-like explicit way [eng-Latn]\_
 
+## Privacy Policy
+
+- [docs/eng-Latn/privacy-policy.md](docs/eng-Latn/privacy-policy.md)
 
 <!--
 

@@ -619,8 +619,39 @@ class Numerordinatio {
 }
 
 /**
- * @author: Emerson Rocha <rocha(at)ieee.org>
- * @license: SPDX-License-Identifier: Unlicense OR 0BSD
+ * _[eng-Latn] The BCP47Langtag is an public domain JavaScript class to
+ * aid parsing of the IETF BCP 47 language tag. It implements the syntactic
+ * analysis of RFC 5646 and does not require lookup tables which makes
+ * it friendly for quick analysis.
+ *
+ * Limitations:
+ *   - subtags such as "-t-" and "-u- '' are not parsed on this current version.
+ *     They are treated as generic BCP47 extensions.
+ *   - The Language-Tag_normalized result would still need external data lookups
+ *     to stricter normalization. Yet BCP47Langtag can be used as the very
+ *     first step to analyze a language tag which is viable to port
+ *     across programming languages.
+ *   - The default behavior is to throw exceptions with at least some types of
+ *     syntactic errors, a feature which can be disabled yet reasoning is
+ *     exposed with _error. However, already very malformated  can have
+ *     further bugs which different programming implementations do not need
+ *     to be consistent with each other.
+ *
+ * Versions in other programming languages:
+ *   The initial author encourages versions to other programming languages or
+ *   libraries or tools which make use of this. No need to ask permission
+ *   upfront and there is no problem with using other licenses
+ *   than public domain.
+ *
+ * Changelog:
+ *   - 2021-01-02: JavaScript version ported from Python linguacodex.py
+ *
+ * [eng-Latn]_
+ *
+ * @author Emerson Rocha <rocha(at)ieee.org>
+ * @license "Unlicense OR 0BSD"
+ * @version  1.0.0~2022.01-02
+ * @see {@link https://tools.ietf.org/rfc/bcp/bcp47}
  *
  * @example
  * // 'pt'
