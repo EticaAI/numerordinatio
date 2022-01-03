@@ -666,23 +666,23 @@ class Numerordinatio {
  * // null
  * (new BCP47Langtag('zh-pinyin')).resultatum('script')
  *
- * @TODO fix this @example, not same result as the python reference
- * // null
+ * @example
+ * // ['a', 'ccc']
  * (new BCP47Langtag('en-a-bbb-x-a-ccc')).resultatum('privateuse')
  *
- * @TODO fix this @example (Uncaught ["region?"])
+ * @example
  * // {a: 'bbb'}
  * (new BCP47Langtag('en-a-bbb-x-a-ccc')).resultatum('extension')
  *
- * @example
+ * @example <caption>Error handing: raise exceptions by default</caption>
  * // Uncaught ["extension [a] empty"]
  * (new BCP47Langtag('tlh-a-b-foo')).resultatum('_error')
  *
- * @example
+ * @example <caption>Error handing: no strict mode, option 1</caption>
  * // ['extension [a] empty']
  * (new BCP47Langtag('tlh-a-b-foo')).resultatum('_error', false)
  *
- * @example
+ * @example <caption>Error handing: no strict mode, option 2</caption>
  * // ['extension [a] empty']
  * (new BCP47Langtag('tlh-a-b-foo', null, false)).resultatum('_error')
  *
@@ -844,11 +844,11 @@ class BCP47Langtag {
         parts.shift()
         while (parts.length > 0) {
           this._resultatum['privateuse'].push(parts.shift())
-          break
         }
+        break
       }
 
-      // if len(parts[0]) == 1 and parts[0].isalpha():
+      // BCP47 extensions start with one US-ASCII letter.
       if (parts[0].length === 1 && /^[a-z]+$/i.test(parts[0])) {
         if (parts[0].toLowerCase() === 'i') {
           this._resultatum['_error'].push('Only grandfathered can use i-')
@@ -864,7 +864,7 @@ class BCP47Langtag {
           continue
         }
 
-        this._resultatum['extension'][extension_key] = []
+        this._resultatum['extension'][extension_key] = ''
         while (parts.length > 0 && parts[0].length !== 1) {
           // Extensions may have more strict rules than -x-
           // @see https://datatracker.ietf.org/doc/html/rfc6497 (-t-)
@@ -894,7 +894,9 @@ class BCP47Langtag {
 
       // Edge case to test for numeric in 4 (not 3): 'de-CH-1996'
       if (parts[0].length === 4 && /^[a-z]+$/i.test(parts[0]) && this._resultatum['script'] === null) {
-        if (this._resultatum['privateuse'].length === 0) {
+        // NOTE: this section is not an identical to the python version, yet
+        //       tests passes.
+        if (this._resultatum['region'] === null && this._resultatum['privateuse'].length === 0) {
           this._resultatum['script'] = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
         } else {
           this._resultatum['script'] = false
