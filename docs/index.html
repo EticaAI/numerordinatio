@@ -648,21 +648,30 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
 
     <section>
       <h2 id="et-cetera">
-        <a href="#et-cetera">§</a>3. et cetera
+        <a href="#et-cetera">§</a>3. Et cetera
       </h2>
       <a class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" href="#et-cetera-corpus" role="button"
-        aria-expanded="false" aria-controls="et-cetera-corpus">Aperta vel prope et cetera</a>
+        aria-expanded="false" aria-controls="et-cetera-corpus">Et cetera: Aperta vel prope</a>
       <div class="collapse" id="et-cetera-corpus">
-        et-cetera-corpus
         <section class="w-et-cetera-bcp47">
           <h3 id="et-cetera-bcp47">
-            <a href="#et-cetera-bcp47">§</a> 3.1. <em lang="en">IETF BCP 47 language tag</em>
+            <a href="#et-cetera-bcp47">§</a> 3.1. <em lang="en">IETF BCP 47 language tag</em> <sup><mark>hoc est
+                experimentum</mark></sup>
           </h3>
+          <form class="row g-3 needs-validation">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="i_et_cetera_bcp47" placeholder="Exemplum: alternative name"
+                value="eng-Latn-150-x-semiceu" aria-label="terminum simplici" required>
+            </div>
+          </form>
           <div class="mb-3">
             <button class="btn btn-outline-primary" type="submit" id="i_et-cetera-bcp47" style="width: 100%;">
-              āctiōnem
+              āctiōnem: IETF BCP 47 language tag
             </button>
           </div>
+          <pre id="et-cetera-bcp47-resultatum">
+
+          </pre>
         </section>
       </div>
     </section>
@@ -1543,6 +1552,23 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
     function estExperimentum() {
       // #beta=1
       return (document.location.hash.indexOf('beta=1') > -1)
+    }
+
+    // i_et-cetera-bcp47
+
+    // if ()
+    if (document.body.contains(document.getElementById('i_et-cetera-bcp47'))) {
+      console.log('foi')
+      const bcp47_action = document.getElementById('i_et-cetera-bcp47')
+      const bcp47_res = document.getElementById('et-cetera-bcp47-resultatum')
+      bcp47_action.addEventListener("click", function (el) {
+        let bcp47_textum = document.getElementById('i_et_cetera_bcp47').value
+        console.log('bcp47_textum', bcp47_textum)
+        let resultatum = JSON.stringify((new BCP47Langtag(bcp47_textum)).resultatum(), null, 2)
+        console.log('resultatum', resultatum)
+        bcp47_res.innerText = resultatum
+        return false
+      });
     }
 
 
