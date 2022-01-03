@@ -10,18 +10,22 @@
   <link rel="icon" href="img/favicon.png">
   <title>Numerordĭnātĭo pictūrae</title>
   <style>
+    :root {
+      /* --bcp47-language: 'lat,prs'; */
+      --bcp47-language: 'lat';
+    }
+
     details>details {
       padding-left: 2em;
     }
 
     [data-hide-significatum="1"] dl [data-significatum="1"] {
-      display: none; 
-      /* display: initial;  */
+      display: none;
     }
-    [data-show-bcp47-language] dl [bcp47-language="1"] {
-      /* display: none;  */
-      display: initial; 
-    }
+  </style>
+  <!-- https://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript -->
+  <style id="picturam-stylesheet">
+
   </style>
 </head>
 
@@ -50,7 +54,8 @@
         </label>
       </div>
       <div class="form-check form-switch">
-        <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se" checked>
+        <!-- <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se" checked> -->
+        <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se">
         <label class="form-check-label" for="se">
           Expānsiōnem de significātum
         </label>
@@ -60,7 +65,7 @@
       <div class="input-group mb-3">
         <span class="input-group-text" id="cl_label">BCP47 linguam</span>
         <input type="text" name="cl" id="cl" class="form-control instrumentum-optionem" placeholder="lat, arb, grk"
-          aria-label="BCP47 linguam" aria-describedby="cl_label" value="lat, prs">
+          aria-label="BCP47 linguam" aria-describedby="cl_label" value="">
       </div>
     </div>
     <div class="col">
@@ -81,7 +86,8 @@
       </div>
       <textarea style="width: 100%; height: auto; min-height: 20em;" id="picturam-form-textarea"></textarea>
     </div>
-    <div id="picturam-html" class="col" data-hide-significatum="">
+    <!-- <div id="picturam-html" class="col" data-hide-significatum=""> -->
+    <div id="picturam-html" class="col" data-hide-significatum="1">
     </div>
   </div>
 
@@ -112,11 +118,55 @@
       render_optionem()
     }
 
+    function picturam_css(object_de_array, stylesheet_id = 'picturam-stylesheet'){
+      let picturamStylesheet = document.getElementById(stylesheet_id)
+      let crudumStylesheet = []
+      console.log(picturamStylesheet)
+      console.log(object_de_array)
+
+      for (let [selector, optionem] of Object.entries(object_de_array)) {
+        crudumStylesheet.push(`${selector} {\n  ${optionem.join(";\n  ")}\n}`)
+      }
+
+      picturamStylesheet.innerHTML = crudumStylesheet.join("\n")
+    }
+    window.picturam_css = picturam_css
+
+    // picturam_css({
+    //   'dl [data-bcp47-language="Lat" i]': [
+    //     'display: none;'
+    //   ],
+    //   'dl [data-bcp47-language="lat" i]': [
+    //     'display: none;'
+    //   ],
+    // })
+
     function render_optionem() {
+      let picturam_css_optionem = {}
       console.log('render_optionem')
       let details = document.querySelectorAll('#picturam-html details');
       // let significatum = document.querySelectorAll('[data-significatum]');
       [...details].map(item => document.getElementById('ce').checked ? item.setAttribute("open", 1) : item.removeAttribute("open"))
+
+      let cl_val = document.querySelector('#cl')
+      let cl_val_list = cl_val.value.split(',').map(item => item.trim()).filter(item => item)
+      if (cl_val_list && cl_val_list.length > 0) {
+        for (let rem of cl_val_list) {
+          picturam_css_optionem[`dl [data-bcp47-language="${rem}" i]`] = ['display: block !important;']
+        }
+      }
+
+      let cs_val = document.querySelector('#cs')
+      let cs_val_list = cs_val.value.split(',').map(item => item.trim()).filter(item => item)
+      if (cs_val_list && cs_val_list.length > 0) {
+        for (let rem of cs_val_list) {
+          picturam_css_optionem[`dl [data-bcp47-script="${rem}" i]`] = ['display: block !important;']
+        }
+      }
+      console.log('picturam_css_optionem', picturam_css_optionem)
+      picturam_css(picturam_css_optionem)
+
+
       // if (document.getElementById('ce').checked) {
       //   [...details].map(item => item.setAttribute("open", document.getElementById('ce').checked))
       // }
