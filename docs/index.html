@@ -1466,86 +1466,6 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
       })
     })
 
-    // function prepare_scientia() {
-    //   try {
-    //     // const doc = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
-    //     scientia_basi = jsyaml.load(CoreMirrorOntologia.getValue(), 'utf8');
-
-    //     scientia = new CodexDeObiectum(scientia_basi)
-    //     scientia.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-    //     scientia.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-    //     scientia.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-    //     scientia.praeparare()
-
-    //     window['scientiam_agendum'] = scientia
-    //     // console.log(scientia_basi);
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // }
-
-    // window.prepare_scientia = prepare_scientia
-
-
-    // @deprecated deprecated without replacement
-    // function prepare_usum_professori(callback) {
-    //   try {
-    //     let _temp = CoreMirrorProfessorem.getValue()
-
-    //     usum_professori_tabulam = Primitivum.__parseCSV(_temp)
-
-    //     let _usum_professori_obiectum = Primitivum.codex_de_tabulam_in_obiectum(usum_professori_tabulam)
-    //     usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
-    //     usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-    //     usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-    //     usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-
-    //     usum_professori_obiectum.praeparare()
-
-    //     if (callback) {
-    //       callback(true)
-    //     }
-    //   } catch (e) {
-    //     console.log(e)
-    //     alert(e);
-    //   }
-    // }
-
-    // window.prepare_usum_professori = prepare_usum_professori
-
-    // // @deprecated deprecated without replacement
-    // function prepare_usum_professori2(callback) {
-    //   return prepare_usum_professori(callback)
-    //   let crudum_data = CoreMirrorProfessorem.getValue()
-    //   console.log('crudum_data', crudum_data)
-    //   // console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
-    //   // console.log('parseCSV(crudum_data)', parseCSV(crudum_data))
-    //   crudum_data = "a,b\n1,2"
-    //   try {
-    //     Papa.parse(crudum_data, {
-    //       complete: function (result) {
-    //         console.log('result.data', result.data)
-    //         console.log('result', result)
-    //         // let _usum_professori_obiectum = codex_de_tabulam_in_obiectum(result.data)
-    //         let _usum_professori_obiectum = Primitivum.codex_de_tabulam_in_obiectum(result.data)
-    //         usum_professori_obiectum = new CodexDeObiectum(_usum_professori_obiectum)
-    //         usum_professori_obiectum.estLinguamObjectivae(document.querySelector('#objectivum_linguam').value.split(','))
-    //         usum_professori_obiectum.estLinguamAuxilio(document.querySelector('#auxilium_linguam').value.split(','))
-    //         usum_professori_obiectum.estLinguamAgendae(document.querySelector('#agendum_linguam').value.split(','))
-
-    //         usum_professori_obiectum.praeparare()
-
-    //         if (callback) {
-    //           callback(true)
-    //         }
-    //       }
-    //     })
-    //   } catch (e) {
-    //     console.log(e)
-    //     alert(e);
-    //   }
-    // }
-
     /** _[eng-Latn] Helper functions, start **/
 
 
@@ -1554,18 +1474,15 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
       return (document.location.hash.indexOf('beta=1') > -1)
     }
 
-    // i_et-cetera-bcp47
-
-    // if ()
     if (document.body.contains(document.getElementById('i_et-cetera-bcp47'))) {
-      console.log('foi')
+      // console.log('foi')
       const bcp47_action = document.getElementById('i_et-cetera-bcp47')
       const bcp47_res = document.getElementById('et-cetera-bcp47-resultatum')
       bcp47_action.addEventListener("click", function (el) {
         let bcp47_textum = document.getElementById('i_et_cetera_bcp47').value
-        console.log('bcp47_textum', bcp47_textum)
+        // console.log('bcp47_textum', bcp47_textum)
         let resultatum = JSON.stringify((new BCP47Langtag(bcp47_textum)).resultatum(), null, 2)
-        console.log('resultatum', resultatum)
+        // console.log('resultatum', resultatum)
         bcp47_res.innerText = resultatum
         return false
       });

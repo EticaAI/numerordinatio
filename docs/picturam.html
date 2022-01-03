@@ -8,21 +8,32 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"
     referrerpolicy="no-referrer">
   <link rel="icon" href="img/favicon.png">
-  <title>numerordinatio-picturam</title>
+  <title>Numerordĭnātĭo pictūrae</title>
   <style>
-    details > details {
+    details>details {
       padding-left: 2em;
     }
   </style>
 </head>
 
 <body>
-  <h1>numerordinatio-picturam</h1>
+  <h1>Numerordĭnātĭo pictūrae</h1>
 
-  <picture id="picturam">
-  </picture>
-  <div id="picturam-html">
+  <div id="picturam-notitia">
+    <ul>
+      <li>Exemplum: <a target="_blank" href='./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}'>./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}</a></li>
+      <li>Exemplum: <a target="_blank" href='./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a></li>
+      <li>Exemplum: <a target="_blank" href='./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a></li>
+    </ul>
   </div>
+  <div class="row">
+    <div id="picturam-form" class="col" style="display: none">
+      <textarea style="width: 100%; height: auto; min-height: 20em;" id="picturam-form-textarea"></textarea>
+    </div>
+    <div id="picturam-html" class="col">
+    </div>
+  </div>
+
 
   <div class="d3_svg_demo2"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
@@ -34,83 +45,91 @@
   <script type="module">
     import * as Picturam from './lib/numerordinatio-picturam.mjs';
 
-    let pic = new Picturam.PicturamDL(d3, '#picturam')
+    let peritum_defallo = {
+      'json_iri': null,
+      'data': null,
+    }
+
     let pic_html = new Picturam.PicturamDL(d3, '#picturam-html')
+    let pic_exemplum = document.getElementById('picturam-notitia')
 
-    d3.select("#d3_p").style("color", "blue");
-    // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => { console.log(data); })
-
-    const el = d3.select("#d3_svg_demo2");
-    let width = 500
-    let height = 500
-
-    // d3.json("https://raw.githubusercontent.com/iamspruce/intro-d3/main/nigeria-states.json").then(({ data }) => {
-    // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then(({ data }) => {
-    //     el
-    //         .selectAll("p")
-    //         .data(data)
-    //         .join("p")
-    //         // .text((d) => d.Name)
-    //         .text((d) => d)
-    // });
-
-    // @see https://www.tutorialspoint.com/d3js/d3js_introduction_to_svg.htm
-    // @see http://jsfiddle.net/VmnEC/
-
-    const svg = d3.select("#picturam")
-      .attr("width", width)
-      .attr("height", height);
-
-    d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => {
-
+    function render(data) {
+      pic_exemplum.innerHTML = ''
       pic_html.estData(data)
-
       let crudum_html = pic_html.inHtml()
-
       let wp = document.getElementById('picturam-html')
-
-
-      // console.log('crudum_html', crudum_html)
-
       wp.innerHTML = crudum_html
-      // console.log('gogo', wp.innerHTML)
-      // crudum_html
+    }
+
+    // http://git.workspace.localhost/EticaAI/numerordinatio/docs/picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}
+    function fontem_data_peritum(functionem_regressae){
+      let resultatum = peritum_defallo
+      // console.log('fontem_data_peritum...')
+      if (document.location.hash.indexOf('#?peritum=') > -1) {
+        let crudum = document.location.hash.replace('#?peritum=', '')
+        let decodedURI = ''
+        let decodecodedURIJSONdedURI = null
+        // console.log(crudum, decodeURI(crudum))
+        try {
+          decodedURI = decodeURI(crudum).replace(/^\'+|\'+$/g, '')
+          // console.log('decodedURI', decodedURI)
+          decodecodedURIJSONdedURI = JSON.parse(decodedURI)
+          // console.log('decodecodedURIJSONdedURI', decodecodedURIJSONdedURI)
+
+          resultatum.json_iri = decodecodedURIJSONdedURI.json_iri || null
+          resultatum.json_data = decodecodedURIJSONdedURI.json_data || null
+          resultatum.json_form = decodecodedURIJSONdedURI.json_form || null
+
+        } catch (error) {
+          console.log('error resultatum', resultatum)
+        }
+        if (resultatum.json_iri){
+          console.log('resultatum.json_iri', resultatum.json_iri)
+          d3.json(resultatum.json_iri).then((data) => {
+            render(data)
+          })
+        } else if (resultatum.json_data){
+          console.log('resultatum.json_data', resultatum.json_data)
+          render(resultatum.json_data)
+        } else if (resultatum.json_form){
+          console.log('resultatum.json_form', resultatum.json_form)
+          document.getElementById('picturam-form').style.display = 'block'
+          document.getElementById('picturam-form-textarea').value = JSON.stringify(resultatum.json_form, null, 2)
+          document.getElementById('picturam-form-textarea').addEventListener('change', function(el){
+            render(resultatum.json_form)
+          })
+          // $('#picturam-form').toggle()
+          render(resultatum.json_form)
+        } else {
+          console.log('no json_iri', resultatum)
+        }
+      }
+      console.log(resultatum)
+    }
+
+    // function fontem_data(functionem_regressae) {
+    //   let _functionem_regressae = functionem_regressae || console.log
+    //   let de_hash = {}
+    //   let _hash = document.location.hash
+    //   if (_hash.indexOf('#?json_iri=') > -1) {
+    //     let json_iri = _hash.replace('#?json_iri=', '')
+
+    //     d3.json(json_iri).then((data) => {
+    //       functionem_regressae(data)
+    //     });
+    //   }
+    //   functionem_regressae(de_hash)
+    // }
+
+    fontem_data_peritum()
+    // fontem_data(function (data) {
+    //   render(data)
+    // })
 
 
-
-      // console.log(Object.keys(data))
-      // if (!data || !Object.keys(data).length) {
-      //   throw "non data"
-      // }
-      //   console.log(data)
-      //   console.log(svg)
-
-      //   svg.data(data)
-      //       .enter().append("g")
-      //       .attr("transform", function (d, i) { return "translate(100,100)"; });
-
-
-      //   // debug
-      //   svg
-      //     //   .select(".selector")
-      //       .call((d) => console.log(d))
-
-      // svg.append("line")
-      //   .attr("x1", 100)
-      //   .attr("y1", 100)
-      //   .attr("x2", 200)
-      //   .attr("y2", 200)
-      //   .style("stroke", "rgb(255,0,0)")
-      //   .style("stroke-width", 2);
-      // // svg.append("text").text(function(d, i) { return d[whichevernode];})
-      // svg.append("text").text('teste')
-      // el
-      //     .selectAll("p")
-      //     .data(data)
-      //     .join("p")
-      //     // .text((d) => d.Name)
-      //     .text((d) => d)
-    });
+    // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => {
+    //   render(data)
+    // });
   </script>
 </body>
 

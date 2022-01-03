@@ -85,7 +85,7 @@ class PicturamDL extends Picturam {
       let result = ''
       // throw `Too deep ${indicem}`
 
-      console.log('indicem, progenitorem, rem', indicem, progenitorem, rem)
+      // console.log('indicem, progenitorem, rem', indicem, progenitorem, rem)
 
       if (indicem > 100) {
         throw `Too deep ${indicem}`
