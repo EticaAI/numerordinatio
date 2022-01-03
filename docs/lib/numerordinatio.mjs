@@ -638,8 +638,8 @@ class Numerordinatio {
  * // ['min-nan']
  * (new BCP47Langtag('zh-min-nan')).resultatum('variant')
  *
- * @TODO fix this example @example, consider 'fr' language, not private use
- * // {language: 'ch', region: null, privateuse: Array(1)}
+ * @example
+ * // {language: null, region: null, privateuse: ['fr', 'CH']}
  * (new BCP47Langtag('x-fr-CH')).resultatum(['language', 'region', 'privateuse'])
  *
  * @example
@@ -686,13 +686,37 @@ class Numerordinatio {
  * // ['extension [a] empty']
  * (new BCP47Langtag('tlh-a-b-foo', null, false)).resultatum('_error')
  *
- * @TODO fix this example
- * //
- * (new BCP47Langtag('zh-Latn-CN-variant1-a-extend1-x-wadegile-private1')).resultatum(['variant', 'extension', 'privateuse'])
+ * @example <caption>BCP47 4.4.2 example</caption>
+ * // {variant: ['variant1'],
+ * //   extension: {a: 'extend1'},
+ * //   privateuse: ['wadegile', 'private1']}
+ * (new BCP47Langtag(
+ *   'zh-Latn-CN-variant1-a-extend1-x-wadegile-private1')).resultatum(
+ *     ['variant', 'extension', 'privateuse'])
  *
- * @TODO fix this example
- * //
- * (new BCP47Langtag('en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678')).resultatum()
+ * @example <caption>BCP47 4.5 example</caption>
+ * // 'en-a-aaa-b-ccc-bbb-x-xyz'
+ * (new BCP47Langtag(
+ *   'en-b-ccc-bbb-a-aaa-X-xyz')).resultatum('Language-Tag_normalized')
+ *
+ * @example <caption>Full example, uses Unicode CLDR test case</caption>
+ * // {"Language-Tag":
+ * //   "en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678",
+ * //   "Language-Tag_normalized":
+ * //   "en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678",
+ * //    "language":"en",
+ * //    "script":"Latn",
+ * //    "region":"US",
+ * //    "variant":["lojban","gaulish"],
+ * //    "extension":{"a":"12345678-ABCD","b":"ABCDEFGH"},
+ * //    "privateuse":["a","b","c","12345678"],
+ * //    "grandfathered":null,
+ * //    "_unknown":[],
+ * //    "_error":[]
+ * //  }
+ * (new BCP47Langtag(
+ *   'en-Latn-US-lojban-gaulish-a-12345678-ABCD-b-ABCDEFGH-x-a-b-c-12345678'
+ *  )).resultatum()
  *
  * ---------------------------------------------------------------------------
   The syntax of the language tag in ABNF [RFC5234] is:
@@ -869,8 +893,14 @@ class BCP47Langtag {
           // Extensions may have more strict rules than -x-
           // @see https://datatracker.ietf.org/doc/html/rfc6497 (-t-)
           // @see https://datatracker.ietf.org/doc/html/rfc6067 (-u-)
+
+
+          // Let's avoid atempt to lowercase extensions, since this is not
+          // not explicity on BCP47 for unknow extensions
+          // this._resultatum['extension'][extension_key] = this._resultatum['extension'][extension_key] +
+          //   '-' + parts.shift().toLowerCase()
           this._resultatum['extension'][extension_key] = this._resultatum['extension'][extension_key] +
-            '-' + parts.shift().toLowerCase()
+            '-' + parts.shift()
 
           // trim any extra '-' at start or end
           // this._resultatum['extension'][extension_key] =  this._resultatum['extension'][extension_key].trim('-')
@@ -931,14 +961,12 @@ class BCP47Langtag {
       }
 
       if (Object.keys(this._resultatum['extension']).length === 0 && this._resultatum['privateuse'].length === 0) {
-        // "Variant subtags that begin with a letter (a-z, A-Z) MUST be
-        // at least five characters long."
-
-        // console.log('oi', parts)
-
-        // Example: eng-simple
-        // (new BCP47Langtag('eng-simple')).resultatum()
-        if (/^[a-z]+$/i.test(parts[0]) && parts[0].length >= 5) {
+        // 2.2.5. "Variant Subtags"
+        //   4.1 "Variant subtags that begin with a (US-ASCII)* letter
+        //      (a-z, A-Z) MUST be at least five characters long."
+        //   4.2 "Variant subtags that begin with a digit (0-9) MUST be at
+        //       least four characters long."
+        if (/^[a-z]+$/i.test(parts[0][0]) && parts[0].length >= 5) {
           this._resultatum['variant'].push(parts.shift())
           continue
         }
@@ -954,69 +982,78 @@ class BCP47Langtag {
       leftover.push(parts.shift())
     }
 
-    // @TODO
-    //    >>> bcp47_langtag('de-CH-1996', 'variant')
-    //    ['1996']
-
     this._resultatum['_unknown'] = leftover
 
+    // Language-Tag_normalized
     if (this._resultatum['_error'].length === 0) {
-      let norm = []
 
-      if (this._resultatum['language']) {
-        norm.push(this._resultatum['language'])
-      }
-      if (this._resultatum['script']) {
-        norm.push(this._resultatum['script'])
-      }
-      if (this._resultatum['region']) {
-        norm.push(this._resultatum['region'])
-      }
-      if (this._resultatum['variant'].length > 0) {
-        norm.push(this._resultatum['variant'].join('-'))
-      }
-      if (Object.keys(this._resultatum['extension']).length > 0) {
-        //  TODO: maybe re-implement only for know extensions,
-        //        like -t-, -u-, -h-. For now we're not trying to
-        //        normalize ordering of unknow future extensions, BUT
-        //        we sort key from different extensions
-        let sorted_extension = {}
+      if (this._resultatum['grandfathered']) {
+        this._resultatum['Language-Tag_normalized'] = this._resultatum['grandfathered']
 
-        const ordered = Object.keys(this._resultatum['extension']).sort().reduce(
-          (obj, key) => {
-            obj[key] = this._resultatum['extension'][key];
-            return obj;
-          },
-          {}
-        );
+      } else {
+        let norm = []
 
-        this._resultatum['extension'] = ordered
-
-        for (let [_clavem, rem] of Object.entries(this._resultatum['extension'])) {
-          if (this._resultatum['extension'][_clavem][0] === null) {
-            norm.push(_clavem)
-          } else {
-            norm.push(_clavem)
-            norm.push(this._resultatum['extension'][_clavem])
-          }
-          // @TODO: this part needs more testing
+        if (this._resultatum['language']) {
+          norm.push(this._resultatum['language'])
         }
 
-        norm.push(this._resultatum['variant'].join('-'))
+        if (this._resultatum['script']) {
+          norm.push(this._resultatum['script'])
+        }
+
+        if (this._resultatum['region']) {
+          norm.push(this._resultatum['region'])
+        }
+
+        if (this._resultatum['variant'].length > 0) {
+          norm.push(this._resultatum['variant'].join('-'))
+        }
+
+        if (Object.keys(this._resultatum['extension']).length > 0) {
+          //  TODO: maybe re-implement only for know extensions,
+          //        like -t-, -u-, -h-. For now we're not trying to
+          //        normalize ordering of unknow future extensions, BUT
+          //        we sort key from different extensions
+          // let sorted_extension = {}
+
+          const ordered = Object.keys(this._resultatum['extension']).sort().reduce(
+            (obj, key) => {
+              obj[key] = this._resultatum['extension'][key];
+              return obj;
+            },
+            {}
+          );
+
+          this._resultatum['extension'] = ordered
+
+          for (let [_clavem, rem] of Object.entries(this._resultatum['extension'])) {
+            if (this._resultatum['extension'][_clavem][0] === null) {
+              norm.push(_clavem)
+            } else {
+              norm.push(_clavem)
+              norm.push(this._resultatum['extension'][_clavem])
+            }
+          }
+        }
+
+        if (this._resultatum['privateuse'].length > 0) {
+          // BCP47 don't mention sorting on private
+          // this._resultatum['privateuse'] = this._resultatum['privateuse'].sort()
+
+          norm.push('x-' + this._resultatum['privateuse'].join('-'))
+        }
+
+        this._resultatum['Language-Tag_normalized'] = norm.join('-')
       }
 
-      this._resultatum['Language-Tag_normalized'] = norm.join('-')
     }
 
-    // (new BCP47Langtag('por-Latn-a-teste')).resultatum()
-    // (new BCP47Langtag('por-Latn-a-teste')).resultatum()
     return this
   }
 
   resultatum(clavem = null, strictum = null) {
     clavem = clavem || this.clavem
     strictum = (strictum !== null ? strictum : this.strictum)
-    // let result = 
     this._praeparare()
 
     if (strictum && this._resultatum['_error'].length > 0) {
@@ -1118,222 +1155,6 @@ def bcp47_langtag(
 'extension': {'a': 'aaa', 'b': 'ccc-bbb'}, 'privateuse': ['xyz'], \
 'grandfathered': None, '_unknown': [], '_error': []}
     """
-    # For sake of copy-and-paste portability, we ignore a few pylints:
-    # pylint: disable=too-many-branches,too-many-statements,too-many-locals
-    result = {
-        # The input Language-Tag, _as it is_
-        'Language-Tag': rem,
-        # The Language-Tag normalized syntax, if no errors
-        'Language-Tag_normalized': None,
-        'language': None,
-        'script': None,
-        'region': None,
-        'variant': [],
-        'extension': {},   # Example {'a': ['bbb', 'ccc'], 'd': True}
-        'privateuse': [],  # Example: ['wadegile', 'private1']
-        'grandfathered': None,
-        '_unknown': [],
-        '_error': [],
-    }
-
-    skip = 0
-
-    if not isinstance(rem, str) or len(rem) == 0:
-        result['_error'].append('Empty/wrong type')
-        skip = 1
-    else:
-        rem = rem.replace('_', '-').strip()
-
-    # The weird tags first: grandfathered/irregular
-    if rem in [
-        'en-GB-oed', 'i-ami', 'i-bnn', 'i-default', 'i-enochian',
-        'i-hak', 'i-klingon', 'i-lux', 'i-ming', 'i-navajo', 'i-pwn',
-            'i-tao', 'i-tay', 'i-tsu', 'sgn-BE-FR', 'sgn-BE-NL', 'sgn-CH-DE']:
-        # result['langtag'] = None
-        result['language'] = rem.lower()
-        result['grandfathered'] = rem
-        skip = 1
-    # The weird tags first: grandfathered/regular
-    if rem in [
-            'art-lojban', 'cel-gaulish', 'no-bok', 'no-nyn', 'zh-guoyu',
-            'zh-hakka', 'zh-min', 'zh-min-nan', 'zh-xiang']:
-
-        parts_r = rem.split('-')
-        # result['langtag'] = None
-        result['language'] = parts_r.pop(0).lower()
-        result['variant'].append('-'.join(parts_r).lower())
-        result['grandfathered'] = rem
-        skip = 1
-
-    parts = rem.split('-')
-    leftover = []
-
-    deep = 0
-    while len(parts) > 0 and skip == 0 and deep < 100:
-        deep = deep + 1
-
-        # BCP47 can start with private tag, without language at all
-        if parts[0].lower() == 'x':
-            parts.pop(0)
-            while len(parts) > 0:
-                result['privateuse'].append(parts.pop(0))
-            break
-
-        # BCP47 extensions start with one letter.
-        if len(parts[0]) == 1 and parts[0].isalpha():
-            if parts[0].isalpha() == 'i':
-                result['_error'].append('Only grandfathered can use i-')
-
-            extension_key = parts.pop(0).lower()
-            if len(parts) == 0 or len(parts[0]) == 1:
-                # BCP47 2.2.6. : "Each singleton MUST be followed by at least
-                # one extension subtag (...)
-                result['extension'][extension_key] = [None]
-                result['_error'].append(
-                    'extension [' + extension_key + '] empty')
-                continue
-
-            # result['extension'][extension_key] = []
-            result['extension'][extension_key] = ''
-            while len(parts) > 0 and len(parts[0]) != 1:
-                # Extensions may have more strict rules than -x-
-                # @see https://datatracker.ietf.org/doc/html/rfc6497 (-t-)
-                # @see https://datatracker.ietf.org/doc/html/rfc6067 (-u-)
-                # result['extension'][extension_key].append(
-                #     parts.pop(0).lower())
-                result['extension'][extension_key] = \
-                    result['extension'][extension_key] + \
-                    '-' + parts.pop(0).lower()
-
-                result['extension'][extension_key] = \
-                    result['extension'][extension_key].strip('-')
-
-            continue
-
-        # for part in parts:
-        if result['language'] is None:
-            if parts[0].isalnum() and len(parts[0]) == 2 or len(parts[0]) == 3:
-                result['language'] = parts[0].lower()
-            else:
-                result['language'] = False
-                result['_error'].append('language?')
-            parts.pop(0)
-            continue
-
-        # Edge case to test for numeric in 4 (not 3): 'de-CH-1996'
-        if len(parts[0]) == 4 and parts[0].isalpha() \
-                and result['script'] is None:
-            # if parts[0].isalpha() and result['script'] is None:
-            if parts[0].isalpha():
-                if result['region'] is None and len(result['privateuse']) == 0:
-                    result['script'] = parts[0].capitalize()
-                else:
-                    result['script'] = False
-                    result['_error'].append('script after region/privateuse')
-            else:
-                result['script'] = False
-                result['_error'].append('script?')
-            parts.pop(0)
-            continue
-
-        if len(parts[0]) == 2 and result['region'] is None:
-            if parts[0].isalpha():
-                result['region'] = parts[0].upper()
-            else:
-                result['region'] = False
-                result['_error'].append('region?')
-            parts.pop(0)
-            continue
-
-        if len(parts[0]) == 3 and result['region'] is None:
-            if parts[0].isnumeric():
-                result['region'] = parts.pop(0)
-            else:
-                result['region'] = False
-                result['_error'].append('region?')
-                parts.pop(0)
-            continue
-
-        if len(result['extension']) == 0 and len(result['privateuse']) == 0:
-            # "Variant subtags that begin with a letter (a-z, A-Z) MUST be
-            # at least five characters long."
-            if parts[0][0].isalpha() and len(parts[0]) >= 5:
-                result['variant'].append(parts.pop(0))
-                continue
-            if parts[0][0].isnumeric() and len(parts[0]) >= 4:
-                result['variant'].append(parts.pop(0))
-                continue
-
-        leftover.append(parts.pop(0))
-
-    result['_unknown'] = leftover
-
-    # TODO: maybe re-implement only for know extensions, like -t-, -u-, -h-
-    # if len(result['extension']) > 0:
-    #     extension_norm = {}
-    #     # keys
-    #     keys_sorted = sorted(result['extension'])
-    #     # values
-    #     for key in keys_sorted:
-    #         extension_norm[key] = sorted(result['extension'][key])
-
-    #     result['extension'] = extension_norm
-
-    if len(result['_error']) == 0:
-
-        if result['grandfathered']:
-            result['Language-Tag_normalized'] = result['grandfathered']
-        else:
-            norm = []
-            if result['language']:
-                norm.append(result['language'])
-            if result['script']:
-                norm.append(result['script'])
-            if result['region']:
-                norm.append(result['region'])
-            if len(result['variant']) > 0:
-                norm.append('-'.join(result['variant']))
-
-            if len(result['extension']) > 0:
-                #  TODO: maybe re-implement only for know extensions,
-                #        like -t-, -u-, -h-. For now we're not trying to
-                #        normalize ordering of unknow future extensions, BUT
-                #        we sort key from different extensions
-                sorted_extension = {}
-                for key in sorted(result['extension']):
-                    sorted_extension[key] = result['extension'][key]
-                result['extension'] = sorted_extension
-
-                for key in result['extension']:
-                    if result['extension'][key][0] is None:
-                        norm.append(key)
-                    else:
-                        norm.append(key)
-                        # norm.extend(result['extension'][key])
-                        norm.append(result['extension'][key])
-this._resultatum['extension'][_clavem
-            if len(result['privateuse']) > 0:
-                norm.append('x-' + '-'.join(result['privateuse']))
-
-            result['Language-Tag_normalized'] = '-'.join(norm)
-
-    if strictum and len(result['_error']) > 0:
-        raise ValueError(
-            'Errors for [' + rem + ']: ' + ', '.join(result['_error']))
-
-    if clavem is not None:
-        if isinstance(clavem, str):
-            return result[clavem]
-        if isinstance(clavem, list):
-            result_partial = {}
-            for item in clavem:
-                result_partial[item] = result[item]
-            return result_partial
-        raise TypeError(
-            'clavem [' + str(type(clavem)) + '] != [str, list]')
-
-    return result
-
 */
 
 /**
