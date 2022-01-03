@@ -1,7 +1,7 @@
 // Dominium Publicum
 // SPDX-License-Identifier: Unlicense
 
-import { Auxilium, Primitivum, codicem_separato } from './numerordinatio.mjs';
+import { Auxilium, BCP47Langtag, Primitivum, codicem_separato } from './numerordinatio.mjs';
 // import { datum_specificum } from './numerordinatio.mjs';
 // import * as D3 from 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.js';
 // import { * } from 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.js'
@@ -43,6 +43,38 @@ class PicturamDL extends Picturam {
   //   this.radicem = d3.select(radicem)
   //   this.data = {}
   // }
+
+  static _htmlDataAttributes(linguam){
+    let crudum_html = []
+    let bcp47 = new BCP47Langtag(linguam, null, false).resultatum()
+
+    crudum_html.push(`data-significatum="1"`)
+    if (bcp47.language){
+      crudum_html.push(`data-bcp47-language="${bcp47.language}"`)
+    }
+    if (bcp47.language){
+      crudum_html.push(`data-bcp47-language="${bcp47.language}"`)
+    }
+    if (bcp47.script){
+      crudum_html.push(`data-bcp47-script="${bcp47.script}"`)
+    }
+    if (bcp47.region){
+      crudum_html.push(`data-bcp47-region="${bcp47.region}"`)
+    }
+    if (bcp47.variant && bcp47.variant.length > 0){
+      crudum_html.push(`data-bcp47-variant="${bcp47.variant.join(',')}"`)
+    }
+    // TODO: this is a nested object. Need different way to encode
+    if (bcp47.extension && Object.keys(bcp47.extension).length > 0){
+      crudum_html.push(`data-bcp47-extension="${bcp47.extension}"`)
+    }
+    if (bcp47.privateuse && bcp47.privateuse.length > 0){
+      crudum_html.push(`data-bcp47-privateuse="${bcp47.privateuse.join(',')}"`)
+    }
+
+    console.log('bcp47', bcp47)
+    return crudum_html.join(' ')
+  }
 
   inHtml() {
     let raw_html = ''
@@ -147,12 +179,14 @@ class PicturamDL extends Picturam {
                 // result += `\n${JSON.stringify([clavem_2, rem_subitem_2])}`
                 // let _linguam = clavem
                 let _linguam = clavem_2
+                // console.log('_linguam', _linguam)
+                let ldata = PicturamDL._htmlDataAttributes(_linguam)
                 for (let [_temp2, indicem_et_rem] of Object.entries(rem_subitem_2)) {
                   result += `<dl>`
                   // result += `<dt>${linguam}</dt>`
-                  result += `<dt>${_linguam}</dt>`
+                  result += `<dt ${ldata}>${_linguam}</dt>`
                   for (let [indicem, rem_crudum] of Object.entries(indicem_et_rem)) {
-                    result += `<dd>${indicem}: ${rem_crudum}</dd>`
+                    result += `<dd ${ldata}>${indicem}: ${rem_crudum}</dd>`
                   }
                   result += `</dl>`
                 }

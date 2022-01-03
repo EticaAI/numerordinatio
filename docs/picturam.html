@@ -13,6 +13,15 @@
     details>details {
       padding-left: 2em;
     }
+
+    [data-hide-significatum="1"] dl [data-significatum="1"] {
+      display: none; 
+      /* display: initial;  */
+    }
+    [data-show-bcp47-language] dl [bcp47-language="1"] {
+      /* display: none;  */
+      display: initial; 
+    }
   </style>
 </head>
 
@@ -21,19 +30,60 @@
 
   <div id="picturam-notitia">
     <ul>
-      <li>Exemplum: <a target="_blank" href='./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}'>./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}</a></li>
-      <li>Exemplum: <a target="_blank" href='./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a></li>
-      <li>Exemplum: <a target="_blank" href='./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a></li>
+      <li>Exemplum: <a target="_blank"
+          href='./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}'>./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}</a>
+      </li>
+      <li>Exemplum: <a target="_blank"
+          href='./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
+      </li>
+      <li>Exemplum: <a target="_blank"
+          href='./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
+      </li>
     </ul>
   </div>
   <div class="row">
-    <div id="picturam-form" class="col" style="display: none">
-      <textarea style="width: 100%; height: auto; min-height: 20em;" id="picturam-form-textarea"></textarea>
+    <div class="col">
+      <div class="form-check form-switch">
+        <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="ce" checked>
+        <label class="form-check-label" for="ce">
+          Expānsiōnem de conceptum
+        </label>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se" checked>
+        <label class="form-check-label" for="se">
+          Expānsiōnem de significātum
+        </label>
+      </div>
     </div>
-    <div id="picturam-html" class="col">
+    <div class="col">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="cl_label">BCP47 linguam</span>
+        <input type="text" name="cl" id="cl" class="form-control instrumentum-optionem" placeholder="lat, arb, grk"
+          aria-label="BCP47 linguam" aria-describedby="cl_label" value="lat, prs">
+      </div>
+    </div>
+    <div class="col">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="cs_label">BCP47 scriptum</span>
+        <input type="text" name="cs" id="cs" class="form-control instrumentum-optionem" placeholder="Latn, Zyyy, Zmth"
+          aria-label="BCP47 scriptum" aria-describedby="cs_label">
+      </div>
     </div>
   </div>
 
+  <div class="row">
+    <div id="picturam-form" class="col" style="display: none">
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary actionem" id="picturam-form-actionem" style="width: 100%;">
+          āctiōnem
+        </button>
+      </div>
+      <textarea style="width: 100%; height: auto; min-height: 20em;" id="picturam-form-textarea"></textarea>
+    </div>
+    <div id="picturam-html" class="col" data-hide-significatum="">
+    </div>
+  </div>
 
   <div class="d3_svg_demo2"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
@@ -59,10 +109,22 @@
       let crudum_html = pic_html.inHtml()
       let wp = document.getElementById('picturam-html')
       wp.innerHTML = crudum_html
+      render_optionem()
     }
 
+    function render_optionem() {
+      console.log('render_optionem')
+      let details = document.querySelectorAll('#picturam-html details');
+      // let significatum = document.querySelectorAll('[data-significatum]');
+      [...details].map(item => document.getElementById('ce').checked ? item.setAttribute("open", 1) : item.removeAttribute("open"))
+      // if (document.getElementById('ce').checked) {
+      //   [...details].map(item => item.setAttribute("open", document.getElementById('ce').checked))
+      // }
+    }
+    window.render_optionem = render_optionem
+
     // http://git.workspace.localhost/EticaAI/numerordinatio/docs/picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}
-    function fontem_data_peritum(functionem_regressae){
+    function fontem_data_peritum(functionem_regressae) {
       let resultatum = peritum_defallo
       // console.log('fontem_data_peritum...')
       if (document.location.hash.indexOf('#?peritum=') > -1) {
@@ -83,20 +145,21 @@
         } catch (error) {
           console.log('error resultatum', resultatum)
         }
-        if (resultatum.json_iri){
+        if (resultatum.json_iri) {
           console.log('resultatum.json_iri', resultatum.json_iri)
           d3.json(resultatum.json_iri).then((data) => {
             render(data)
           })
-        } else if (resultatum.json_data){
+        } else if (resultatum.json_data) {
           console.log('resultatum.json_data', resultatum.json_data)
           render(resultatum.json_data)
-        } else if (resultatum.json_form){
+        } else if (resultatum.json_form) {
           console.log('resultatum.json_form', resultatum.json_form)
           document.getElementById('picturam-form').style.display = 'block'
           document.getElementById('picturam-form-textarea').value = JSON.stringify(resultatum.json_form, null, 2)
-          document.getElementById('picturam-form-textarea').addEventListener('change', function(el){
-            render(resultatum.json_form)
+          document.getElementById('picturam-form-actionem').addEventListener('click', function (el) {
+            let json_data = JSON.parse(document.getElementById('picturam-form-textarea').value)
+            render(json_data)
           })
           // $('#picturam-form').toggle()
           render(resultatum.json_form)
@@ -106,6 +169,36 @@
       }
       console.log(resultatum)
     }
+
+    let picturam_html_wp = document.getElementById('picturam-html')
+    let instrumentum_optionem = document.getElementsByClassName('instrumentum-optionem')
+    let list = [...instrumentum_optionem]
+    list.map(item => item.addEventListener('change', render_optionem))
+
+    // @see https://css-tricks.com/almanac/selectors/a/attribute/
+    // @see https://css-tricks.com/a-complete-guide-to-data-attributes/
+    document.getElementById('se').addEventListener('change', function (el) {
+      // console.log('changed', el.checked, el)
+      if (el.target.checked) {
+        picturam_html_wp.removeAttribute("data-hide-significatum")
+      } else {
+        picturam_html_wp.setAttribute("data-hide-significatum", "1")
+      }
+    })
+    // document.getElementById('cl').addEventListener('change', function (el) {
+    //   let rem = cl.value.split(',').map(item => item.trim())
+
+    //   // console.log('changed', el.checked, el)
+    //   console.log(cl.value)
+    //   console.log('rem', rem)
+    //   if (rem && rem.length > 0) {
+    //     rem.forEach(language => {
+    //       picturam_html_wp.setAttribute("data-show-bcp47-language", language)
+    //     });
+    //   } else {
+    //     picturam_html_wp.removeAttribute("data-hide-significatum")
+    //   }
+    // })
 
     // function fontem_data(functionem_regressae) {
     //   let _functionem_regressae = functionem_regressae || console.log
