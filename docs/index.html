@@ -1,10 +1,9 @@
+<!doctype html>
+<html lang="la">
 <!--
 Dominium Publicum
 SPDX-License-Identifier: Unlicense
 -->
-<!doctype html>
-<html lang="la">
-
 <head>
   <meta charset="utf-8">
   <!-- <title>cōdex simplex ontologiae</title> -->
@@ -341,6 +340,17 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
                 scientiam-basi-verbosum.gv
               </a>
             </li>
+            <li>
+              <a target="_blank" href="#" class="dropdown-item numerordinatio_exportare"
+                data-numord-conscientiam="scientiae_focum" data-numord-archivum="json" data-numord-varians="verbosum"
+                data-numord-constructionem="crudum" data-numord-reconstructum="true"
+                data-numord-functionem-finale="picturam_json" data-numord-titulum="scientiam-basi-verbosum">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Globe:">
+                  <use xlink:href="#bi-globe" />
+                </svg>
+                scientiam-basi-verbosum.json (picturam.html)
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -508,6 +518,17 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
                   <use xlink:href="#bi-globe" />
                 </svg>
                 referentia-normam.gv
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href="#" class="dropdown-item numerordinatio_exportare"
+                data-numord-conscientiam="referentia_normam" data-numord-archivum="json" data-numord-varians="verbosum"
+                data-numord-constructionem="crudum" data-numord-reconstructum="true"
+                data-numord-functionem-finale="picturam_json" data-numord-titulum="referentia-normam">
+                <svg class="bi bi-globe" width="16" height="16" role="img" aria-label="Globe:">
+                  <use xlink:href="#bi-globe" />
+                </svg>
+                referentia-normam.json (picturam.html)
               </a>
             </li>
           </ul>
@@ -1254,6 +1275,15 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
           HtmlElementum.href = 'https://edotor.net/?engine=dot#' + data_encoded
           return false;
         },
+        'picturam_json': function (crudum_datum, HtmlElementum, numerordinatio_abstractum, datum_specificum_rem) {
+          console.log('functionem_constructionem picturam_json', crudum_datum)
+          let _peritum = {
+            'json_data': crudum_datum
+          }
+          // HtmlElementum.href = './picturam.html#?peritum=' + encodeURI(JSON.stringify(_peritum))
+          HtmlElementum.href = './picturam.html#?peritum=' + JSON.stringify(_peritum)
+          return false;
+        },
       },
       // 'globum': 'status_quo', // window.status_quo
       // cōnscientiam, https://en.wiktionary.org/wiki/conscientia
@@ -1589,7 +1619,7 @@ data/exemplum/normae-exemplarium-un-htcds.csv</textarea>
       let __result = scientia.reversumLogicae(document.querySelector('#i_reversum_logicae').value)
 
       // console.log(ui_reversum_logicae, ui_reversum_logicae.value)
-      CoreMirroReversumAst.setValue('# @TODO ' + JSON.stringify(__result))
+      CoreMirroReversumAst.setValue('# @TODO Graphviz de: ' + JSON.stringify(__result))
       // return false;
     });
 

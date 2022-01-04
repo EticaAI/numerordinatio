@@ -1,5 +1,9 @@
 <!doctype html>
 <html lang="la">
+<!--
+Dominium Publicum
+SPDX-License-Identifier: Unlicense
+-->
 
 <head>
   <meta charset="utf-8">
@@ -10,13 +14,18 @@
   <link rel="icon" href="img/favicon.png">
   <title>Numerordĭnātĭo pictūrae</title>
   <style>
-    :root {
-      /* --bcp47-language: 'lat,prs'; */
-      --bcp47-language: 'lat';
-    }
-
     details>details {
       padding-left: 2em;
+    }
+    dt {
+      padding-left: 1em;
+      font-size: 0.9em;
+      color: #666666;
+    }
+    dd {
+      padding-left: 2em;
+      font-size: 0.8em;
+      color: #666666;
     }
 
     [data-hide-significatum="1"] dl [data-significatum="1"] {
@@ -57,7 +66,17 @@
               </label>
             </div>
           </div>
-
+        </div>
+        <div class="col-12">
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <!-- <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se" checked> -->
+              <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se1" checked>
+              <label class="form-check-label" for="se1">
+                Simple velox nomen
+              </label>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-xxl-8 col-12">
@@ -113,9 +132,9 @@
     <div id="picturam-notitia">
       <div class="alert alert-info">
         <ul>
-          <li>Exemplum: <a target="_blank"
+          <!-- <li>Exemplum: <a target="_blank"
               href='./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}'>./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}</a>
-          </li>
+          </li> -->
           <li>Exemplum: <a target="_blank"
               href='./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
           </li>
@@ -147,6 +166,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.min.js"
     integrity="sha512-wkduu4oQG74ySorPiSRStC0Zl8rQfjr/Ty6dMvYTmjZw6RS5bferdx8TR7ynxeh79ySEp/benIFFisKofMjPbg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+  <!--
+    _[eng-Latn] Note: this interface code _works_ to glue the libraries
+    to the interface, but this part is not as well documented [eng-Latn]_
+  -->
   <script type="module">
     import * as Picturam from './lib/numerordinatio-picturam.mjs';
 
@@ -170,8 +195,8 @@
     function picturam_css(object_de_array, stylesheet_id = 'picturam-stylesheet') {
       let picturamStylesheet = document.getElementById(stylesheet_id)
       let crudumStylesheet = []
-      console.log(picturamStylesheet)
-      console.log(object_de_array)
+      // console.log(picturamStylesheet)
+      // console.log(object_de_array)
 
       for (let [selector, optionem] of Object.entries(object_de_array)) {
         crudumStylesheet.push(`${selector} {\n  ${optionem.join(";\n  ")}\n}`)
@@ -181,18 +206,9 @@
     }
     window.picturam_css = picturam_css
 
-    // picturam_css({
-    //   'dl [data-bcp47-language="Lat" i]': [
-    //     'display: none;'
-    //   ],
-    //   'dl [data-bcp47-language="lat" i]': [
-    //     'display: none;'
-    //   ],
-    // })
-
     function render_optionem() {
       let picturam_css_optionem = {}
-      console.log('render_optionem')
+      // console.log('render_optionem')
       let details = document.querySelectorAll('#picturam-html details');
       // let significatum = document.querySelectorAll('[data-significatum]');
       [...details].map(item => document.getElementById('ce').checked ? item.setAttribute("open", 1) : item.removeAttribute("open"))
@@ -244,7 +260,16 @@
         }
       }
 
-      console.log('picturam_css_optionem', picturam_css_optionem)
+      let se1_val = document.querySelector('#se1').checked
+      if (se1_val) {
+        // picturam_css_optionem[`dl dt.meta-in-lineam]`] = ['display: block !important;']
+      } else {
+        picturam_css_optionem[`.meta-in-lineam`] = ['display: none;']
+      }
+
+      // meta-in-lineam
+
+      // console.log('picturam_css_optionem', picturam_css_optionem)
       picturam_css(picturam_css_optionem)
 
 
@@ -282,10 +307,10 @@
             render(data)
           })
         } else if (resultatum.json_data) {
-          console.log('resultatum.json_data', resultatum.json_data)
+          // console.log('resultatum.json_data', resultatum.json_data)
           render(resultatum.json_data)
         } else if (resultatum.json_form) {
-          console.log('resultatum.json_form', resultatum.json_form)
+          // console.log('resultatum.json_form', resultatum.json_form)
           document.getElementById('picturam-form').style.display = 'block'
           document.getElementById('picturam-form-textarea').value = JSON.stringify(resultatum.json_form, null, 2)
           document.getElementById('picturam-form-actionem').addEventListener('click', function (el) {
@@ -298,7 +323,11 @@
           console.log('no json_iri', resultatum)
         }
       }
-      console.log(resultatum)
+      // console.log(resultatum)
+    }
+
+    function hoverdetails(el){
+
     }
 
     let picturam_html_wp = document.getElementById('picturam-html')
@@ -316,44 +345,9 @@
         picturam_html_wp.setAttribute("data-hide-significatum", "1")
       }
     })
-    // document.getElementById('cl').addEventListener('change', function (el) {
-    //   let rem = cl.value.split(',').map(item => item.trim())
-
-    //   // console.log('changed', el.checked, el)
-    //   console.log(cl.value)
-    //   console.log('rem', rem)
-    //   if (rem && rem.length > 0) {
-    //     rem.forEach(language => {
-    //       picturam_html_wp.setAttribute("data-show-bcp47-language", language)
-    //     });
-    //   } else {
-    //     picturam_html_wp.removeAttribute("data-hide-significatum")
-    //   }
-    // })
-
-    // function fontem_data(functionem_regressae) {
-    //   let _functionem_regressae = functionem_regressae || console.log
-    //   let de_hash = {}
-    //   let _hash = document.location.hash
-    //   if (_hash.indexOf('#?json_iri=') > -1) {
-    //     let json_iri = _hash.replace('#?json_iri=', '')
-
-    //     d3.json(json_iri).then((data) => {
-    //       functionem_regressae(data)
-    //     });
-    //   }
-    //   functionem_regressae(de_hash)
-    // }
 
     fontem_data_peritum()
-    // fontem_data(function (data) {
-    //   render(data)
-    // })
 
-
-    // d3.json("data/exemplum/scientiae-communitatem--sexualitatem.json").then((data) => {
-    //   render(data)
-    // });
   </script>
 </body>
 

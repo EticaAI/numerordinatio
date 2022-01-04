@@ -6,7 +6,7 @@ import { Auxilium, BCP47Langtag, Primitivum, codicem_separato } from './numerord
 // import * as D3 from 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.js';
 // import { * } from 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.2.1/d3.js'
 
-console.log('numerordinatio-picturam.mjs')
+// console.log('numerordinatio-picturam.mjs')
 
 class Picturam {
   constructor(d3, radicem) {
@@ -72,7 +72,7 @@ class PicturamDL extends Picturam {
       crudum_html.push(`data-bcp47-privateuse="${bcp47.privateuse.join(',')}"`)
     }
 
-    console.log('bcp47', bcp47)
+    // console.log('bcp47', bcp47)
     return crudum_html.join(' ')
   }
 
@@ -151,10 +151,11 @@ class PicturamDL extends Picturam {
             }
             
 
-            result += `<details id="${ego_codicem}">`
-            // result += `<summary>${indicem}_${clavem}</summary>`
-            result += `<summary>${clavem}</summary>`
+
             // result += `<summary>${ego_codicem}</summary>`
+            let result_group = ''
+            let result_group_simplex_label = ''
+            let result_group_simplex_title = ''
             for (let [clavem_2, rem_subitem_2] of Object.entries(rem_subitem)) {
               // console.log('clavem_2', clavem_2, __RegulaNumerumInVasum.test(clavem_2))
               if (__RegulaNumerumInVasum.test(clavem_2)) {
@@ -169,9 +170,10 @@ class PicturamDL extends Picturam {
                   progenitorem_inner = __base__3
                 }
 
-                console.log()
+                // console.log()
                 // result += `\n${recursive(rem_subitem_2, (indicem + 1))}`
-                result += `\n${recursive(recursive_item, (indicem + 1), progenitorem_inner)}`
+                // result += `\n${recursive(recursive_item, (indicem + 1), progenitorem_inner)}`
+                result_group += `\n${recursive(recursive_item, (indicem + 1), progenitorem_inner)}`
                 // console.log('@todo: re-enable recursive')
 
               } else {
@@ -182,16 +184,28 @@ class PicturamDL extends Picturam {
                 // console.log('_linguam', _linguam)
                 let ldata = PicturamDL._htmlDataAttributes(_linguam)
                 for (let [_temp2, indicem_et_rem] of Object.entries(rem_subitem_2)) {
-                  result += `<dl>`
+                  // result += `<dl>`
+                  result_group += `<dl>`
                   // result += `<dt>${linguam}</dt>`
-                  result += `<dt ${ldata}>${_linguam}</dt>`
+                  // result += `<dt ${ldata}>${_linguam}</dt>`
+                  result_group += `<dt ${ldata}>${_linguam}</dt>`
                   for (let [indicem, rem_crudum] of Object.entries(indicem_et_rem)) {
-                    result += `<dd ${ldata}>${indicem}: ${rem_crudum}</dd>`
+                    // result += `<dd ${ldata}>${indicem}: ${rem_crudum}</dd>`
+                    if (!result_group_simplex_label) {
+                      result_group_simplex_label = ` <em class="meta-in-lineam" lang="${_linguam}">${rem_crudum}</em>`
+                      result_group_simplex_title = `${rem_crudum}`
+                    }
+
+                    result_group += `<dd ${ldata}>${indicem}: ${rem_crudum}</dd>`
                   }
-                  result += `</dl>`
+                  // result += `</dl>`
+                  result_group += `</dl>`
                 }
               }
             }
+            result += `<details id="${ego_codicem}">`
+            result += `<summary title="${result_group_simplex_title}">${clavem}${result_group_simplex_label}</summary>`
+            result += result_group
             result += `</details>`
           } else {
             let _linguam = clavem
