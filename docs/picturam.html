@@ -30,68 +30,117 @@
 </head>
 
 <body>
-  <h1>Numerordĭnātĭo pictūrae</h1>
+  <main class="container-fluid">
 
-  <div id="picturam-notitia">
-    <ul>
-      <li>Exemplum: <a target="_blank"
-          href='./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}'>./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}</a>
-      </li>
-      <li>Exemplum: <a target="_blank"
-          href='./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
-      </li>
-      <li>Exemplum: <a target="_blank"
-          href='./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
-      </li>
-    </ul>
-  </div>
-  <div class="row">
-    <div class="col">
-      <div class="form-check form-switch">
-        <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="ce" checked>
-        <label class="form-check-label" for="ce">
-          Expānsiōnem de conceptum
-        </label>
-      </div>
-      <div class="form-check form-switch">
-        <!-- <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se" checked> -->
-        <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se">
-        <label class="form-check-label" for="se">
-          Expānsiōnem de significātum
-        </label>
-      </div>
-    </div>
-    <div class="col">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="cl_label">BCP47 linguam</span>
-        <input type="text" name="cl" id="cl" class="form-control instrumentum-optionem" placeholder="lat, arb, grk"
-          aria-label="BCP47 linguam" aria-describedby="cl_label" value="">
-      </div>
-    </div>
-    <div class="col">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="cs_label">BCP47 scriptum</span>
-        <input type="text" name="cs" id="cs" class="form-control instrumentum-optionem" placeholder="Latn, Zyyy, Zmth"
-          aria-label="BCP47 scriptum" aria-describedby="cs_label">
-      </div>
-    </div>
-  </div>
+    <h1>Numerordĭnātĭo pictūrae</h1>
 
-  <div class="row">
-    <div id="picturam-form" class="col" style="display: none">
-      <div class="mb-3">
-        <button type="button" class="btn btn-primary actionem" id="picturam-form-actionem" style="width: 100%;">
-          āctiōnem
-        </button>
-      </div>
-      <textarea style="width: 100%; height: auto; min-height: 20em;" id="picturam-form-textarea"></textarea>
-    </div>
-    <!-- <div id="picturam-html" class="col" data-hide-significatum=""> -->
-    <div id="picturam-html" class="col" data-hide-significatum="1">
-    </div>
-  </div>
+    <div class="row">
+      <div class="col-xxl-4 col-12">
+        <div class="col-12">
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="ce" checked>
+              <label class="form-check-label" for="ce">
+                Expānsiōnem de conceptum
+              </label>
+            </div>
+          </div>
 
-  <div class="d3_svg_demo2"></div>
+        </div>
+        <div class="col-12">
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <!-- <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se" checked> -->
+              <input class="form-check-input instrumentum-optionem" type="checkbox" role="switch" id="se">
+              <label class="form-check-label" for="se">
+                Expānsiōnem de significātum
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-xxl-8 col-12">
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="cl_label">BCP47 language</span>
+              <input type="text" name="cl" id="cl" class="form-control instrumentum-optionem"
+                placeholder="lat, arb, grc, zxx" aria-label="BCP47 linguam" aria-describedby="cl_label" value="">
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="cs_label">BCP47 script</span>
+              <input type="text" name="cs" id="cs" class="form-control instrumentum-optionem"
+                placeholder="Latn, Arab, Grek, Zmth" aria-label="BCP47 scriptum" aria-describedby="cs_label">
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="cloco_label">BCP47 region</span>
+              <input type="text" name="cloco" id="cloco" class="form-control instrumentum-optionem"
+                placeholder="380, 001, 300, 001" aria-label="BCP47 scriptum" aria-describedby="cloco_label">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="cv_label">BCP47 variant</span>
+              <input type="text" name="cv" id="cv" class="form-control instrumentum-optionem"
+                placeholder="pinyin, oxendict, simple" aria-label="BCP47 variant" aria-describedby="cv_label" value="">
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="cext_label">BCP47 extension (*)</span>
+              <input type="text" name="cext" id="cext" class="form-control instrumentum-optionem"
+                placeholder="u-sd-chzh, u-nu-latn" aria-label="BCP47 extension" aria-describedby="cext_label" value="">
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="cp_label">BCP47 privateuse</span>
+              <input type="text" name="cp" id="cp" class="form-control instrumentum-optionem"
+                placeholder="semiceu, systema" aria-label="BCP47 privateuse" aria-describedby="cp_label" value="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="picturam-notitia">
+      <div class="alert alert-info">
+        <ul>
+          <li>Exemplum: <a target="_blank"
+              href='./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}'>./picturam.html#?peritum={"json_iri":"data/exemplum/scientiae-communitatem--sexualitatem.json"}</a>
+          </li>
+          <li>Exemplum: <a target="_blank"
+              href='./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_data":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
+          </li>
+          <li>Exemplum: <a target="_blank"
+              href='./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}'>./picturam.html#?peritum={"json_form":{"10":{},"10:1":{"lat-Latn":{"0":"Exemplum"},"prs-Arab":{"0":"مثال"},"rus-Cyrl":{"0":"Пример"}}}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="picturam-form" class="col" style="display: none">
+        <div class="mb-3">
+          <button type="button" class="btn btn-primary actionem" id="picturam-form-actionem" style="width: 100%;">
+            āctiōnem
+          </button>
+        </div>
+        <textarea style="width: 100%; height: auto; min-height: 20em;" id="picturam-form-textarea"></textarea>
+      </div>
+      <!-- <div id="picturam-html" class="col" data-hide-significatum=""> -->
+      <div id="picturam-html" class="col" data-hide-significatum="1">
+      </div>
+    </div>
+
+  </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
@@ -118,7 +167,7 @@
       render_optionem()
     }
 
-    function picturam_css(object_de_array, stylesheet_id = 'picturam-stylesheet'){
+    function picturam_css(object_de_array, stylesheet_id = 'picturam-stylesheet') {
       let picturamStylesheet = document.getElementById(stylesheet_id)
       let crudumStylesheet = []
       console.log(picturamStylesheet)
@@ -163,6 +212,38 @@
           picturam_css_optionem[`dl [data-bcp47-script="${rem}" i]`] = ['display: block !important;']
         }
       }
+
+      let cloco_val = document.querySelector('#cloco')
+      let cloco_val_list = cloco_val.value.split(',').map(item => item.trim()).filter(item => item)
+      if (cloco_val_list && cloco_val_list.length > 0) {
+        for (let rem of cloco_val_list) {
+          picturam_css_optionem[`dl [data-bcp47-region="${rem}" i]`] = ['display: block !important;']
+        }
+      }
+
+      let cv_val = document.querySelector('#cv')
+      let cv_val_list = cv_val.value.split(',').map(item => item.trim()).filter(item => item)
+      if (cv_val_list && cv_val_list.length > 0) {
+        for (let rem of cv_val_list) {
+          picturam_css_optionem[`dl [data-bcp47-variant="${rem}" i]`] = ['display: block !important;']
+        }
+      }
+
+      let cext_val = document.querySelector('#cext')
+      let cext_val_list = cext_val.value.split(',').map(item => item.trim()).filter(item => item)
+      if (cext_val_list && cext_val_list.length > 0) {
+        for (let rem of cext_val_list) {
+          picturam_css_optionem[`dl [data-bcp47-extension="${rem}" i]`] = ['display: block !important;']
+        }
+      }
+      let cp_val = document.querySelector('#cp')
+      let cp_val_list = cp_val.value.split(',').map(item => item.trim()).filter(item => item)
+      if (cp_val_list && cp_val_list.length > 0) {
+        for (let rem of cp_val_list) {
+          picturam_css_optionem[`dl [data-bcp47-privateuse="${rem}" i]`] = ['display: block !important;']
+        }
+      }
+
       console.log('picturam_css_optionem', picturam_css_optionem)
       picturam_css(picturam_css_optionem)
 
